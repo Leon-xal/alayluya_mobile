@@ -13,7 +13,7 @@ import '../../utils/global.dart';
 import '../../utils/syncs.dart';
 import '../../main.dart';
 import 'dart:io';
-import 'package:launch_review/launch_review.dart';
+import 'package:launch_review/launch_review_latest.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:device_info/device_info.dart';

@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter_skeleton/flutter_skeleton.dart';
+// import 'package:flutter_skeleton/flutter_skeleton.dart';
+import 'package:shimmer/shimmer.dart'; // Import shimmer
 import '../../main.dart';
 import '../../utils/Icon.dart';
 import '../../utils/global.dart';
@@ -56,15 +57,94 @@ class AArticleLikeList extends StatefulWidget{
 //with AutomaticKeepAliveClientMixin
 //###Leo
 class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
-  List<dynamic> articleItems = [];
-  List<dynamic> articleTagsItems = [];
+  //List<dynamic> articleItems = [];
+  //List<dynamic> articleTagsItems = [];
+  List<ArticleLike> articleItems = []; // Use ArticleLike type for better type safety
+  List<Tag> articleTagsItems = []; // Use Tag type for better type safety
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   int page_id = 1;
   bool isloadcomplete = false;
+  bool isLoading = false; // Add isLoading flag
 
 //  @override
 //  bool get wantKeepAlive => widget.isreload; ///see AutomaticKeepAliveClientMixin
 
+ Widget _shimmerListItem() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+                  child: AspectRatio(
+                    aspectRatio: 3.0 / 2.0,
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      color: Colors.grey[300], // Shimmer for image
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(height: 16, width: 200, color: Colors.grey[300]), // Shimmer for title
+                    Padding(padding: const EdgeInsets.only(bottom: 10.0, right: 4.0)),
+                    Container(height: 30, width: 250, color: Colors.grey[300]), // Shimmer for description
+                    Padding(padding: const EdgeInsets.only(bottom: 10.0, right: 4.0)),
+                    if (widget.isShowTag)
+                      Wrap(
+                        spacing: 5,
+                        runSpacing: 0,
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        children: List.generate(3, (index) => Container(height: 20, width: 50, color: Colors.grey[300])), // Shimmer for tags
+                      ),
+                    if (widget.isShowPrayerBtn)
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10.0),
+                        child: Container(height: 25, width: 70, color: Colors.grey[300]), // Shimmer for prayer button
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (widget.isShowElandName)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 10.0),
+                                child: Container(height: 18, width: 18, color: Colors.grey[300]), // Shimmer for author icon
+                              ),
+                              Container(height: 14, width: 150, color: Colors.grey[300]), // Shimmer for author name
+                            ],
+                          ),
+                        if (widget.isShowLikeBtn)
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10.0),
+                            child: Container(height: 25, width: 70, color: Colors.grey[300]), // Shimmer for like button
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 //###Leo
   @override
   void didChangeDependencies() {
@@ -92,8 +172,6 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
               articleItems[i].like++;
             }else{
               articleItems[i].like--;
-            }
-          }
         }
       });
     }
@@ -427,6 +505,50 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
 
   }
 
+  Future<void> _loadListData(BuildContext context, {bool isshowloading = true, int pageid = 1, int limit = 5, int cateid = 0, String search_by_title = '', int user_id = 0}) async {
+    if (isLoading) return; // Prevent multiple simultaneous loads
+    isLoading = true;
+    if (isshowloading) G.loading.show(context);
+    try {
+      var res = await G.req.article.like_list(
+        cateid: cateid,
+        pageid: pageid,
+        limit: limit,
+        search_by_title: search_by_title,
+        userid: user_id,
+      );
+      Map result = res.data;
+      ArticleLikeListModel tempArticleLikeList = ArticleLikeListModel.fromJson(result);
+      if (mounted) {
+        setState(() {
+          isloadcomplete = true;
+          articleItems.addAll(tempArticleLikeList.list);
+          if (tempArticleLikeList.list.isEmpty) {
+            _refreshController.loadNoData();
+          }
+          isLoading = false; // Set loading flag to false after data is loaded
+        });
+      }
+    } on DioError catch (e) {
+      // Handle DioError specifically for better error handling
+      print('DioError: ${e.message}');
+      if (e.response != null) {
+        print('Response data: ${e.response?.data}');
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print('articleCatch===>${e}');
+      setState(() {
+        isLoading = false;
+      });
+    } finally {
+      if (isshowloading) G.loading.hide(context);
+    }
+  }
+
+  /* replaced flutter_skeleton code
   _loadListData(BuildContext context, {bool isshowloading=true, int pageid=1, int limit=5,cateid=0,search_by_title='',user_id=0,}) async {
     if(isshowloading == true) G.loading.show(context);
 //    print('articlereault====>${search_by_title}');
@@ -461,6 +583,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
     }
 
   }
+  */
 
   Widget _cardListSkeleton() {
     return Container(
@@ -485,96 +608,57 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
 
 //    super.build(context);
 
-    if(widget.isSmartRefresher == true){
-      if(isloadcomplete == true){
-        return (articleItems.length == 0)?Container(
-          child: Center(
-            child: new Image.asset(
-              "lib/assets/images/empty_img.png",
-              fit: BoxFit.fill,
-            ),
-          ),
-        ):SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: (widget.isloadmore == true)?true:false,
-          header: WaterDropHeader(
-            refresh:SizedBox(
-              height: 25,
-              width: 25,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation<Color>(rgba(28, 141, 160, 1)),
+        return widget.isSmartRefresher
+        ? SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: widget.isloadmore,
+            header: WaterDropHeader(
+              refresh: SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(rgba(28, 141, 160, 1)),
+                ),
               ),
+              complete: Text('√ 加載完成'),
             ),
-            complete:Text('√ 加載完成'),
-          ),
-//      header: MaterialClassicHeader(),
-//      header: G.pullToRefresh.header(),        footer: G.pullToRefresh.footer(),
-          footer: G.pullToRefresh.footer(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-//        child: SingleChildScrollView(
-//            child: new Container(
-//              child: new Column(
-////              children: articleItems.map(buildContent).toList()
-////              children: articleItems.asMap().keys.map((f){
-////                articleItems[f].key = f;
-////                return buildContent(articleItems[f]);
-////              }).toList()
-//                children: <Widget>[
-//                  top_contents,
-//                  new Column(
-//                      children: articleItems.asMap().keys.map((f){
-//                        articleItems[f].key = f;
-//                        return buildContent(articleItems[f]);
-//                      }).toList()
-//                  ),
-//                  bottom_contents,
-//                ],
-//              ),
-//            )
-//        ),
-
-          child: ListView.builder(
-            itemBuilder: (c, f){
-//          print('fff====>${f},${elandItems.length}');
-              articleItems[f].key = f;
-              return new Container(
-                child: new Column(
-                  children: <Widget>[
-                    (f == 0) ? top_contents : Container(),
-                    buildContent(articleItems[f]),
-                    (f == articleItems.length-1) ? bottom_contents : Container(),
+            footer: G.pullToRefresh.footer(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: isloadcomplete
+                ? (articleItems.isEmpty)
+                    ? Center(child: Image.asset("lib/assets/images/empty_img.png", fit: BoxFit.fill))
+                    : ListView.builder(
+                        itemCount: articleItems.length,
+                        itemBuilder: (c, i) {
+                          articleItems[i].key = i; // Assign key for better performance
+                          return Column(
+                            children: [
+                              if (i == 0) widget.topchild ?? Container(),
+                              buildContent(articleItems[i]),
+                              if (i == articleItems.length - 1) widget.bottomchild ?? Container(),
+                            ],
+                          );
+                        },
+                      )
+                : ListView.builder(
+                    itemCount: 10, // Show 10 shimmer items
+                    itemBuilder: (context, index) => _shimmerListItem(),
+                  ),
+          )
+        : (articleItems.isEmpty)
+            ? Container()
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    widget.topchild ?? Container(),
+                    ...articleItems.map(buildContent),
+                    widget.bottomchild ?? Container(),
                   ],
                 ),
               );
-            },
-            itemCount: articleItems.length,
-          ),
-
-        );
-      }else{
-        return _cardListSkeleton();
-      }
-    }else{
-      return (articleItems.length == 0)?Container():SingleChildScrollView(
-          child: new Container(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                top_contents,
-                new Column(
-                    children: articleItems.asMap().keys.map((f){
-                      articleItems[f].key = f;
-                      return buildContent(articleItems[f]);
-                    }).toList()
-                ),
-                bottom_contents,
-              ],
-            ),
-          )
-      );
-    }
   }
 }

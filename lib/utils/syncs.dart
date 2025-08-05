@@ -1,7 +1,7 @@
 /*
 * 用於異步轉同步
 * */
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/global.dart';
 
 class Syncs{

@@ -1,6 +1,7 @@
 import 'package:color_dart/RgbaColor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+//import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../model/article_cate_model/data.dart';
 import '../../utils/global.dart';
