@@ -4,7 +4,7 @@ import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
 import 'package:html/parser.dart' show parse;
 import '../../components/a_photoview/index.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';

@@ -9,7 +9,7 @@ import '../../components/a_dialog/index.dart';
 import '../../utils/syncs.dart';
 
 import '../../provider/facebookProvider.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

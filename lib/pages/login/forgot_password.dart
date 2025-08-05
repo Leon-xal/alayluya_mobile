@@ -1,7 +1,7 @@
 import 'dart:async';
 import './components/region_code.dart';
 import './components/phone_forgot.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 import '../../utils/syncs.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../../components/a_button/index.dart';

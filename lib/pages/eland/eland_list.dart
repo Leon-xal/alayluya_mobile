@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import '../../components/custom_navbar/index.dart';
 import '../../model/user_model/data.dart';

@@ -9,7 +9,7 @@ import '../../components/a_web_view/index.dart';
 import '../../components/a_pdfview/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:social_share_plugin/social_share_plugin.dart';

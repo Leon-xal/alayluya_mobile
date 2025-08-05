@@ -13,7 +13,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 // import 'package:flui/flui.dart';
 import 'package:flutter/services.dart';
@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
             fontFamily: "yahei",
             appBarTheme: AppBarTheme(
               actionsIconTheme: IconThemeData(
-                color: rgba(0, 0, 0, 0),
+                color: rgba(0,0,0,0),
               ),
               elevation: 0,
             ),

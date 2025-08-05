@@ -1,4 +1,4 @@
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import '../../utils/syncs.dart';
 import '../../model/user_model/data.dart';

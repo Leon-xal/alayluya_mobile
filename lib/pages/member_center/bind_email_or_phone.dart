@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 import '../login/components/region_code.dart';
 import '../../components/a_button/index.dart';
-import 'package:color_dart/HexColor.dart';
-import 'package:color_dart/RgbaColor.dart';
+//import 'package:color_dart/HexColor.dart';
+//import 'package:color_dart/RgbaColor.dart';
 import '../../utils/global.dart';
 import '../../components/custom_appbar/index.dart';
 import 'package:flutter/material.dart';

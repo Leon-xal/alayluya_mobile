@@ -4,7 +4,7 @@
  * @lastTime: 2020-03-18 11:50:01
  * @LastEditors: Alfred
  */
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

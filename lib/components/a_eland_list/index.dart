@@ -2,7 +2,7 @@ import '../../model/user_model/data.dart';
 import '../../main.dart';
 import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
-import 'package:color_dart/color_dart.dart';
+//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_skeleton/flutter_skeleton.dart';
