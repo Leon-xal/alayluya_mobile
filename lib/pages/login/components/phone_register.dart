@@ -35,7 +35,6 @@ class PhoneRegister extends StatefulWidget {
 }
 
 class _PhoneRegisterState extends State<PhoneRegister> {
-
   var code = regionCode[0]['code'];
   bool canClick = true;
   Timer timer;
@@ -43,25 +42,25 @@ class _PhoneRegisterState extends State<PhoneRegister> {
   int countDown = 60;
 
   void getCode() async {
-    if(widget.code == null || widget.code == ''){
+    if (widget.code == '') {
       await G.toast('請選擇號碼所在地');
       return;
     }
-    if(widget.phone['value'] == null || widget.phone['value'] == ''){
+    if (widget.phone['value'] == null || widget.phone['value'] == '') {
       await G.toast('請輸入手機號碼');
       return;
     }
-    if(widget.phone['value'].length < 6){
+    if (widget.phone['value'].length < 6) {
       await G.toast('手機號碼不正確');
       return;
     }
 
     final reg = RegExp(r'^-?[0-9]+');
-    if(reg.hasMatch(widget.phone['value']) == false){
+    if (reg.hasMatch(widget.phone['value']) == false) {
       await G.toast('手機號碼不正確');
       return;
     }
-    if(!canClick) return;
+    if (!canClick) return;
     setState(() {
       canClick = false;
     });
@@ -70,28 +69,28 @@ class _PhoneRegisterState extends State<PhoneRegister> {
     print('widget.phone1=====>${widget.phone}');
     print('widget.phone2=====>${widget.phone['value']}');
     var res = await G.req.user.registermobileverify(
-      phone: '+${widget.code}${widget.phone['value']}'
+      phone: '+${widget.code}${widget.phone['value']}',
     );
     // print('res2====>');
 
     var data = res.data;
     // if(data == null) return;
     // print('res====>${res.data}');
-    if(data == null){
+    if (data == null) {
       // print('res1====>${res}');
       setState(() {
         canClick = true;
       });
       return;
-    }else{
+    } else {
       widget.returnSid(data['data']['sid']);
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if(countDown>0){
+        if (countDown > 0) {
           setState(() {
-            countDown -- ;
+            countDown--;
           });
-        }else{
-          timer?.cancel();
+        } else {
+          timer.cancel();
           setState(() {
             countDown = 60;
             canClick = true;
@@ -99,93 +98,111 @@ class _PhoneRegisterState extends State<PhoneRegister> {
         }
       });
     }
-
   }
 
-  Future clickAreaCode(BuildContext context){
+  Future clickAreaCode(BuildContext context) {
     return showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (context) {
-          return Container(
-            height: 380,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              )
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 380,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
-            child: Column(
-              children: [
-                Expanded(
-                    child: Container(
-                      child: CupertinoPicker(
-                        itemExtent: 40,
-                        onSelectedItemChanged: (value){
-                          setState(() {
-                            code = regionCode[value]['code'];
-                          });
-                        },
-                        children: regionCode.map((areaCode){
-                          return Container(
-                            alignment: Alignment.center,
-                            child: Text('${areaCode['zh']} +' + '${areaCode['code']}'),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                ),
-                GestureDetector(
-                  onTap: (){
-                    widget.callback(code);
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border(top: BorderSide(width: 1,color: Colors.grey))
-                    ),
-                    child: Text('確認',style: TextStyle(fontSize: 20,color: rgba(28, 141, 160, 0.7))),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  child: CupertinoPicker(
+                    itemExtent: 40,
+                    onSelectedItemChanged: (value) {
+                      setState(() {
+                        code = regionCode[value]['code'];
+                      });
+                    },
+                    children: regionCode.map((areaCode) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${areaCode['zh']} +' + '${areaCode['code']}',
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
-                GestureDetector(
-                  onTap: ()=>Navigator.pop(context),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border: Border(top: BorderSide(width: 1,color: Colors.grey))
+              ),
+              GestureDetector(
+                onTap: () {
+                  widget.callback(code);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(width: 1, color: Colors.grey),
                     ),
-                    child: Text('取消',style: TextStyle(fontSize: 20,color: Colors.black)),
                   ),
-                )
-              ]
-            ),
-          );
-        }
+                  child: Text(
+                    '確認',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: rgba(28, 141, 160, 0.7),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(width: 1, color: Colors.grey),
+                    ),
+                  ),
+                  child: Text(
+                    '取消',
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget input(Map registerInfoKey, String hitText, {bool obscureText = false,bool hasBorder = true}) {
+  Widget input(
+    Map registerInfoKey,
+    String hitText, {
+    bool obscureText = false,
+    bool hasBorder = true,
+  }) {
     return Container(
       height: 48,
       margin: EdgeInsets.only(top: 0),
-      decoration: BoxDecoration(border:hasBorder ? G.borderBottom() : null),
+      decoration: BoxDecoration(border: hasBorder ? G.borderBottom() : null),
       child: TextField(
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-            counterText: "",
-            border: InputBorder.none,
-            hintText: '$hitText',
-            hintStyle: TextStyle(
-              fontSize: 14,
-            )),
+          counterText: "",
+          border: InputBorder.none,
+          hintText: '$hitText',
+          hintStyle: TextStyle(fontSize: 14),
+        ),
         obscureText: obscureText,
         onChanged: (e) {
           setState(() {
             registerInfoKey['value'] = e;
-            registerInfoKey['verify'] = (e == null || e == '') ? false : true;
+            registerInfoKey['verify'] = (e == '') ? false : true;
           });
         },
       ),
@@ -198,67 +215,65 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       child: Column(
         children: [
           Container(
-              height: 48,
-              decoration: BoxDecoration(border: G.borderBottom()),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: ()=>clickAreaCode(context),
-                    child: Container(
-                      width: 80,
-                      decoration: BoxDecoration(color: rgba(204, 204, 204, 1),),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10,bottom: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${widget.code}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(Icons.keyboard_arrow_down,color: Colors.black,size: 16,)
-                        ],
-                      )
+            height: 48,
+            decoration: BoxDecoration(border: G.borderBottom()),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => clickAreaCode(context),
+                  child: Container(
+                    width: 80,
+                    decoration: BoxDecoration(color: rgba(204, 204, 204, 1)),
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 10, bottom: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${widget.code}',
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                      ],
                     ),
                   ),
-                  Container(width: 10),
-                  Expanded(
-                    child:  input(widget.phone, '手機號碼',hasBorder: false),
-                  ),
-                ],
-              )),
+                ),
+                Container(width: 10),
+                Expanded(child: input(widget.phone, '手機號碼', hasBorder: false)),
+              ],
+            ),
+          ),
           SizedBox(height: 10),
           Container(
-              height: 48,
-              decoration: BoxDecoration(border: G.borderBottom()),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: input(widget.phoneCode, '驗證碼',hasBorder: false),
-                  ),
-                  GestureDetector(
-                    onTap: ()=>getCode(),
-                    child: Container(
-                      width: 120,
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      color: canClick ? rgba(28, 141, 160, 0.7) : Colors.grey,
-                      margin: EdgeInsets.only(top: 10,bottom: 0),
-                      child: Text(
-                        canClick ? '發送' : '${countDown}s',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18
-                        ),
-                      ),
+            height: 48,
+            decoration: BoxDecoration(border: G.borderBottom()),
+            child: Row(
+              children: [
+                Expanded(
+                  child: input(widget.phoneCode, '驗證碼', hasBorder: false),
+                ),
+                GestureDetector(
+                  onTap: () => getCode(),
+                  child: Container(
+                    width: 120,
+                    alignment: Alignment.center,
+                    height: double.infinity,
+                    color: canClick ? rgba(28, 141, 160, 0.7) : Colors.grey,
+                    margin: EdgeInsets.only(top: 10, bottom: 0),
+                    child: Text(
+                      canClick ? '發送' : '${countDown}s',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
-                  )
-                ],
-              )),
+                  ),
+                ),
+              ],
+            ),
+          ),
           SizedBox(height: 10),
           input(widget.phoneFirstname, '姓'),
           SizedBox(height: 10),
@@ -271,10 +286,11 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       ),
     );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer?.cancel();
+    timer.cancel();
   }
 }

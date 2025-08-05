@@ -11,7 +11,6 @@ import '../today/today_page.dart';
 import '../article/article_page.dart';
 import '../member_center/member_center.dart';
 
-
 class IndexPage extends StatefulWidget {
   final String routeName;
   final Object arguments;
@@ -23,26 +22,48 @@ class IndexPage extends StatefulWidget {
 
   /// 所有toolbar页面
   final Map<int, Map> pages = {
-    0: _createPage(_homepage, appbar: _homepage.getAppBar(), routeName: '/', arg: '11'),
-    1: _createPage(_todaypage, appbar: _todaypage.getAppBar(), routeName: '/today', arg: '22'),
-    2: _createPage(_articlepage, appbar: _articlepage.getAppBar(), routeName: '/article', arg: '33'),
-    3: _createPage(_membercenter, appbar: _membercenter.getAppBar(), routeName: '/membercenter', arg: '44'),
+    0: _createPage(
+      _homepage,
+      appbar: _homepage.getAppBar(),
+      routeName: '/',
+      arg: '11',
+    ),
+    1: _createPage(
+      _todaypage,
+      appbar: _todaypage.getAppBar(),
+      routeName: '/today',
+      arg: '22',
+    ),
+    2: _createPage(
+      _articlepage,
+      appbar: _articlepage.getAppBar(),
+      routeName: '/article',
+      arg: '33',
+    ),
+    3: _createPage(
+      _membercenter,
+      appbar: _membercenter.getAppBar(),
+      routeName: '/membercenter',
+      arg: '44',
+    ),
   };
-
-
-
 
   /// 创建页面map
   /// ```
   /// @param {Widget} page - 页面
   /// @param {Appbar} appbar - 当前页面是否显示appbar 默认为true
   /// ```
-  static Map _createPage(Widget page, { AppBar appbar, String routeName,Object arg}) {
+  static Map _createPage(
+    Widget page, {
+    AppBar appbar,
+    String routeName,
+    Object arg,
+  }) {
     return {
       "widget": page,
       "appbar": appbar,
       "routeName": routeName,
-      "arg": arg
+      "arg": arg,
     };
   }
 
@@ -53,35 +74,27 @@ class IndexPage extends StatefulWidget {
 
   static IndexPage _singleton;
 
-  IndexPage.singleton({
-    this.routeName,
-    this.arguments,
-  });
+  IndexPage.singleton({this.routeName, this.arguments});
 
-  factory IndexPage({
-    Key key,
-    String routeName,
-    Object arguments,
-  }) {
-    if(_singleton == null) {
-      // print('arguments====>${arguments}');
-      _singleton = IndexPage.singleton(routeName: routeName, arguments: arguments,);
-    }
+  factory IndexPage({Key key, String routeName, Object arguments}) {
     return _singleton;
   }
 
   // 通过 routeName 获取对应页面的索引
   getPageIndex(routeName) {
-    switch(routeName) {
-      case '/home': return 0;
-      case '/today': return 1;
-      case '/article': return 2;
-      case '/membercenter': return 3;
-      default: return 0;
+    switch (routeName) {
+      case '/home':
+        return 0;
+      case '/today':
+        return 1;
+      case '/article':
+        return 2;
+      case '/membercenter':
+        return 3;
+      default:
+        return 0;
     }
   }
-
-
 
   _NavigationState createState() => _NavigationState();
 }
@@ -90,7 +103,7 @@ class _NavigationState extends State<IndexPage> {
   // final Map arguments;
   PageController _pageController;
 
-  static int currentIndex =  0;
+  static int currentIndex = 0;
 
   List<Widget> _pages = [];
 
@@ -104,8 +117,6 @@ class _NavigationState extends State<IndexPage> {
     // Future.delayed(Duration(seconds: 4), () {
     //   print('arguments====>${widget.arguments}');
     // });
-
-
 
     // if(arguments.containsKey('index')){
     //   print('arguments====>${arguments['index']}');
@@ -122,67 +133,61 @@ class _NavigationState extends State<IndexPage> {
     _pages.add(widget.pages[2]['widget']);
     _pages.add(widget.pages[3]['widget']);
 
-
     // print('argumentsCurrentIndex1====>${currentIndex}');
-
 
     Future.delayed(Duration.zero, () {
       String routeName = ModalRoute.of(context).settings.name;
       setState(() {
         int tempCurrentIndex = widget.getPageIndex(routeName);
-        if(tempCurrentIndex != currentIndex){
+        if (tempCurrentIndex != currentIndex) {
           currentIndex = tempCurrentIndex;
           this._pageController.jumpToPage(currentIndex);
         }
 
         // print('argumentsCurrentIndex2====>${tempCurrentIndex}');
       });
-
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     dynamic arg = ModalRoute.of(context).settings.arguments;
     if (arg != null) {
       print('argumentsIndex====>${arg}');
     }
-//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
+    //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
 
     Map page = widget.pages[currentIndex];
-//    List<Widget> _pages = [page[0]['widget'],page[1]['widget'],page[2]['widget'],page[3]['widget']];
-//    return Text('qwe');
+    //    List<Widget> _pages = [page[0]['widget'],page[1]['widget'],page[2]['widget'],page[3]['widget']];
+    //    return Text('qwe');
     return Scaffold(
-        // appBar: (currentIndex == 1)?null:page['appbar'],
+      // appBar: (currentIndex == 1)?null:page['appbar'],
       appBar: page['appbar'],
-        body: PageView(
-          physics: NeverScrollableScrollPhysics(), //禁止滑动
-          controller: this._pageController,
-          children: this._pages
-        ),
-        bottomNavigationBar: CustomNavbar(
-            onTap:(index) {
-              setState(() {
-                currentIndex = index;
-                // print('this._pageController======>${this._pageController}');
-                G.isHasNetwork(
-                    onCallback:(hasNetwork) async {
-                      if(hasNetwork == true){
-                        this._pageController.jumpToPage(currentIndex);
-                      }else{
-                        G.getCurrentState().pushNamed("/not_network");
-                      }
-                    }
-                );
+      body: PageView(
+        physics: NeverScrollableScrollPhysics(), //禁止滑动
+        controller: this._pageController,
+        children: this._pages,
+      ),
+      bottomNavigationBar: CustomNavbar(
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+            // print('this._pageController======>${this._pageController}');
+            G.isHasNetwork(
+              onCallback: (hasNetwork) async {
+                if (hasNetwork == true) {
+                  this._pageController.jumpToPage(currentIndex);
+                } else {
+                  G.getCurrentState().pushNamed("/not_network");
+                }
+              },
+            );
 
-                // this._pageController.
-                // print('currentIndex2=====>${currentIndex}');
-              });
-            }
-        ),
+            // this._pageController.
+            // print('currentIndex2=====>${currentIndex}');
+          });
+        },
+      ),
     );
   }
 }

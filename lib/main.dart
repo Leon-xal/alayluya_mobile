@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 // import 'package:flui/flui.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,14 +43,16 @@ void main() async {
     print('IOS自动登陆开发中====>');
   }
   // 强制竖屏
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   // await Syncs.getInstance();
   // SharedPreferences.setMockInitialValues({});
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
-//  _shoppingCart = prefs.getString('shoppingCart');
+  //  _shoppingCart = prefs.getString('shoppingCart');
   String user = prefs.getString('user');
   // G.oldApi = prefs.getBool('apiType') ?? true;
   //
@@ -61,8 +62,8 @@ void main() async {
   //   print('使用api類型=========使用新版api');
   // }
 
-//    print('user===>${json.decode(user)}');
-  if (user != null && user.isNotEmpty) {
+  //    print('user===>${json.decode(user)}');
+  if (user.isNotEmpty) {
     /// 初始化user
 
     G.user.init(json.decode(user));
@@ -72,8 +73,8 @@ void main() async {
   }
 
   String domain = prefs.getString('domain');
-//  prefs.setString('domain', null);
-  if (domain != null && domain.isNotEmpty) {
+  //  prefs.setString('domain', null);
+  if (domain.isNotEmpty) {
     G.isDev = true;
     G.baseurl = domain;
     // G.baseurl = 'http://testapi2.alayluya.com';
@@ -124,20 +125,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-//    final ShoppingCartModel _shoppingCartModel = Provider.of<ShoppingCartModel>(context);
-//
-//    if(_shoppingCart != null) {
-//      Map data = json.decode(_shoppingCart);
-//      _shoppingCartModel.init(data);
-//    }
+    //    final ShoppingCartModel _shoppingCartModel = Provider.of<ShoppingCartModel>(context);
+    //
+    //    if(_shoppingCart != null) {
+    //      Map data = json.decode(_shoppingCart);
+    //      _shoppingCartModel.init(data);
+    //    }
 
     //  SystemChrome.setEnabledSystemUIOverlays([]);
-//  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.black);
-//  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
-        .copyWith(statusBarBrightness: Brightness.light));
-//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.dark));
-//    print("init====>");
+    //  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.black);
+    //  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.light.copyWith(
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+    //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.dark));
+    //    print("init====>");
 
     // return MultiProvider(
     //   providers: [
@@ -147,30 +151,29 @@ class _MyAppState extends State<MyApp> {
     return RefreshConfiguration(
       headerTriggerDistance: 30.0,
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          navigatorKey: G.navigatorKey,
-          title: 'Alayluya',
-          theme: ThemeData(
-            fontFamily: "yahei",
-            appBarTheme: AppBarTheme(
-              actionsIconTheme: IconThemeData(
-                color: rgba(0,0,0,0),
-              ),
-              elevation: 0,
-            ),
+        debugShowCheckedModeBanner: false,
+        navigatorKey: G.navigatorKey,
+        title: 'Alayluya',
+        theme: ThemeData(
+          fontFamily: "yahei",
+          appBarTheme: AppBarTheme(
+            actionsIconTheme: IconThemeData(color: rgba(0, 0, 0, 0)),
+            elevation: 0,
           ),
-//      initialRoute: '/into_app',
-          initialRoute: '/',
-          onGenerateRoute: router.getRoutes,
-          //###Leo
-          navigatorObservers: [MyApp.routeObserver],
-          builder: (BuildContext context, Widget child) {
-            return child;
-            // return FLToastProvider(
-            //     defaults: _toastDefaults,
-            //     child: child
-            // );
-          }),
+        ),
+        //      initialRoute: '/into_app',
+        initialRoute: '/',
+        onGenerateRoute: router.getRoutes,
+        //###Leo
+        navigatorObservers: [MyApp.routeObserver],
+        builder: (BuildContext context, Widget child) {
+          return child;
+          // return FLToastProvider(
+          //     defaults: _toastDefaults,
+          //     child: child
+          // );
+        },
+      ),
     );
     // );
   }

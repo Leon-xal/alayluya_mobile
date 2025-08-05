@@ -24,15 +24,17 @@ class OneSignalWapper {
 
   init() {
     var systemInfo = Syncs.getSystemInfo;
-    is_open_onesignal_push = (systemInfo == null)?false:systemInfo['is_open_onesignal_push'];
+    is_open_onesignal_push = (systemInfo == null)
+        ? false
+        : systemInfo['is_open_onesignal_push'];
     print('is_open_onesignal_push1======>${is_open_onesignal_push}');
     if (kOneSignalKey['appID'] != '' && is_open_onesignal_push == true) {
-
       // print("OneSignalWapper=======>${kOneSignalKey['appID']}");
       Future.delayed(Duration.zero, () async {
-
-        NotificationPermissions.getNotificationPermissionStatus().then((status) async {
-          if(status == PermissionStatus.granted){
+        NotificationPermissions.getNotificationPermissionStatus().then((
+          status,
+        ) async {
+          if (status == PermissionStatus.granted) {
             OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
             OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
@@ -40,15 +42,18 @@ class OneSignalWapper {
             var settings = {
               OSiOSSettings.autoPrompt: false,
               OSiOSSettings.inAppLaunchUrl: false,
-              OSiOSSettings.promptBeforeOpeningPushUrl: true
+              OSiOSSettings.promptBeforeOpeningPushUrl: true,
             };
             // OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
             //   print("Received notification=======>: \n${notification.jsonRepresentation().replaceAll("\\n", "\n")}");
             // });
 
-            OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-
-              print("Opened notification=======>: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}");
+            OneSignal.shared.setNotificationOpenedHandler((
+              OSNotificationOpenedResult result,
+            ) {
+              print(
+                "Opened notification=======>: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}",
+              );
 
               // print('Opened notification2=======>${result.notification.payload.rawPayload}');
               // print('Opened notification3=======>${result.notification.payload.rawPayload['custom']}');
@@ -57,17 +62,23 @@ class OneSignalWapper {
               if (Platform.isAndroid) {
                 custom = jsonDecode(result.notification.rawPayload['custom']);
               } else {
-                custom = result.notification .rawPayload['custom'];
+                custom = result.notification.rawPayload['custom'];
               }
 
               print('Opened notification4=======>${custom}');
 
-              if(custom.containsKey('a')){
-                if(custom['a'].containsKey('article')){
+              if (custom.containsKey('a')) {
+                if (custom['a'].containsKey('article')) {
                   String title = custom['a']['article'];
-                  String hrefVal = 'https://alayluya.com/article/'+Uri.encodeComponent(title);
+                  String hrefVal =
+                      'https://alayluya.com/article/' +
+                      Uri.encodeComponent(title);
                   // print('hrefVal======>${hrefVal}');
-                  AWebview.open(G.getCurrentContext(), url: hrefVal,title: title);
+                  AWebview.open(
+                    G.getCurrentContext(),
+                    url: hrefVal,
+                    title: title,
+                  );
                 }
               }
 
@@ -76,20 +87,36 @@ class OneSignalWapper {
               // G.pushNamed( '/article_detail',arguments: {'pushUrl':custom['u']});
             });
 
-            OneSignal.shared.setInAppMessageClickedHandler((OSInAppMessageAction action) {
-              print("In App Message Clicked=======>: \n${action.jsonRepresentation().replaceAll("\\n", "\n")}");
+            OneSignal.shared.setInAppMessageClickedHandler((
+              OSInAppMessageAction action,
+            ) {
+              print(
+                "In App Message Clicked=======>: \n${action.jsonRepresentation().replaceAll("\\n", "\n")}",
+              );
             });
 
-            OneSignal.shared.setSubscriptionObserver((OSSubscriptionStateChanges changes) {
-              print("SUBSCRIPTION STATE CHANGED=======>: ${changes.jsonRepresentation()}");
+            OneSignal.shared.setSubscriptionObserver((
+              OSSubscriptionStateChanges changes,
+            ) {
+              print(
+                "SUBSCRIPTION STATE CHANGED=======>: ${changes.jsonRepresentation()}",
+              );
             });
 
-            OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
-              print("PERMISSION STATE CHANGED=======>: ${changes.jsonRepresentation()}");
+            OneSignal.shared.setPermissionObserver((
+              OSPermissionStateChanges changes,
+            ) {
+              print(
+                "PERMISSION STATE CHANGED=======>: ${changes.jsonRepresentation()}",
+              );
             });
 
-            OneSignal.shared.setEmailSubscriptionObserver((OSEmailSubscriptionStateChanges changes) {
-              print("EMAIL SUBSCRIPTION STATE CHANGED=======> ${changes.jsonRepresentation()}");
+            OneSignal.shared.setEmailSubscriptionObserver((
+              OSEmailSubscriptionStateChanges changes,
+            ) {
+              print(
+                "EMAIL SUBSCRIPTION STATE CHANGED=======> ${changes.jsonRepresentation()}",
+              );
             });
 
             await OneSignal.shared.setAppId(kOneSignalKey['appID']);
@@ -99,9 +126,10 @@ class OneSignalWapper {
             // OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
             // OneSignal.shared.consentGranted(false);
-            bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
+            bool requiresConsent = await OneSignal.shared
+                .requiresUserPrivacyConsent();
             print('requiresConsent=====>${requiresConsent}');
-            if(requiresConsent == true){
+            if (requiresConsent == true) {
               await OneSignal.shared.consentGranted(true);
             }
 
@@ -113,7 +141,8 @@ class OneSignalWapper {
             //   print("Accepted permission=======>: ${accepted}");
             // }
 
-            bool accepted = await OneSignal.shared.promptUserForPushNotificationPermission();
+            bool accepted = await OneSignal.shared
+                .promptUserForPushNotificationPermission();
             print("Accepted permission=======>: ${accepted}");
             // if(accepted == false){ //強制用戶去開啟推送功能
 
@@ -130,43 +159,56 @@ class OneSignalWapper {
             // }
           }
         });
-
       });
     }
   }
 
   loginInit() async {
-    NotificationPermissions.getNotificationPermissionStatus().then((status) async {
-      if(status == PermissionStatus.granted){
+    NotificationPermissions.getNotificationPermissionStatus().then((
+      status,
+    ) async {
+      if (status == PermissionStatus.granted) {
         var systemInfo = Syncs.getSystemInfo;
-        is_open_onesignal_push = (systemInfo == null)?false:systemInfo['is_open_onesignal_push'];
+        is_open_onesignal_push = (systemInfo == null)
+            ? false
+            : systemInfo['is_open_onesignal_push'];
         print('is_open_onesignal_push2======>${is_open_onesignal_push}');
         if (kOneSignalKey['appID'] != '' && is_open_onesignal_push == true) {
           // UserDataModel info = G.user.info;
           UserDataModel userData = G.user.data;
           Future.delayed(Duration.zero, () async {
             print("External user id set1=======>: ${userData.id.toString()}");
-            OneSignal.shared.setExternalUserId(userData.id.toString()).then((results) {
-              if (results == null) return;
+            OneSignal.shared.setExternalUserId(userData.id.toString()).then((
+              results,
+            ) {
               print("External user id set2=======>: ${results}");
             });
 
-            OneSignal.shared.setEmail(email: '${userData.email}').whenComplete(() {
-              print("Successfully set email======>");
-            }).catchError((error) {
-              print("Failed to set email with error======>: $error");
-            });
+            OneSignal.shared
+                .setEmail(email: '${userData.email}')
+                .whenComplete(() {
+                  print("Successfully set email======>");
+                })
+                .catchError((error) {
+                  print("Failed to set email with error======>: $error");
+                });
             // OneSignal.shared.sendTag('email', '${userData.email}').then((response) {
             //   print("Successfully sent tags with response2===>: $response");
             // }).catchError((error) {
             //   print("Encountered an error sending tags===>: $error");
             // });
             // print('Successfully sent tags with response1===>: {"id":"${userData.id.toString()}","email":"${userData.email}"}');
-            OneSignal.shared.sendTags({"id":"${userData.id.toString()}","email":"${userData.email}"}).then((response) {
-              print("Successfully sent tags with response2===>: $response");
-            }).catchError((error) {
-              print("Encountered an error sending tags===>: $error");
-            });
+            OneSignal.shared
+                .sendTags({
+                  "id": "${userData.id.toString()}",
+                  "email": "${userData.email}",
+                })
+                .then((response) {
+                  print("Successfully sent tags with response2===>: $response");
+                })
+                .catchError((error) {
+                  print("Encountered an error sending tags===>: $error");
+                });
             // await OneSignal.shared.getPermissionSubscriptionState().then((status) async {
             //   print("Getting permissionSubscriptionState_permissionStatus=======>: ${status.permissionStatus.status}");
             //   print("Getting permissionSubscriptionState_subscriptionStatus_subscribed=======>: ${status.subscriptionStatus.subscribed.toString()}");
@@ -207,8 +249,5 @@ class OneSignalWapper {
     });
   }
 
-  logout() async {
-
-  }
-
+  logout() async {}
 }

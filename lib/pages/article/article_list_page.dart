@@ -6,10 +6,7 @@ import '../../utils/global.dart';
 
 class ArticleListPage extends StatefulWidget {
   final Map args;
-  ArticleListPage({
-    Key key,
-    this.args,
-  }) : super(key: key);
+  ArticleListPage({Key key, this.args}) : super(key: key);
   @override
   createState() => _ArticleListPageState();
 }
@@ -25,42 +22,42 @@ class _ArticleListPageState extends State<ArticleListPage> {
     UserDataModel userData = G.user.data;
     userid = userData.id;
     args = widget.args;
-    if(args != null){
-      _eland_id = args['eland_id'];
-      _ishot = args['ishot'];
-      print('_ishot===>${_ishot}');
-    }
-//    Future.delayed(Duration.zero, () async {
-//      print('ssss===>${userid}');
-//    });
+    _eland_id = args['eland_id'];
+    _ishot = args['ishot'];
+    print('_ishot===>${_ishot}');
+    //    Future.delayed(Duration.zero, () async {
+    //      print('ssss===>${userid}');
+    //    });
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Colors.white,
-      appBar: customAppbar(context: context,title:'AA文章'),
+      appBar: customAppbar(context: context, title: 'AA文章'),
 
-      body: (userid > 0)?
-      AArticleList(
-        uid: userid,
-        eland_id: _eland_id,
-        isreload:true,
-        isShowDesc:true,
-        isShowCenterload: true,
-        isShowPrayerBtn:false,
-        ishot:_ishot,
-      ):Container(),
+      body: (userid > 0)
+          ? AArticleList(
+              uid: userid,
+              eland_id: _eland_id,
+              isreload: true,
+              isShowDesc: true,
+              isShowCenterload: true,
+              isShowPrayerBtn: false,
+              ishot: _ishot,
+            )
+          : Container(),
 
-      bottomNavigationBar: CustomNavbar(onTap:(index) {
-        G.pushNamed(G.toobarRouteNameList[index]);
-      }),
+      bottomNavigationBar: CustomNavbar(
+        onTap: (index) {
+          G.pushNamed(G.toobarRouteNameList[index]);
+        },
+      ),
     );
   }
-
-
 }

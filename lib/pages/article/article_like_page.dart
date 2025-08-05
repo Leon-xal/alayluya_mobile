@@ -3,16 +3,9 @@ import '../../components/custom_navbar/index.dart';
 import '../../components/a_article_like_list/index.dart';
 import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
-import '../home/home_page.dart';
-import '../today/today_page.dart';
-import 'article_page.dart';
-import '../member_center/member_center.dart';
 
 class ArticleLikePage extends StatefulWidget {
-
-  ArticleLikePage({
-    Key key,
-  }) : super(key: key);
+  ArticleLikePage({Key key}) : super(key: key);
   @override
   createState() => _ArticleLikePageState();
 }
@@ -26,36 +19,35 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
 
     UserDataModel userData = G.user.data;
     userid = userData.id;
-//    Future.delayed(Duration.zero, () async {
-//      print('ssss===>${userid}');
-//    });
+    //    Future.delayed(Duration.zero, () async {
+    //      print('ssss===>${userid}');
+    //    });
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
       backgroundColor: Colors.white,
-      appBar: customAppbar(context: context,title:'點贊文章'),
+      appBar: customAppbar(context: context, title: '點贊文章'),
 
-      body: (userid > 0)?
-      AArticleLikeList(
-        isShowDesc: true,
-        isShowPrayerBtn: false,
-        isreload: true,
-        user_id: userid,
-      ):Container(),
+      body: (userid > 0)
+          ? AArticleLikeList(
+              isShowDesc: true,
+              isShowPrayerBtn: false,
+              isreload: true,
+              user_id: userid,
+            )
+          : Container(),
 
       bottomNavigationBar: CustomNavbar(
-        onTap:(index) {
-
+        onTap: (index) {
           // print('currentIndex2=====>${index}');
           G.pushNamed(G.toobarRouteNameList[index]);
-
 
           // if(index == 1){
           //   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
@@ -68,10 +60,6 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
           // }else{
           //   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
           // }
-
-
-
-
 
           // G.pushNamed('/index',arguments: {'index': index});
           // G.pushNamed('/index');
@@ -91,11 +79,8 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
           //     return HomePage();
           //   }
           // }),(route) => route == null);
-
-        }
+        },
       ),
     );
   }
-
-
 }

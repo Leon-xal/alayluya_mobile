@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../components/a_eland_dynamic/test.dart';
-import '../../components/a_eland_card/index.dart';
-import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
-import '../../components/custom_navbar/index.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:dio/dio.dart';
 
 class TestFacebookLogin extends StatefulWidget {
   TestFacebookLogin({Key key}) : super(key: key);
 
   @override
   createState() => _TestFacebookLoginState();
-
 }
-
 
 class _TestFacebookLoginState extends State<TestFacebookLogin> {
   // static final FacebookLogin facebookSignIn = new FacebookLogin();
@@ -88,7 +77,6 @@ class _TestFacebookLoginState extends State<TestFacebookLogin> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -98,9 +86,8 @@ class _TestFacebookLoginState extends State<TestFacebookLogin> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: customAppbar(context: context,title: 'TestFacebookLogin'),
+      appBar: customAppbar(context: context, title: 'TestFacebookLogin'),
       body: Container(
         child: Text('TestFacebookLogin'),
         // child: new Center(
@@ -124,9 +111,5 @@ class _TestFacebookLoginState extends State<TestFacebookLogin> {
       //   G.pushNamed(G.toobarRouteNameList[index]);
       // }),
     );
-
   }
-
-
-
 }

@@ -2,32 +2,28 @@ import 'dart:async';
 //import 'package:color_dart/HexColor.dart';
 //import 'package:color_dart/RgbaColor.dart';
 
+import 'package:flutter/services.dart';
+
 import '../../utils/global.dart';
 import 'package:flutter/material.dart';
 
 // import './into_app.dart';
-
 
 class NotNetwork extends StatefulWidget {
   NotNetwork({Key key}) : super(key: key);
 
   @override
   createState() => _NotNetworkState();
-
 }
 
-
 class _NotNetworkState extends State<NotNetwork> {
-
-  int clickNumOneOpenDev=0;
-  int clickNumTwoOpenDev=0;
+  int clickNumOneOpenDev = 0;
+  int clickNumTwoOpenDev = 0;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async{
-
-    });
+    Future.delayed(Duration.zero, () async {});
   }
 
   @override
@@ -37,7 +33,6 @@ class _NotNetworkState extends State<NotNetwork> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       // appBar: customAppbar(context: context,title: 'Alayluya'),
       // appBar: customAppbar(title: 'Alayluya'),
@@ -57,62 +52,65 @@ class _NotNetworkState extends State<NotNetwork> {
       //   ),
       // ),
       appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: false,
-          title: Container(
-            child: Text('Alayluya', style: TextStyle(
-                color: rgba(56, 56, 56, 1),
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-            ),),
-            padding: EdgeInsets.only(left: 0),
+        centerTitle: false,
+        title: Container(
+          child: Text(
+            'Alayluya',
+            style: TextStyle(
+              color: rgba(56, 56, 56, 1),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          backgroundColor: hex('#fff'),
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              // Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, "/", (route) => true);
-            },
-            child: icon_left(color: rgba(0, 0, 0, 1), size: 25),
-          ),
-          automaticallyImplyLeading: context == null ? false : true,
+          padding: EdgeInsets.only(left: 0),
+        ),
+        backgroundColor: hex('#fff'),
+        elevation: 0,
+        leading: InkWell(
+          onTap: () {
+            // Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(context, "/", (route) => true);
+          },
+          child: icon_left(color: rgba(0, 0, 0, 1), size: 25),
+        ),
+        automaticallyImplyLeading: context == null ? false : true,
 
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: G.borderBottom(show: true)
-                ),
-              )
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(0),
+          child: Container(
+            decoration: BoxDecoration(border: G.borderBottom(show: true)),
           ),
         ),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
       body: Container(
         child: Center(
           child: Column(
             children: [
-              Expanded(
-                child: Container(),
-              ),
+              Expanded(child: Container()),
               Container(
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: (){
-                        if(clickNumOneOpenDev >= 10 && clickNumTwoOpenDev == 0){
+                      onTap: () {
+                        if (clickNumOneOpenDev >= 10 &&
+                            clickNumTwoOpenDev == 0) {
                           G.isDev = false;
                           G.toast('debug mode stop');
                         }
-                        if(clickNumOneOpenDev >= 10){
-                          print("aaa1=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}");
+                        if (clickNumOneOpenDev >= 10) {
+                          print(
+                            "aaa1=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}",
+                          );
                           clickNumTwoOpenDev = 0;
-                        }else{
+                        } else {
                           clickNumOneOpenDev++;
-                          print("aaa2=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}");
+                          print(
+                            "aaa2=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}",
+                          );
                         }
                       },
-                      child:icon_wifi_off(
+                      child: icon_wifi_off(
                         size: 100,
                         // color: hex('#333')
                         color: rgba(0, 0, 0, 0.52),
@@ -120,40 +118,35 @@ class _NotNetworkState extends State<NotNetwork> {
                       ),
                     ),
                     InkWell(
-                      onTap: (){
-                        if(clickNumOneOpenDev >= 10 && clickNumTwoOpenDev >= 10){
-                          print("aaa3=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}");
+                      onTap: () {
+                        if (clickNumOneOpenDev >= 10 &&
+                            clickNumTwoOpenDev >= 10) {
+                          print(
+                            "aaa3=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}",
+                          );
                           G.isDev = true;
                           G.toast('debug mode ready');
                           G.pushNamed('/setdomain');
-                        }else{
-                          if(clickNumOneOpenDev == 10){
-                            print("aaa4=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}");
+                        } else {
+                          if (clickNumOneOpenDev == 10) {
+                            print(
+                              "aaa4=====>${clickNumOneOpenDev}/${clickNumTwoOpenDev}",
+                            );
                             clickNumTwoOpenDev++;
                           }
                         }
-
-
                       },
                       child: Text('網絡不在狀態'),
                     ),
-
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(),
-              ),
-              Expanded(
-                child: Container(),
-              ),
+              Expanded(child: Container()),
+              Expanded(child: Container()),
             ],
           ),
         ),
       ),
     );
   }
-
-
-
 }

@@ -10,9 +10,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-
 class FacebookProvider extends ChangeNotifier {
-
   SharedPreferences _prefs;
 
   // static final FacebookLogin facebookSignIn = new FacebookLogin();
@@ -30,20 +28,25 @@ class FacebookProvider extends ChangeNotifier {
     //   facebookSignIn = new FacebookLogin();
     //   // print('FacebookProvider======>init2/${facebookSignIn}');
     // }
-    Future.delayed(Duration.zero, () async{
+    Future.delayed(Duration.zero, () async {
       _prefs = await SharedPreferences.getInstance();
-      _isFacebookLogin = (_prefs.getBool('isFacebookLogin') == false ||_prefs.getBool('isFacebookLogin') == null)?false:true;
+      _isFacebookLogin =
+          (_prefs.getBool('isFacebookLogin') == false ||
+              _prefs.getBool('isFacebookLogin') == null)
+          ? false
+          : true;
       // print('FacebookProvider======>init3/${_isFacebookLogin}');
     });
   }
 
   Future<bool> loginByFacebook() async {
-
-    final result = await FacebookAuth.instance.login(permissions:['email']);
+    final result = await FacebookAuth.instance.login(permissions: ['email']);
     print('result======>${result}');
     print('result.status======>${result.status}');
-    if(result.status == LoginStatus.success){
-      Map<String, dynamic> profile = await FacebookAuth.instance.getUserData(fields:"name,first_name,last_name,email");
+    if (result.status == LoginStatus.success) {
+      Map<String, dynamic> profile = await FacebookAuth.instance.getUserData(
+        fields: "name,first_name,last_name,email",
+      );
       final AccessToken accessToken = result.accessToken;
       Map<String, dynamic> accessTokenJson = accessToken.toJson();
       // print('AccessToken=========>${accessTokenJson['token']}');
@@ -53,7 +56,6 @@ class FacebookProvider extends ChangeNotifier {
       // print('last_name=========>${profile['last_name']}');
       // print('id=========>${profile['id']}');
       // print('_userData=========>${profile}');
-
 
       var res = await G.req.user.loginByFacebook(
         name: profile['name'],
@@ -66,41 +68,30 @@ class FacebookProvider extends ChangeNotifier {
 
       print('loginByFacebook1=====>${res}');
 
-      if(res == null){
+      var data = res.data;
+      // print('loginByFacebook2=====>${data['data']['id']}');
+      if (data == null) {
         _isFacebookLogin = false;
         _message = '登錄失敗';
         notifyListeners();
         return false;
-      }else{
-        var data = res.data;
-        // print('loginByFacebook2=====>${data['data']['id']}');
-        if(data == null) {
+      } else {
+        if (data['data']['id'] == -1) {
           _isFacebookLogin = false;
-          _message = '登錄失敗';
+          _message = data['msg'];
+          print('loginByFacebook3=====>${data['msg']}');
           notifyListeners();
           return false;
-        }else{
-          if(data['data']['id'] == -1){
-            _isFacebookLogin = false;
-            _message = data['msg'];
-            print('loginByFacebook3=====>${data['msg']}');
-            notifyListeners();
-            return false;
-          }else{
-            await getUserDetail(data['data']['id']);
-            _isFacebookLogin = true;
-            _message = '登錄成功';
-            _prefs.setBool('isFacebookLogin', true);
-            notifyListeners();
-            return true;
-          }
+        } else {
+          await getUserDetail(data['data']['id']);
+          _isFacebookLogin = true;
+          _message = '登錄成功';
+          _prefs.setBool('isFacebookLogin', true);
+          notifyListeners();
+          return true;
         }
       }
-
-
-
-
-    }else{
+    } else {
       _isFacebookLogin = false;
       _message = '登錄失敗';
       print('FacebookLoginStatus.cancelledByUser=====>${_message}');
@@ -206,17 +197,15 @@ class FacebookProvider extends ChangeNotifier {
   }
 
   getUserDetail(int userid) async {
-    var res = await G.req.user.detail(
-      id: userid,
-    );
+    var res = await G.req.user.detail(id: userid);
 
     Map data = res.data;
-//    print('data=====>${data}');
-//    Map json = data['data'];
+    //    print('data=====>${data}');
+    //    Map json = data['data'];
     Map<dynamic, dynamic> json = data['data'];
-//    print('json=====>${json}');
-//    json['token'] = token;
-//    print('getUserDetail=====>${json}');
+    //    print('json=====>${json}');
+    //    json['token'] = token;
+    //    print('getUserDetail=====>${json}');
     G.user.init(json);
   }
 
@@ -229,5 +218,4 @@ class FacebookProvider extends ChangeNotifier {
     notifyListeners();
     return true;
   }
-
 }

@@ -15,14 +15,10 @@ import '../../model/comment_list_model/data.dart';
 
 class CommentPage extends StatefulWidget {
   final Map args;
-  CommentPage({
-    Key key,
-    this.args,
-  }) : super(key: key);
+  CommentPage({Key key, this.args}) : super(key: key);
 
   @override
   _CommentPageState createState() => _CommentPageState();
-
 }
 
 class _CommentPageState extends State<CommentPage> {
@@ -33,7 +29,9 @@ class _CommentPageState extends State<CommentPage> {
   int userid = 0;
   int page_id = 1;
   List<dynamic> items = [];
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   bool isloadcomplete = false;
 
@@ -43,12 +41,10 @@ class _CommentPageState extends State<CommentPage> {
     UserDataModel userData = G.user.data;
     userid = userData.id;
     args = widget.args;
-    if(args != null){
-      id = args['id'];
-      Future.delayed(Duration.zero, () async{
-        _loadData(id: id,limit:25,pageid: page_id,uid: userid);
-      });
-    }
+    id = args['id'];
+    Future.delayed(Duration.zero, () async {
+      _loadData(id: id, limit: 25, pageid: page_id, uid: userid);
+    });
   }
 
   @override
@@ -56,90 +52,89 @@ class _CommentPageState extends State<CommentPage> {
     super.dispose();
   }
 
-  void _onRefresh() async{
-//    print('onRefresh1===>');
-//     await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero,(){
-      if(mounted) {
+  void _onRefresh() async {
+    //    print('onRefresh1===>');
+    //     await Future.delayed(Duration(milliseconds: 1000));
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
         page_id = 1;
         items = [];
-        _loadData(id: id,limit:25,pageid:page_id,uid:userid);
+        _loadData(id: id, limit: 25, pageid: page_id, uid: userid);
       }
       _refreshController.refreshCompleted();
     });
-
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     // await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero,(){
-      if(mounted) {
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
         int page_id2 = ++page_id;
-        _loadData(limit:25,pageid:page_id2,uid:userid);
+        _loadData(limit: 25, pageid: page_id2, uid: userid);
       }
       _refreshController.loadComplete();
     });
-
   }
 
-  _loadData({int id=0,int uid=0, int pageid=1, int limit=25,}) async {
+  _loadData({int id = 0, int uid = 0, int pageid = 1, int limit = 25}) async {
     try {
-//      print('_loaddata====>${id},${uid},${pageid},${limit}');
+      //      print('_loaddata====>${id},${uid},${pageid},${limit}');
       var res = await G.req.article.comment(
         articleid: id,
         userid: uid,
-        pageid:pageid,
-        limit:limit,
+        pageid: pageid,
+        limit: limit,
       );
-//      print('comment===>${res}');
+      //      print('comment===>${res}');
       Map result = res.data;
       CommentModel tempList = CommentModel.fromJson(result);
       if (mounted) {
         setState(() {
           items.addAll(tempList.list);
-//          if(items.length > 0){
+          //          if(items.length > 0){
           isloadcomplete = true;
-//          }
-
+          //          }
         });
         if (tempList.list.length == 0) {
           _refreshController.loadNoData();
         }
       }
-    }catch(e) {
+    } catch (e) {
       print('_loadData===>${e}');
     }
   }
 
-  _clickDoLike(item){
+  _clickDoLike(item) {
+    //    print('sss===>${item.eland_name}');
 
-//    print('sss===>${item.eland_name}');
-
-//    int uid = G.user.data.id;
-//    int articleid = item.id;
-//    print('aaa===>${id},${userid}');
+    //    int uid = G.user.data.id;
+    //    int articleid = item.id;
+    //    print('aaa===>${id},${userid}');
     try {
-      Future.delayed(Duration.zero, () async{
-        var res = await G.req.article.do_like_comment(articleid: id, userid: userid,comment_id: item.comment_id,to_userid: item.user_id);
+      Future.delayed(Duration.zero, () async {
+        var res = await G.req.article.do_like_comment(
+          articleid: id,
+          userid: userid,
+          comment_id: item.comment_id,
+          to_userid: item.user_id,
+        );
         Map result = res.data;
-        if(result['code'] == 200){
+        if (result['code'] == 200) {
           setState(() {
-            if(item.ilike == true && item.like_num > 0){
-              items[item.key].like_num = item.like_num-1;
+            if (item.ilike == true && item.like_num > 0) {
+              items[item.key].like_num = item.like_num - 1;
               items[item.key].ilike = false;
-            }else{
-              items[item.key].like_num = item.like_num+1;
+            } else {
+              items[item.key].like_num = item.like_num + 1;
               items[item.key].ilike = true;
             }
           });
         }
       });
-    }catch(e){
+    } catch (e) {
       print('_clickDoLike===>${e}');
     }
-
   }
-
 
   Widget editWidget(context, size) {
     // 计算当前的文本需要占用的行数
@@ -149,15 +144,20 @@ class _CommentPageState extends State<CommentPage> {
       maxLines: 100,
       cursorColor: hex('#014d7b'),
       decoration: InputDecoration(
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.only(top:3.0,left:5.0,right:5.0,bottom:5.0)
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.only(
+          top: 3.0,
+          left: 5.0,
+          right: 5.0,
+          bottom: 5.0,
+        ),
       ),
-//      onTap: () => setState(() {}),
-//      onChanged: (v) => setState(() {}),
+      //      onTap: () => setState(() {}),
+      //      onChanged: (v) => setState(() {}),
       style: TextStyle(
-          textBaseline: TextBaseline.alphabetic,
-          fontSize: 14.0,
-          color: const Color(0xff181818)
+        textBaseline: TextBaseline.alphabetic,
+        fontSize: 14.0,
+        color: const Color(0xff181818),
       ),
     );
   }
@@ -176,7 +176,7 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   Widget buildContent(item) {
-//    print('aaa=====>${userid},${item.user_id}');
+    //    print('aaa=====>${userid},${item.user_id}');
     return Stack(
       children: [
         new Container(
@@ -186,7 +186,7 @@ class _CommentPageState extends State<CommentPage> {
           decoration: new BoxDecoration(
             color: Colors.white,
             border: new BorderDirectional(
-                bottom: new BorderSide(color: Colors.black12, width: 1.0)
+              bottom: new BorderSide(color: Colors.black12, width: 1.0),
             ),
           ),
           child: new Column(
@@ -195,17 +195,17 @@ class _CommentPageState extends State<CommentPage> {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(top: 10.0),
                 child: new Row(
-    //                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Container(
                       width: 45,
                       height: 45,
-                      margin: const EdgeInsets.only(left:10.0,right: 15.0),
+                      margin: const EdgeInsets.only(left: 10.0, right: 15.0),
                       child: new CircleAvatar(
-                          backgroundColor: rgba(28, 141, 160, 1),
-                          backgroundImage: new NetworkImage(item.avatar),
-                          radius: 11.0
+                        backgroundColor: rgba(28, 141, 160, 1),
+                        backgroundImage: new NetworkImage(item.avatar),
+                        radius: 11.0,
                       ),
                     ),
                     new Column(
@@ -215,28 +215,41 @@ class _CommentPageState extends State<CommentPage> {
                           alignment: Alignment.centerLeft,
                           width: G.screenWidth() * 0.73333,
                           child: new Text(
-                              item.user_name,
-                              maxLines:2,
-                              overflow:TextOverflow.ellipsis,
-                              style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16.0,)
+                            item.user_name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: new TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.only(top: 5.0,bottom:5.0),
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                           width: G.screenWidth() * 0.73333,
                           child: new Text(
-                              item.comment_content,
-                              style: new TextStyle(color: Colors.black,fontSize: 15.0,)
+                            item.comment_content,
+                            style: new TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                            ),
                           ),
                         ),
                         Row(
                           children: [
-                            icon_query_builder(size: 13,color: Colors.black54),
-                            Container(
-                              width:5.0,
-                            ),
-                            (item.comment_time.toString() == '') ? Container(): new Text(item.comment_time.toString(), style: new TextStyle(color: Colors.black54,fontSize: 13.0,)),
+                            icon_query_builder(size: 13, color: Colors.black54),
+                            Container(width: 5.0),
+                            (item.comment_time.toString() == '')
+                                ? Container()
+                                : new Text(
+                                    item.comment_time.toString(),
+                                    style: new TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 13.0,
+                                    ),
+                                  ),
                           ],
                         ),
                         Container(
@@ -244,23 +257,46 @@ class _CommentPageState extends State<CommentPage> {
                           child: Row(
                             children: [
                               InkWell(
-                                  child: (item.ilike == true && item.like_num > 0)?
-                                  new Text(item.like_num.toString()+' 點贊', style: new TextStyle(color: rgba(28, 141, 160, 1),fontSize: 13.0,)) :
-                                  new Text(item.like_num.toString()+' 點贊', style: new TextStyle(color: Colors.black54,fontSize: 13.0,)),
-                                  onTap: (){
-//                                    print('like_num===>');
-                                    _clickDoLike(item);
-                                  }
+                                child: (item.ilike == true && item.like_num > 0)
+                                    ? new Text(
+                                        item.like_num.toString() + ' 點贊',
+                                        style: new TextStyle(
+                                          color: rgba(28, 141, 160, 1),
+                                          fontSize: 13.0,
+                                        ),
+                                      )
+                                    : new Text(
+                                        item.like_num.toString() + ' 點贊',
+                                        style: new TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 13.0,
+                                        ),
+                                      ),
+                                onTap: () {
+                                  //                                    print('like_num===>');
+                                  _clickDoLike(item);
+                                },
                               ),
-                              Container(
-                                width:10.0,
-                              ),
+                              Container(width: 10.0),
                               InkWell(
-                                  child: new Text(item.reply_num.toString()+' 回復', style: new TextStyle(color: Colors.black54,fontSize: 13.0,)),
-                                  onTap: (){
-//                                    print('reply_num===>${id},${item.comment_id}');
-                                    G.pushNamed('/reply_comment', arguments: {'articleid': id,'commentid':item.comment_id,'to_userid':item.user_id});
-                                  }
+                                child: new Text(
+                                  item.reply_num.toString() + ' 回復',
+                                  style: new TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                                onTap: () {
+                                  //                                    print('reply_num===>${id},${item.comment_id}');
+                                  G.pushNamed(
+                                    '/reply_comment',
+                                    arguments: {
+                                      'articleid': id,
+                                      'commentid': item.comment_id,
+                                      'to_userid': item.user_id,
+                                    },
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -337,54 +373,53 @@ class _CommentPageState extends State<CommentPage> {
         */
       ],
     );
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     var body = [
       new Expanded(
-        child:(items.length > 0 && isloadcomplete == true) ?
-        SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          header: WaterDropHeader(
-            refresh:SizedBox(
-              height: 25,
-              width: 25,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation<Color>(rgba(28, 141, 160, 1)),
-              ),
-            ),
-            complete:Text('√ 加載完成'),
-          ),
-          footer: G.pullToRefresh.footer(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-
-          child: ListView.builder(
-            itemBuilder: (c, f){
-    //          print('fff====>${f},${elandItems.length}');
-              items[f].key = f;
-              return new Container(
-                child: new Column(
-                  children: <Widget>[
-                    buildContent(items[f]),
-                  ],
+        child: (items.length > 0 && isloadcomplete == true)
+            ? SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                header: WaterDropHeader(
+                  refresh: SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        rgba(28, 141, 160, 1),
+                      ),
+                    ),
+                  ),
+                  complete: Text('√ 加載完成'),
                 ),
-              );
-            },
-            itemCount: items.length,
-          ),
-        ) : ((items.length == 0 && isloadcomplete == true)? Container() : _cardListSkeleton()),
+                footer: G.pullToRefresh.footer(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+
+                child: ListView.builder(
+                  itemBuilder: (c, f) {
+                    //          print('fff====>${f},${elandItems.length}');
+                    items[f].key = f;
+                    return new Container(
+                      child: new Column(
+                        children: <Widget>[buildContent(items[f])],
+                      ),
+                    );
+                  },
+                  itemCount: items.length,
+                ),
+              )
+            : ((items.length == 0 && isloadcomplete == true)
+                  ? Container()
+                  : _cardListSkeleton()),
       ),
-      new Container(
-        height: 15.0,
-      ),
-//      new Spacer(),
+      new Container(height: 15.0),
+      //      new Spacer(),
       new Container(
         height: 50.0,
         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -400,25 +435,28 @@ class _CommentPageState extends State<CommentPage> {
           children: <Widget>[
             new Expanded(
               child: new Container(
-                margin: const EdgeInsets.only(top: 7.0, bottom: 7.0, left: 8.0, right: 8.0),
+                margin: const EdgeInsets.only(
+                  top: 7.0,
+                  bottom: 7.0,
+                  left: 8.0,
+                  right: 8.0,
+                ),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.0)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
                 child: new LayoutBuilder(builder: editWidget),
               ),
             ),
             new InkWell(
-              child: icon_send(
-                  size: 35,
-                  color: hex('#333')
-              ),
+              child: icon_send(size: 35, color: hex('#333')),
               onTap: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                if(_textController.text == null || _textController.text.trim() == '') {
+                if (_textController.text.trim() == '') {
                   return G.toast('你還未填寫內容？');
                 }
                 String commentStr = _textController.text.trim();
-//                print('bbb====>${userid},${id},${commentStr}');
+                //                print('bbb====>${userid},${id},${commentStr}');
 
                 try {
                   var res = await G.req.article.add_comment(
@@ -428,31 +466,28 @@ class _CommentPageState extends State<CommentPage> {
                   );
                   var data = res.data;
 
-                  if(data == null) return;
+                  if (data == null) return;
 
-                  if(data['code'] == 200){
+                  if (data['code'] == 200) {
                     _textController.clear();
                     G.toast('提交成功');
                     _onRefresh();
-                  }else{
+                  } else {
                     G.toast('提交失敗，請重試');
                   }
 
                   print('comment===>${res}');
-
-                }catch(e) {
+                } catch (e) {
                   print('add_comment===>${e}');
                 }
-
               },
             ),
           ],
         ),
       ),
-
     ];
     return Scaffold(
-      appBar: customAppbar(context: context,title: '評論'),
+      appBar: customAppbar(context: context, title: '評論'),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -460,11 +495,7 @@ class _CommentPageState extends State<CommentPage> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: new Column(children: body),
-      )
+      ),
     );
-
   }
-
-
-
 }

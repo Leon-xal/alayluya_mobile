@@ -1,6 +1,5 @@
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import '../../components/a_button/index.dart';
 import '../../utils/global.dart';
 
@@ -13,9 +12,8 @@ class ADialog {
   static Widget _content;
   static Widget _bottom;
 
-
   /// 提示弹窗
-  /// 
+  ///
   /// ```
   /// @param {BuildContext} context
   /// @param {String} title - 标题（标题为null，表示不显示标题）
@@ -23,7 +21,8 @@ class ADialog {
   /// @param {Function} confirmButtonPress - 点击确认回调
   /// @param {Text} confirmButtonText - 确认的文字
   /// ```
-  ADialog.alert(this.context, {
+  ADialog.alert(
+    this.context, {
     this.title,
     @required this.content,
     Function confirmButtonPress,
@@ -33,14 +32,19 @@ class ADialog {
     _content = _initContent();
     _bottom = _initBottom(
       confirmButtonPress: confirmButtonPress,
-      confirmButtonText: confirmButtonText == null ? Text('確認') : confirmButtonText,
-      confirmBorderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4))
+      confirmButtonText: confirmButtonText == null
+          ? Text('確認')
+          : confirmButtonText,
+      confirmBorderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(4),
+        bottomRight: Radius.circular(4),
+      ),
     );
     _initDialog();
   }
 
   /// 确认弹窗
-  /// 
+  ///
   /// ```
   /// @param {BuildContext} context
   /// @param {String} title - 标题 （标题为null，表示不显示标题）
@@ -50,7 +54,8 @@ class ADialog {
   /// @param {Function} cancelButtonPress - 点击取消回调
   /// @param {Text} cancelButtonText - 取消的文字
   /// ```
-  ADialog.confirm(this.context, {
+  ADialog.confirm(
+    this.context, {
     this.title,
     @required this.content,
     Function confirmButtonPress,
@@ -62,74 +67,88 @@ class ADialog {
     _content = _initContent();
     _bottom = _initBottom(
       confirmButtonPress: confirmButtonPress,
-      confirmButtonText: confirmButtonText == null ? Text('確認') : confirmButtonText,
-      cancelButtonText: cancelButtonText == null ? Text('取消') : cancelButtonText,
+      confirmButtonText: confirmButtonText == null
+          ? Text('確認')
+          : confirmButtonText,
+      cancelButtonText: cancelButtonText == null
+          ? Text('取消')
+          : cancelButtonText,
       cancelButtonPress: cancelButtonPress,
       cancelBorderRadius: BorderRadius.only(bottomLeft: Radius.circular(4)),
-      confirmBorderRadius: BorderRadius.only(bottomRight: Radius.circular(4))
+      confirmBorderRadius: BorderRadius.only(bottomRight: Radius.circular(4)),
     );
     _initDialog();
   }
 
-  ADialog.block(this.context, {
-//    this.title,
-//    @required this.content,
+  ADialog.block(
+    this.context, {
+    //    this.title,
+    //    @required this.content,
     Widget contentChild,
     Widget bottomChild,
-//    Function confirmButtonPress,
-//    Text confirmButtonText,
+    //    Function confirmButtonPress,
+    //    Text confirmButtonText,
   }) {
     _title = Container(
       child: Stack(
-          children: <Widget>[
-            Align(
-//              child: Icon(Icons.search, size: 40, color: rgba(28, 141, 160, 1)),
-              child: InkWell(
-                child: icon_close(size: 30,color: rgba(28, 141, 160, 1)),
-                onTap: (){
-                  Navigator.pop(context);
-                }
-              ),
-              alignment: Alignment.topRight,
+        children: <Widget>[
+          Align(
+            //              child: Icon(Icons.search, size: 40, color: rgba(28, 141, 160, 1)),
+            child: InkWell(
+              child: icon_close(size: 30, color: rgba(28, 141, 160, 1)),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
-          ]),
+            alignment: Alignment.topRight,
+          ),
+        ],
+      ),
     );
     _content = Container(
-        alignment: Alignment.centerLeft,
-        margin: const EdgeInsets.only(left: 10.0,right:10.0,top:5.0,bottom:20.0),
-        child: contentChild
+      alignment: Alignment.centerLeft,
+      margin: const EdgeInsets.only(
+        left: 10.0,
+        right: 10.0,
+        top: 5.0,
+        bottom: 20.0,
+      ),
+      child: contentChild,
     );
     _bottom = bottomChild == null ? Container() : bottomChild;
-//    _bottom = _initBottom(
-//        confirmButtonPress: confirmButtonPress,
-//        confirmButtonText: confirmButtonText == null ? Text('确认') : confirmButtonText,
-//        confirmBorderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4))
-//    );
+    //    _bottom = _initBottom(
+    //        confirmButtonPress: confirmButtonPress,
+    //        confirmButtonText: confirmButtonText == null ? Text('确认') : confirmButtonText,
+    //        confirmBorderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4))
+    //    );
     _initDialog();
   }
 
   // 标题部分
   Widget _initTitle() {
-    return title == null ? Container() : Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 12),        
-      child: Text(title, style: TextStyle(
-        color: rgba(56, 56, 56, 1),
-        fontSize: 16,
-        fontWeight: FontWeight.bold
-      )),
-    );
+    return title == null
+        ? Container()
+        : Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(top: 12),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: rgba(56, 56, 56, 1),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
   }
 
   // 内容部分
   Widget _initContent() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 24,horizontal: 15),
-      child: Text(content,
-        style: TextStyle(
-          color: rgba(153, 153, 153, 1),
-          fontSize: 14,
-        ),
+      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 15),
+      child: Text(
+        content,
+        style: TextStyle(color: rgba(153, 153, 153, 1), fontSize: 14),
         textAlign: TextAlign.center,
       ),
     );
@@ -146,47 +165,48 @@ class ADialog {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: rgba(242, 242, 242, 1)))
+        border: Border(top: BorderSide(color: rgba(242, 242, 242, 1))),
       ),
       child: Row(
         children: <Widget>[
           // 取消按钮
           Container(
-            child: cancelButtonText == null ? null : Expanded(child: 
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(right: BorderSide(color: rgba(242, 242, 242,1))),
-                ),
-                child: AButton.normal(
-                  child: cancelButtonText,
-                  color: rgba(56, 56, 56, 1),
-                  borderRadius: cancelBorderRadius,
-                  onPressed: (){
-                    if(cancelButtonPress == null) {
-                      Navigator.pop(context);
-                    } else {
-                      cancelButtonPress();
-                    }
-                  }
-                ),
-              )
-            ),
+            child: cancelButtonText == null
+                ? null
+                : Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(color: rgba(242, 242, 242, 1)),
+                        ),
+                      ),
+                      child: AButton.normal(
+                        child: cancelButtonText,
+                        color: rgba(56, 56, 56, 1),
+                        borderRadius: cancelBorderRadius,
+                        onPressed: () {
+                          cancelButtonPress();
+                        },
+                      ),
+                    ),
+                  ),
           ),
           // 确认按钮
           Container(
-            child: confirmButtonText == null ? null : Expanded(
-              child: AButton.normal(
-                child: confirmButtonText,
-                borderRadius: confirmBorderRadius,
-                color: rgba(28, 141, 160, 1),
-                onPressed: (){
-                  Navigator.pop(context);
-                  if(confirmButtonPress != null) confirmButtonPress();
-
-                }
-              ),
-            ),
-          )
+            child: confirmButtonText == null
+                ? null
+                : Expanded(
+                    child: AButton.normal(
+                      child: confirmButtonText,
+                      borderRadius: confirmBorderRadius,
+                      color: rgba(28, 141, 160, 1),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        confirmButtonPress();
+                      },
+                    ),
+                  ),
+          ),
         ],
       ),
     );
@@ -204,21 +224,17 @@ class ADialog {
             return Dialog(
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4)
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    _title,
-                    _content,
-                    _bottom,
-                  ],
-                )
+                  children: <Widget>[_title, _content, _bottom],
+                ),
               ),
             );
-          }
+          },
         );
-      }
+      },
     );
   }
 }

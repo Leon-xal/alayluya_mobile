@@ -5,17 +5,19 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 enum PlayerState { stopped, playing, paused }
+
 enum PlayingRouteState { speakers, earpiece }
 
 class PlayerWidget extends StatefulWidget {
   final String url;
   final PlayerMode mode;
 
-  PlayerWidget(
-      {Key key, @required this.url, this.mode = PlayerMode.MEDIA_PLAYER})
-      : super(key: key);
+  PlayerWidget({
+    Key key,
+    @required this.url,
+    this.mode = PlayerMode.MEDIA_PLAYER,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -42,8 +44,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   get _isPlaying => _playerState == PlayerState.playing;
   get _isPaused => _playerState == PlayerState.paused;
-  get _durationText => _duration?.toString()?.split('.')?.first ?? '';
-  get _positionText => _position?.toString()?.split('.')?.first ?? '';
+  get _durationText => _duration.toString().split('.').first ?? '';
+  get _positionText => _position.toString().split('.').first ?? '';
 
   get _isPlayingThroughEarpiece =>
       _playingRouteState == PlayingRouteState.earpiece;
@@ -59,11 +61,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   @override
   void dispose() {
     _audioPlayer.stop();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    _playerErrorSubscription?.cancel();
-    _playerStateSubscription?.cancel();
+    _durationSubscription.cancel();
+    _positionSubscription.cancel();
+    _playerCompleteSubscription.cancel();
+    _playerErrorSubscription.cancel();
+    _playerStateSubscription.cancel();
     super.dispose();
   }
 
@@ -96,14 +98,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               icon: Icon(Icons.stop),
               color: rgba(28, 141, 160, 1),
             ),
-//            IconButton(
-//              onPressed: _earpieceOrSpeakersToggle,
-//              iconSize: 64.0,
-//              icon: _isPlayingThroughEarpiece
-//                  ? Icon(Icons.volume_up)
-//                  : Icon(Icons.hearing),
-//              color: rgba(28, 141, 160, 1),
-//            ),
+            //            IconButton(
+            //              onPressed: _earpieceOrSpeakersToggle,
+            //              iconSize: 64.0,
+            //              icon: _isPlayingThroughEarpiece
+            //                  ? Icon(Icons.volume_up)
+            //                  : Icon(Icons.hearing),
+            //              color: rgba(28, 141, 160, 1),
+            //            ),
           ],
         ),
         Column(
@@ -116,13 +118,13 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                   Slider(
                     onChanged: (v) {
                       final Position = v * _duration.inMilliseconds;
-                      _audioPlayer
-                          .seek(Duration(milliseconds: Position.round()));
+                      _audioPlayer.seek(
+                        Duration(milliseconds: Position.round()),
+                      );
                     },
-                    value: (_position != null &&
-                        _duration != null &&
-                        _position.inMilliseconds > 0 &&
-                        _position.inMilliseconds < _duration.inMilliseconds)
+                    value:
+                        (_position.inMilliseconds > 0 &&
+                            _position.inMilliseconds < _duration.inMilliseconds)
                         ? _position.inMilliseconds / _duration.inMilliseconds
                         : 0.0,
                   ),
@@ -132,12 +134,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             Text(
               _position != null
                   ? '${_positionText ?? ''} / ${_durationText ?? ''}'
-                  : _duration != null ? _durationText : '',
+                  : _duration != null
+                  ? _durationText
+                  : '',
               style: TextStyle(fontSize: 24.0),
             ),
           ],
         ),
-        (_audioPlayerState == '' || _audioPlayerState == null)?Text(''):Text('${_audioPlayerState}'),
+        (_audioPlayerState == '' || _audioPlayerState == null)
+            ? Text('')
+            : Text('${_audioPlayerState}'),
       ],
     );
   }
@@ -155,29 +161,32 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
         // set at least title to see the notification bar on ios.
         _audioPlayer.setNotification(
-            title: 'App Name',
-            artist: 'Artist or blank',
-            albumTitle: 'Name or blank',
-            imageUrl: 'url or blank',
-            forwardSkipInterval: const Duration(seconds: 30), // default is 30s
-            backwardSkipInterval: const Duration(seconds: 30), // default is 30s
-            duration: duration,
-            elapsedTime: Duration(seconds: 0));
+          title: 'App Name',
+          artist: 'Artist or blank',
+          albumTitle: 'Name or blank',
+          imageUrl: 'url or blank',
+          forwardSkipInterval: const Duration(seconds: 30), // default is 30s
+          backwardSkipInterval: const Duration(seconds: 30), // default is 30s
+          duration: duration,
+          elapsedTime: Duration(seconds: 0),
+        );
       }
     });
 
-    _positionSubscription =
-        _audioPlayer.onAudioPositionChanged.listen((p) => setState(() {
-          _position = p;
-        }));
+    _positionSubscription = _audioPlayer.onAudioPositionChanged.listen(
+      (p) => setState(() {
+        _position = p;
+      }),
+    );
 
-    _playerCompleteSubscription =
-        _audioPlayer.onPlayerCompletion.listen((event) {
-          _onComplete();
-          setState(() {
-            _position = _duration;
-          });
-        });
+    _playerCompleteSubscription = _audioPlayer.onPlayerCompletion.listen((
+      event,
+    ) {
+      _onComplete();
+      setState(() {
+        _position = _duration;
+      });
+    });
 
     _playerErrorSubscription = _audioPlayer.onPlayerError.listen((msg) {
       print('audioPlayer error : $msg');
@@ -204,10 +213,9 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   }
 
   Future<int> _play() async {
-    final playPosition = (_position != null &&
-        _duration != null &&
-        _position.inMilliseconds > 0 &&
-        _position.inMilliseconds < _duration.inMilliseconds)
+    final playPosition =
+        (_position.inMilliseconds > 0 &&
+            _position.inMilliseconds < _duration.inMilliseconds)
         ? _position
         : null;
     final result = await _audioPlayer.play(url, position: playPosition);
@@ -230,10 +238,12 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Future<int> _earpieceOrSpeakersToggle() async {
     final result = await _audioPlayer.earpieceOrSpeakersToggle();
     if (result == 1)
-      setState(() => _playingRouteState =
-      _playingRouteState == PlayingRouteState.speakers
-          ? PlayingRouteState.earpiece
-          : PlayingRouteState.speakers);
+      setState(
+        () => _playingRouteState =
+            _playingRouteState == PlayingRouteState.speakers
+            ? PlayingRouteState.earpiece
+            : PlayingRouteState.speakers,
+      );
     return result;
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter_html/flutter_html.dart';
 
 import '../../components/custom_navbar/index.dart';
 import '../../model/user_model/data.dart';
-import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 
 class TermsOfUse extends StatefulWidget {
@@ -13,9 +12,7 @@ class TermsOfUse extends StatefulWidget {
   createState() => _TermsOfUseState();
 }
 
-
 class _TermsOfUseState extends State<TermsOfUse> {
-
   int userid = 0;
   ScrollController scrollController = ScrollController();
   String content_html = '';
@@ -24,10 +21,8 @@ class _TermsOfUseState extends State<TermsOfUse> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    if(userData != null){
-        userid = userData.id;
-    }
-//    print('aaaaa===>${userData}');
+    userid = userData.id;
+    //    print('aaaaa===>${userData}');
 
     content_html = """
 <p>1.     本網站提供所有正統基督信仰教會機構免費e-Land，由機構安排人員進行管理。</p>
@@ -63,66 +58,83 @@ class _TermsOfUseState extends State<TermsOfUse> {
 
   @override
   Widget build(BuildContext context) {
-
-      return Scaffold(
-        backgroundColor: hex('#ccc'),
-        appBar: customAppbar(context: context,title: '主內教會機構用戶條款 Terms and Conditions for Church/Organization Users'),
-        body: Container(
-          margin: const EdgeInsets.only(left: 10.0,right:10.0,top:10.0,bottom:10.0),
-          padding: const EdgeInsets.only(left: 20.0,right:20.0,top:20.0,),
-          color: hex('#fff'),
-          width: G.screenWidth(),
-          height: G.screenHeight(),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            controller: scrollController,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      border: new Border(bottom: BorderSide(width: 1.0, color: hex('#cacbd1'))),
-                    ),
-                    padding: const EdgeInsets.only(bottom:15.0,),
-                    margin: const EdgeInsets.only(bottom:10.0,),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Text('主內教會機構用戶條款 Terms and Conditions for Church/Organization Users', style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 20.0,)),
-//                          new Text(article.time, style: new TextStyle(color: Colors.black,fontWeight: FontWeight.normal, fontSize: 14.0,height:2)),
-                      ],
-                    ),
+    return Scaffold(
+      backgroundColor: hex('#ccc'),
+      appBar: customAppbar(
+        context: context,
+        title: '主內教會機構用戶條款 Terms and Conditions for Church/Organization Users',
+      ),
+      body: Container(
+        margin: const EdgeInsets.only(
+          left: 10.0,
+          right: 10.0,
+          top: 10.0,
+          bottom: 10.0,
+        ),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+        color: hex('#fff'),
+        width: G.screenWidth(),
+        height: G.screenHeight(),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          controller: scrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                  border: new Border(
+                    bottom: BorderSide(width: 1.0, color: hex('#cacbd1')),
                   ),
-
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(bottom:15.0,),
-//                    decoration: BoxDecoration(
-//                      border: new Border(bottom: BorderSide(width: 1.0, color: hex('#cacbd1'))),
-//                    ),
-                    child: Html(
-                        data: content_html,
-                        onLinkTap: (url) {
-                          // open url in a webview
-                          print('url=====>${url}');
-                        },
-                        onImageTap: (src) {
-                          // Display the image in large form.
-                          print('src=====>${src}');
-                        }
+                ),
+                padding: const EdgeInsets.only(bottom: 15.0),
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      '主內教會機構用戶條款 Terms and Conditions for Church/Organization Users',
+                      style: new TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
                     ),
-                  ),
-                ]),
+                    //                          new Text(article.time, style: new TextStyle(color: Colors.black,fontWeight: FontWeight.normal, fontSize: 14.0,height:2)),
+                  ],
+                ),
+              ),
+
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(bottom: 15.0),
+                //                    decoration: BoxDecoration(
+                //                      border: new Border(bottom: BorderSide(width: 1.0, color: hex('#cacbd1'))),
+                //                    ),
+                child: Html(
+                  data: content_html,
+                  onLinkTap: (url) {
+                    // open url in a webview
+                    print('url=====>${url}');
+                  },
+                  onImageTap: (src) {
+                    // Display the image in large form.
+                    print('src=====>${src}');
+                  },
+                ),
+              ),
+            ],
           ),
         ),
-        bottomNavigationBar: (userid > 0)?CustomNavbar(onTap:(index) {
-          G.pushNamed(G.toobarRouteNameList[index]);
-        }):null,
-      );
+      ),
+      bottomNavigationBar: (userid > 0)
+          ? CustomNavbar(
+              onTap: (index) {
+                G.pushNamed(G.toobarRouteNameList[index]);
+              },
+            )
+          : null,
+    );
   }
-
-
-
 }
-

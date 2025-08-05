@@ -3,7 +3,6 @@ import '../../components/a_button/index.dart';
 //import 'package:color_dart/RgbaColor.dart';
 // import 'package:flui/flui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/a_upgrade_app/index.dart';
 import '../../components/a_eland_dynamic/index.dart';
@@ -14,12 +13,9 @@ import '../../utils/syncs.dart';
 import '../../main.dart';
 import 'dart:io';
 import 'package:launch_review/launch_review_latest.dart';
-import 'package:google_api_availability/google_api_availability.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:device_info/device_info.dart';
 
 class HomePage extends StatefulWidget {
-
   static _HomePageState _homePageState;
 
   HomePage() {
@@ -33,10 +29,12 @@ class HomePage extends StatefulWidget {
 
 // class _HomePageState extends State<HomePage> {
 //###Leo
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,RouteAware {
-
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin, RouteAware {
   @override
-  bool get wantKeepAlive => true; ///see AutomaticKeepAliveClientMixin
+  bool get wantKeepAlive => true;
+
+  ///see AutomaticKeepAliveClientMixin
 
   SharedPreferences prefs;
 
@@ -49,11 +47,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
     super.initState();
     // print('home======>');
     UserDataModel userData = G.user.data;
-    if(userData != null){
-      userid = userData.id;
-    }
+    userid = userData.id;
 
-    Future.delayed(Duration.zero, () async{
+    Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
       var systemInfo = Syncs.getSystemInfo;
       bool tmp_is_upgrade = await AUpgradeApp.getInstance();
@@ -62,7 +58,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
         is_upgrade = tmp_is_upgrade;
         // is_upgrade = true;
         // print('is_upgrade===========>${is_upgrade}');
-        if(systemInfo != null){
+        if (systemInfo != null) {
           if (Platform.isAndroid) {
             show_version_msg = systemInfo['apponline_android_version_msg'];
           } else {
@@ -70,17 +66,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
           }
         }
       });
-
     });
   }
-//###Leo
+
+  //###Leo
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
   }
-//###Leo
+
+  //###Leo
   @override
   void didPopNext() {
     // TODO: implement didPopNext
@@ -93,79 +90,86 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
     super.dispose();
   }
 
-
   AppBar createAppBar() {
-    return customAppbar(title: 'Alayluya',default_actions: true,);
+    return customAppbar(title: 'Alayluya', default_actions: true);
   }
 
   @override
   Widget build(BuildContext context) {
-
-//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
-//    return Text('123');
+    //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
+    //    return Text('123');
     return AElandDynamic(
-      isshowcenterload:true,
+      isshowcenterload: true,
       uid: userid,
       topchild: Container(
         // height: 180,
-        height: (is_upgrade == true)?227:177,
+        height: (is_upgrade == true) ? 227 : 177,
         child: Column(
           children: [
-            if(is_upgrade == true)
+            if (is_upgrade == true)
               Container(
                 color: Colors.deepOrange,
                 // color: hex("#F48F36FF"),
-                padding: EdgeInsets.only(top: 10,bottom:10,left:15,right:15),
+                padding: EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
+                  left: 15,
+                  right: 15,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('${show_version_msg}'),
                     AButton.normal(
-                        width: 70,height: 25,borderColor: rgba(28, 141, 160, 1),bgColor: hex('#fff'),plain: true,
-                        child: Text('查看', style: TextStyle(
-                            color: hex('#333'),
-                            fontSize: 13
-                        ),),
-                        borderRadius: BorderRadius.circular(40),
-                        // icon: icon_favorite(size: 13,color: hex('#fff')),
-                        onPressed: () async {
-                          // AUpgradeApp.confirm(context);
-                          await AUpgradeApp.goLaunch();
-                          // if (Platform.isAndroid) {
-                          //   GooglePlayServicesAvailability playStoreAvailability;
-                          //   try {
-                          //     playStoreAvailability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability(false);
-                          //   } on PlatformException {
-                          //     playStoreAvailability = GooglePlayServicesAvailability.unknown;
-                          //   }
-                          //
-                          //   // print('playStoreAvailability======>${playStoreAvailability}');
-                          //   // playStoreAvailability======>GooglePlayServicesAvailability.serviceInvalid
-                          //
-                          //   DeviceInfoPlugin dip = new DeviceInfoPlugin();
-                          //   AndroidDeviceInfo dipInfo = await dip.androidInfo;
-                          //   // print('os1=====>${dipInfo.hardware}');
-                          //   // print('os2=====>${dipInfo.device}');
-                          //   // print('os3=====>${dipInfo.androidId}');
-                          //   // print('os4=====>${dipInfo.board}');
-                          //   // print('os5=====>${dipInfo.bootloader}');
-                          //   // print('os6=====>${dipInfo.brand}');
-                          //   // print('os7=====>${dipInfo.display}');
-                          //   // print('os8=====>${dipInfo.fingerprint}');
-                          //   // print('os9=====>${dipInfo.manufacturer}');
-                          //   // print('os10=====>${dipInfo.model}');
-                          //
-                          //   if(dipInfo.manufacturer == 'HUAWEI' || playStoreAvailability == GooglePlayServicesAvailability.serviceInvalid || playStoreAvailability == GooglePlayServicesAvailability.unknown){
-                          //     //要到官网下载apk就可以了。
-                          //     // https://testapi2.alayluya.com/apk/alayluya-1.0.0+100.apk
-                          //     launch('${G.baseurl}/apk/alayluya-${show_version}.apk');
-                          //   }else{
-                          //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
-                          //   }
-                          // }else{
-                          //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
-                          // }
-                        }
+                      width: 70,
+                      height: 25,
+                      borderColor: rgba(28, 141, 160, 1),
+                      bgColor: hex('#fff'),
+                      plain: true,
+                      child: Text(
+                        '查看',
+                        style: TextStyle(color: hex('#333'), fontSize: 13),
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                      // icon: icon_favorite(size: 13,color: hex('#fff')),
+                      onPressed: () async {
+                        // AUpgradeApp.confirm(context);
+                        await AUpgradeApp.goLaunch();
+                        // if (Platform.isAndroid) {
+                        //   GooglePlayServicesAvailability playStoreAvailability;
+                        //   try {
+                        //     playStoreAvailability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability(false);
+                        //   } on PlatformException {
+                        //     playStoreAvailability = GooglePlayServicesAvailability.unknown;
+                        //   }
+                        //
+                        //   // print('playStoreAvailability======>${playStoreAvailability}');
+                        //   // playStoreAvailability======>GooglePlayServicesAvailability.serviceInvalid
+                        //
+                        //   DeviceInfoPlugin dip = new DeviceInfoPlugin();
+                        //   AndroidDeviceInfo dipInfo = await dip.androidInfo;
+                        //   // print('os1=====>${dipInfo.hardware}');
+                        //   // print('os2=====>${dipInfo.device}');
+                        //   // print('os3=====>${dipInfo.androidId}');
+                        //   // print('os4=====>${dipInfo.board}');
+                        //   // print('os5=====>${dipInfo.bootloader}');
+                        //   // print('os6=====>${dipInfo.brand}');
+                        //   // print('os7=====>${dipInfo.display}');
+                        //   // print('os8=====>${dipInfo.fingerprint}');
+                        //   // print('os9=====>${dipInfo.manufacturer}');
+                        //   // print('os10=====>${dipInfo.model}');
+                        //
+                        //   if(dipInfo.manufacturer == 'HUAWEI' || playStoreAvailability == GooglePlayServicesAvailability.serviceInvalid || playStoreAvailability == GooglePlayServicesAvailability.unknown){
+                        //     //要到官网下载apk就可以了。
+                        //     // https://testapi2.alayluya.com/apk/alayluya-1.0.0+100.apk
+                        //     launch('${G.baseurl}/apk/alayluya-${show_version}.apk');
+                        //   }else{
+                        //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+                        //   }
+                        // }else{
+                        //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+                        // }
+                      },
                     ),
                   ],
                 ),
@@ -226,13 +230,10 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
             //   loop: false,
             //   delay: Duration(hours: 24),
             // ),
-            AElandCard(uid:userid),
+            AElandCard(uid: userid),
           ],
         ),
-
       ),
     );
   }
-
-
 }

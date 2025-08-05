@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:color_dart/RgbaColor.dart';
 import 'package:flutter/material.dart';
@@ -23,21 +21,25 @@ class AcachedNetworkImage extends StatelessWidget {
   final BorderRadius borderRadius;
 
   AcachedNetworkImage(
-      this.path, {
-        Key key,
-        this.width,
-        this.height,
-        this.fit: BoxFit.fill,
-        this.borderRadius: const BorderRadius.all(Radius.circular(0.0)),
-      }) : assert(path != null);
+    this.path, {
+    Key key,
+    this.width,
+    this.height,
+    this.fit = BoxFit.fill,
+    this.borderRadius = const BorderRadius.all(Radius.circular(0.0)),
+  });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: borderRadius,
       child: CachedNetworkImage(
-//          color: rgba(28, 141, 160, 1),
-          imageUrl: path, height: height, width: width, fit: fit),
+        //          color: rgba(28, 141, 160, 1),
+        imageUrl: path,
+        height: height,
+        width: width,
+        fit: fit,
+      ),
     );
   }
 }

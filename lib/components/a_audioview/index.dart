@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/foundation/constants.dart';
 
@@ -14,43 +12,31 @@ import '../../utils/global.dart';
 
 class AAudioView {
   final BuildContext context;
+
   /// 图片URL
   final String url;
-  AAudioView.show(this.context,{
-    @required this.url,
-  }) {
-    Widget aview = new AAudioViewScreen(
-      url: url,
-    );
+  AAudioView.show(this.context, {@required this.url}) {
+    Widget aview = new AAudioViewScreen(url: url);
     final route = new CupertinoPageRoute(
       builder: (BuildContext context) => aview,
       settings: new RouteSettings(
         name: aview.toStringShort(),
-//        isInitialRoute: false,
+        //        isInitialRoute: false,
       ),
     );
 
     G.getCurrentState().push(route);
-
   }
 }
 
-
-
 class AAudioViewScreen extends StatefulWidget {
   String url;
-  AAudioViewScreen({
-    Key key,
-    this.url='',
-  }) : super(key: key);
+  AAudioViewScreen({Key key, this.url = ''}) : super(key: key);
   @override
   createState() => _AAudioViewScreenState();
-
 }
 
-
 class _AAudioViewScreenState extends State<AAudioViewScreen> {
-
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
   String localFilePath;
@@ -73,11 +59,11 @@ class _AAudioViewScreenState extends State<AAudioViewScreen> {
 
   Future<int> _getDuration() async {
     File audiofile = await audioCache.load('audio2.mp3');
-    await advancedPlayer.setUrl(
-      audiofile.path,
-    );
+    await advancedPlayer.setUrl(audiofile.path);
     int duration = await Future.delayed(
-        Duration(seconds: 2), () => advancedPlayer.getDuration());
+      Duration(seconds: 2),
+      () => advancedPlayer.getDuration(),
+    );
     return duration;
   }
 
@@ -94,7 +80,8 @@ class _AAudioViewScreenState extends State<AAudioViewScreen> {
           case ConnectionState.done:
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
             return Text(
-                'audio2.mp3 duration is: ${Duration(milliseconds: snapshot.data)}');
+              'audio2.mp3 duration is: ${Duration(milliseconds: snapshot.data)}',
+            );
         }
         return null; // unreachable
       },
@@ -106,19 +93,17 @@ class _AAudioViewScreenState extends State<AAudioViewScreen> {
     return MultiProvider(
       providers: [
         StreamProvider<Duration>.value(
-            initialData: Duration(),
-            value: advancedPlayer.onAudioPositionChanged),
+          initialData: Duration(),
+          value: advancedPlayer.onAudioPositionChanged,
+        ),
       ],
       child: Scaffold(
-        appBar: customAppbar(context: context,title: '音頻'),
+        appBar: customAppbar(context: context, title: '音頻'),
         body: Container(
-            padding: EdgeInsets.only(top: 20.0,),
+          padding: EdgeInsets.only(top: 20.0),
           child: PlayerWidget(url: widget.url),
         ),
       ),
     );
   }
-
-
-
 }

@@ -23,7 +23,6 @@ class LoginMail extends StatefulWidget {
 }
 
 class _LoginMailState extends State<LoginMail> {
-
   TextEditingController passController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -39,11 +38,10 @@ class _LoginMailState extends State<LoginMail> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () async{
+    Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
-      if(G.isLogin == true) G.pop();
+      if (G.isLogin == true) G.pop();
     });
-
   }
 
   @override
@@ -52,118 +50,132 @@ class _LoginMailState extends State<LoginMail> {
   }
 
   ///選擇區號
-  Future clickAreaCode(BuildContext context){
+  Future clickAreaCode(BuildContext context) {
     return showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (context) {
-          return Container(
-            height: 380,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                )
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 380,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
-            child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: CupertinoPicker(
-                        itemExtent: 40,
-                        onSelectedItemChanged: (value){
-                          setState(() {
-                            areaCodeIndex = value;
-                          });
-                        },
-                        children: regionCode.map((areaCode){
-                          return Container(
-                            alignment: Alignment.center,
-                            child: Text('${areaCode['zh']} +' + '${areaCode['code']}'),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  child: CupertinoPicker(
+                    itemExtent: 40,
+                    onSelectedItemChanged: (value) {
                       setState(() {
-                        areaCode = regionCode[areaCodeIndex]['code'];
+                        areaCodeIndex = value;
                       });
-                      Navigator.pop(context);
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border(top: BorderSide(width: 1,color: Colors.grey))
-                      ),
-                      child: Text('確認',style: TextStyle(fontSize: 20,color: rgba(28, 141, 160, 0.7))),
+                    children: regionCode.map((areaCode) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${areaCode['zh']} +' + '${areaCode['code']}',
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    areaCode = regionCode[areaCodeIndex]['code'];
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(width: 1, color: Colors.grey),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: ()=>Navigator.pop(context),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border(top: BorderSide(width: 1,color: Colors.grey))
-                      ),
-                      child: Text('取消',style: TextStyle(fontSize: 20,color: Colors.black)),
+                  child: Text(
+                    '確認',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: rgba(28, 141, 160, 0.7),
                     ),
-                  )
-                ]
-            ),
-          );
-        }
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(width: 1, color: Colors.grey),
+                    ),
+                  ),
+                  child: Text(
+                    '取消',
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-
   /// 登录
-  void login() async{
-      // print('aaaa=====>');
+  void login() async {
+    // print('aaaa=====>');
     FocusScope.of(context).requestFocus(FocusNode());
-//    RegExp regExp = RegExp("^[a-zA-Z0-9_-\.]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+");
-//    if(!regExp.hasMatch(emailController.text) || emailController.text == null || emailController.text.trim() == '') {
-//      return G.toast('輸入郵箱有誤');
-//    }
+    //    RegExp regExp = RegExp("^[a-zA-Z0-9_-\.]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+");
+    //    if(!regExp.hasMatch(emailController.text) || emailController.text == null || emailController.text.trim() == '') {
+    //      return G.toast('輸入郵箱有誤');
+    //    }
 
-    if(userPhoneToLogin==true){
-      if(phoneController.text == null || phoneController.text.trim() == '') {
+    if (userPhoneToLogin == true) {
+      if (phoneController.text.trim() == '') {
         return G.toast('輸入號碼有誤');
       }
 
-      if (phonePassController.text.length == 0 || phonePassController.text.trim() == null || phonePassController.text.trim() == '') {
+      if (phonePassController.text.length == 0 ||
+          phonePassController.text.trim() == '') {
         return G.toast('請輸入密碼');
       }
-    }else{
-      if(emailController.text == null || emailController.text.trim() == '') {
+    } else {
+      if (emailController.text.trim() == '') {
         return G.toast('輸入郵箱有誤');
       }
 
-      if (passController.text.length == 0 || passController.text.trim() == null || passController.text.trim() == '') {
+      if (passController.text.length == 0 || passController.text.trim() == '') {
         return G.toast('請輸入密碼');
       }
     }
-
 
     // 登录前移除user， 不然登录会提示token错误
     prefs.remove('user');
 
     try {
-      if(_login_i == true) return;
+      if (_login_i == true) return;
       _login_i = true;
       var res;
-      if(userPhoneToLogin == true){
+      if (userPhoneToLogin == true) {
         // print('phoneController.text===>${phoneController.text}');
         // print('areaCode.text===>${areaCode}');
         res = await G.req.user.loginByMobile(
-          phone: '+'+areaCode.toString()+phoneController.text.trim(),
+          phone: '+' + areaCode.toString() + phoneController.text.trim(),
           pwd: phonePassController.text.trim(),
         );
-      }else{
+      } else {
         res = await G.req.user.login(
           email: emailController.text.trim(),
           pwd: passController.text.trim(),
@@ -176,7 +188,7 @@ class _LoginMailState extends State<LoginMail> {
       // _login_i = false;
       // return;
 
-      if(data == null) {
+      if (data == null) {
         _login_i = false;
         return;
       }
@@ -186,10 +198,10 @@ class _LoginMailState extends State<LoginMail> {
       await G.toast('登錄成功');
       await Future.delayed(Duration(seconds: 3), () async {
         print("延时三秒后请求数据====>");
-        if(userPhoneToLogin==true){
+        if (userPhoneToLogin == true) {
           phoneController.clear();
           phonePassController.clear();
-        }else{
+        } else {
           emailController.clear();
           passController.clear();
         }
@@ -197,17 +209,21 @@ class _LoginMailState extends State<LoginMail> {
         G.isLogin = true;
         _login_i = false;
 
-        if(G.isLogin == true){
-          await OneSignalWapper()..loginInit();
+        if (G.isLogin == true) {
+          await OneSignalWapper()
+            ..loginInit();
         }
 
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context){
+          MaterialPageRoute(
+            builder: (context) {
               return IndexPage();
-            }),(route) => route == null
+            },
+          ),
+          (route) => route == null,
         );
       });
-    } catch(e) {
+    } catch (e) {
       print("login fail==========>,${e}");
       _login_i = false;
       G.toast('登錄失敗');
@@ -215,27 +231,22 @@ class _LoginMailState extends State<LoginMail> {
   }
 
   getUserDetail(int userid) async {
-    var res = await G.req.user.detail(
-        id: userid,
-    );
+    var res = await G.req.user.detail(id: userid);
 
     Map data = res.data;
-//    print('data=====>${data}');
-//    Map json = data['data'];
+    //    print('data=====>${data}');
+    //    Map json = data['data'];
     Map<dynamic, dynamic> json = data['data'];
-   print('json=====>${json}');
-//    json['token'] = token;
-   print('getUserDetail=====>${json}');
+    print('json=====>${json}');
+    //    json['token'] = token;
+    print('getUserDetail=====>${json}');
     G.user.init(json);
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppbar(context: context,title:'登入',textcenter:true),
+      appBar: customAppbar(context: context, title: '登入', textcenter: true),
       body: SingleChildScrollView(
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -244,66 +255,68 @@ class _LoginMailState extends State<LoginMail> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Container(
-            height: G.screenHeight()-100,
+            height: G.screenHeight() - 100,
             color: hex('#fff'),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: new Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // new Container(
-                  //   child: Text('${Provider.of<FacebookProvider>(context,listen: true).isFacebookLogin}'),
-                  // ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              userPhoneToLogin=!userPhoneToLogin;
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              userPhoneToLogin
-                                  ?'電子郵箱登錄?'
-                                  :'手機號碼登錄?',
-                              style: TextStyle(color: rgba(28, 141, 160, 1)),
-                            ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // new Container(
+                //   child: Text('${Provider.of<FacebookProvider>(context,listen: true).isFacebookLogin}'),
+                // ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            userPhoneToLogin = !userPhoneToLogin;
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          margin: EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            userPhoneToLogin ? '電子郵箱登錄?' : '手機號碼登錄?',
+                            style: TextStyle(color: rgba(28, 141, 160, 1)),
                           ),
                         ),
+                      ),
 
-                        /// 输入手機號碼
-                        if(userPhoneToLogin == true) Container(
+                      /// 输入手機號碼
+                      if (userPhoneToLogin == true)
+                        Container(
                           height: 48,
-                          decoration: BoxDecoration(
-                              border: G.borderBottom()
-                          ),
-                          child:Row(
+                          decoration: BoxDecoration(border: G.borderBottom()),
+                          child: Row(
                             children: [
                               GestureDetector(
-                                onTap: ()=>clickAreaCode(context),
+                                onTap: () => clickAreaCode(context),
                                 child: Container(
-                                    width: 80,
-                                    decoration: BoxDecoration(color: rgba(204, 204, 204, 1),),
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.only(top: 10,bottom: 0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '$areaCode',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15
-                                          ),
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: rgba(204, 204, 204, 1),
+                                  ),
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.only(top: 10, bottom: 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '$areaCode',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
                                         ),
-                                        SizedBox(width: 5),
-                                        Icon(Icons.keyboard_arrow_down,color: Colors.black,size: 16,)
-                                      ],
-                                    )
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.black,
+                                        size: 16,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Container(width: 10),
@@ -312,166 +325,169 @@ class _LoginMailState extends State<LoginMail> {
                                   controller: phoneController,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                      counterText: "",
-                                      border: InputBorder.none,
-                                      hintText: '手機號碼',
-                                      hintStyle: TextStyle(fontSize: 14,)
+                                    counterText: "",
+                                    border: InputBorder.none,
+                                    hintText: '手機號碼',
+                                    hintStyle: TextStyle(fontSize: 14),
                                   ),
                                   autofocus: false,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                        if(userPhoneToLogin == true)SizedBox(height: 10),
-                        /// 輸入密碼
-                        if(userPhoneToLogin == true) Container(
+                      if (userPhoneToLogin == true) SizedBox(height: 10),
+
+                      /// 輸入密碼
+                      if (userPhoneToLogin == true)
+                        Container(
                           height: 48,
-                          decoration: BoxDecoration(
-                              border: G.borderBottom()
-                          ),
+                          decoration: BoxDecoration(border: G.borderBottom()),
                           child: TextField(
                             controller: phonePassController,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                counterText: "",
-                                border: InputBorder.none,
-                                hintText: '密碼',
-                                hintStyle: TextStyle(fontSize: 14,)
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: '密碼',
+                              hintStyle: TextStyle(fontSize: 14),
                             ),
                             obscureText: true,
-//                          onChanged: (e) {
-//                            setState(() {
-//
-//                            });
-//                          },
+                            //                          onChanged: (e) {
+                            //                            setState(() {
+                            //
+                            //                            });
+                            //                          },
                           ),
                         ),
 
-                        /// 输入邮箱
-                        if(userPhoneToLogin == false) Container(
+                      /// 输入邮箱
+                      if (userPhoneToLogin == false)
+                        Container(
                           height: 55,
-                          decoration: BoxDecoration(
-                              border: G.borderBottom()
-                          ),
+                          decoration: BoxDecoration(border: G.borderBottom()),
                           child: TextField(
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                                counterText: "",
-                                border: InputBorder.none,
-                                hintText: '電郵地址',
-                                hintStyle: TextStyle(fontSize: 14,)
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: '電郵地址',
+                              hintStyle: TextStyle(fontSize: 14),
                             ),
-//                          onChanged: (e) {
-//                            RegExp regExp = RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+");
-//                            setState(() {
-//                              email['value'] = e;
-//                              email['verify'] = regExp.hasMatch(e);
-//                              print('changedEmailInput======>${email}');
-//                            });
-//                          },
+                            //                          onChanged: (e) {
+                            //                            RegExp regExp = RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+");
+                            //                            setState(() {
+                            //                              email['value'] = e;
+                            //                              email['verify'] = regExp.hasMatch(e);
+                            //                              print('changedEmailInput======>${email}');
+                            //                            });
+                            //                          },
                             autofocus: false,
                           ),
                         ),
 
-                        /// 輸入密碼
-                        if(userPhoneToLogin == false) Container(
+                      /// 輸入密碼
+                      if (userPhoneToLogin == false)
+                        Container(
                           height: 55,
-                          decoration: BoxDecoration(
-                              border: G.borderBottom()
-                          ),
+                          decoration: BoxDecoration(border: G.borderBottom()),
                           child: TextField(
                             controller: passController,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                counterText: "",
-                                border: InputBorder.none,
-                                hintText: '密碼',
-                                hintStyle: TextStyle(fontSize: 14,)
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: '密碼',
+                              hintStyle: TextStyle(fontSize: 14),
                             ),
                             obscureText: true,
-//                          onChanged: (e) {
-//                            setState(() {
-//
-//                            });
-//                          },
+                            //                          onChanged: (e) {
+                            //                            setState(() {
+                            //
+                            //                            });
+                            //                          },
                           ),
                         ),
 
-                        /// 忘記密碼
-                        Container(
-                          margin: EdgeInsets.only(top:20),
-                          alignment: Alignment.topRight,
-                          child: InkWell(
-                            child: Text('忘記密碼', style: TextStyle(
-                                color: rgba(85, 122, 157, 1),
-                                fontSize: 12
-                            ),),
-                            // onTap: () => G.pushNamed('/search_result', arguments: {'result': item.value});
-                            onTap: (){
-                              // Navigator.pushNamed(context, '/forgot_password'),
-                              G.pushNamed('/forgot_password', arguments: {'userPhoneToLogin': userPhoneToLogin});
-                              // Navigator.pushNamed(context, '/forgot_password', arguments: {'userPhoneToLogin': userPhoneToLogin});
-                            }
+                      /// 忘記密碼
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          child: Text(
+                            '忘記密碼',
+                            style: TextStyle(
+                              color: rgba(85, 122, 157, 1),
+                              fontSize: 12,
+                            ),
                           ),
+                          // onTap: () => G.pushNamed('/search_result', arguments: {'result': item.value});
+                          onTap: () {
+                            // Navigator.pushNamed(context, '/forgot_password'),
+                            G.pushNamed(
+                              '/forgot_password',
+                              arguments: {'userPhoneToLogin': userPhoneToLogin},
+                            );
+                            // Navigator.pushNamed(context, '/forgot_password', arguments: {'userPhoneToLogin': userPhoneToLogin});
+                          },
                         ),
-                        /// 确认登綠
-                        Container(
-                          margin: EdgeInsets.only(top: 40),
-                          child: AButton.normal(
-                              width: 250,
-                              child: Text('登入'),
-//                            rgba(169, 211, 218, 1)
-                              bgColor: rgba(28, 141, 160, 1),
-                              color: hex('#fff'),
-                              borderColor: rgba(28, 141, 160, 1),
-                              plain: true,
-                              borderRadius: BorderRadius.circular(40),
-                              onPressed: () => login()
-                          ),
+                      ),
+
+                      /// 确认登綠
+                      Container(
+                        margin: EdgeInsets.only(top: 40),
+                        child: AButton.normal(
+                          width: 250,
+                          child: Text('登入'),
+                          //                            rgba(169, 211, 218, 1)
+                          bgColor: rgba(28, 141, 160, 1),
+                          color: hex('#fff'),
+                          borderColor: rgba(28, 141, 160, 1),
+                          plain: true,
+                          borderRadius: BorderRadius.circular(40),
+                          onPressed: () => login(),
                         ),
-
-
-                      ],),
+                      ),
+                    ],
                   ),
-                  Container(
-                    child: new Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top:20,bottom:20),
-                          alignment: Alignment.center,
-                          child: Text('非會員請點擊這裡', style: TextStyle(
-                              color: rgba(51, 51, 51, 1),
-                              fontSize: 12
-                          ),),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 50),
-                          child: AButton.normal(
-                            width: 250,
-                            child: new Text('註冊'),
+                ),
+                Container(
+                  child: new Column(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '非會員請點擊這裡',
+                          style: TextStyle(
                             color: rgba(51, 51, 51, 1),
-                            bgColor: rgba(255, 255, 255, 1),
-                            borderColor: rgba(204, 204, 204, 1),
-                            plain: true,
-                            borderRadius: BorderRadius.circular(40),
-                            onPressed: () => G.pushNamed('/register'),
-//                        onPressed: () => Navigator.pushNamed(context, '/register_page'),
+                            fontSize: 12,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 50),
+                        child: AButton.normal(
+                          width: 250,
+                          child: new Text('註冊'),
+                          color: rgba(51, 51, 51, 1),
+                          bgColor: rgba(255, 255, 255, 1),
+                          borderColor: rgba(204, 204, 204, 1),
+                          plain: true,
+                          borderRadius: BorderRadius.circular(40),
+                          onPressed: () => G.pushNamed('/register'),
+                          //                        onPressed: () => Navigator.pushNamed(context, '/register_page'),
+                        ),
+                      ),
+                    ],
                   ),
-                ]
+                ),
+              ],
             ),
-
           ),
-        )
-
+        ),
       ),
-
     );
   }
-
 }

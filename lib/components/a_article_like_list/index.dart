@@ -529,7 +529,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
           isLoading = false; // Set loading flag to false after data is loaded
         });
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       // Handle DioError specifically for better error handling
       print('DioError: ${e.message}');
       if (e.response != null) {
@@ -602,9 +602,6 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware{
   Widget build(BuildContext context) {
     Widget top_contents = widget.topchild;
     Widget bottom_contents = widget.bottomchild;
-//    print('contents===>${top_contents}');
-    if(top_contents == null) top_contents = Container();
-    if(bottom_contents == null) bottom_contents = Container();
 
 //    super.build(context);
 

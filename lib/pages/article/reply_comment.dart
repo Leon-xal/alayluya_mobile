@@ -16,16 +16,11 @@ import '../../model/reply_list_model/data.dart';
 
 class ReplyComment extends StatefulWidget {
   final Map args;
-  ReplyComment({
-    Key key,
-    this.args,
-  }) : super(key: key);
+  ReplyComment({Key key, this.args}) : super(key: key);
 
   @override
   _ReplyCommentState createState() => _ReplyCommentState();
-
 }
-
 
 class _ReplyCommentState extends State<ReplyComment> {
   static Map args;
@@ -34,10 +29,12 @@ class _ReplyCommentState extends State<ReplyComment> {
   int articleid = 0;
   int commentid = 0;
   int userid = 0;
-  int to_userid=0;
+  int to_userid = 0;
   int page_id = 1;
   List<dynamic> items = [];
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   bool isloadcomplete = false;
 
@@ -47,14 +44,18 @@ class _ReplyCommentState extends State<ReplyComment> {
     UserDataModel userData = G.user.data;
     userid = userData.id;
     args = widget.args;
-    if(args != null){
-      articleid = args['articleid'];
-      commentid = args['commentid'];
-      to_userid = args['to_userid'];
-      Future.delayed(Duration.zero, () async{
-        _loadData(articleid: articleid,commentid: commentid,uid: userid,limit:25,pageid: page_id);
-      });
-    }
+    articleid = args['articleid'];
+    commentid = args['commentid'];
+    to_userid = args['to_userid'];
+    Future.delayed(Duration.zero, () async {
+      _loadData(
+        articleid: articleid,
+        commentid: commentid,
+        uid: userid,
+        limit: 25,
+        pageid: page_id,
+      );
+    });
   }
 
   @override
@@ -62,44 +63,57 @@ class _ReplyCommentState extends State<ReplyComment> {
     super.dispose();
   }
 
-  void _onRefresh() async{
-//    print('onRefresh1===>');
-//     await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero,()async{
-      if(mounted) {
+  void _onRefresh() async {
+    //    print('onRefresh1===>');
+    //     await Future.delayed(Duration(milliseconds: 1000));
+    Future.delayed(Duration.zero, () async {
+      if (mounted) {
         page_id = 1;
         items = [];
-        _loadData(articleid: articleid,commentid: commentid,uid:userid,limit:25,pageid:page_id);
+        _loadData(
+          articleid: articleid,
+          commentid: commentid,
+          uid: userid,
+          limit: 25,
+          pageid: page_id,
+        );
       }
       _refreshController.refreshCompleted();
     });
-
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     // await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero, () {
       if (mounted) {
         int page_id2 = ++page_id;
-        _loadData(articleid: articleid,
-            commentid: commentid,
-            uid: userid,
-            limit: 25,
-            pageid: page_id2);
+        _loadData(
+          articleid: articleid,
+          commentid: commentid,
+          uid: userid,
+          limit: 25,
+          pageid: page_id2,
+        );
       }
       _refreshController.loadComplete();
     });
   }
 
-  _loadData({int articleid=0,int commentid=0,int uid=0, int pageid=1, int limit=25,}) async {
+  _loadData({
+    int articleid = 0,
+    int commentid = 0,
+    int uid = 0,
+    int pageid = 1,
+    int limit = 25,
+  }) async {
     try {
-//      print('_loaddata====>${id},${uid},${pageid},${limit}');
+      //      print('_loaddata====>${id},${uid},${pageid},${limit}');
       var res = await G.req.article.reply_comment_list(
         articleid: articleid,
         comment_id: commentid,
         userid: uid,
-        pageid:pageid,
-        limit:limit,
+        pageid: pageid,
+        limit: limit,
       );
       print('reply===>${res}');
       Map result = res.data;
@@ -108,13 +122,12 @@ class _ReplyCommentState extends State<ReplyComment> {
         setState(() {
           items.addAll(tempList.list);
           isloadcomplete = true;
-
         });
         if (tempList.list.length == 0) {
           _refreshController.loadNoData();
         }
       }
-    }catch(e) {
+    } catch (e) {
       print('_loadData===>${e}');
     }
   }
@@ -127,15 +140,20 @@ class _ReplyCommentState extends State<ReplyComment> {
       maxLines: 100,
       cursorColor: hex('#014d7b'),
       decoration: InputDecoration(
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.only(top:3.0,left:5.0,right:5.0,bottom:5.0)
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.only(
+          top: 3.0,
+          left: 5.0,
+          right: 5.0,
+          bottom: 5.0,
+        ),
       ),
-//      onTap: () => setState(() {}),
-//      onChanged: (v) => setState(() {}),
+      //      onTap: () => setState(() {}),
+      //      onChanged: (v) => setState(() {}),
       style: TextStyle(
-          textBaseline: TextBaseline.alphabetic,
-          fontSize: 14.0,
-          color: const Color(0xff181818)
+        textBaseline: TextBaseline.alphabetic,
+        fontSize: 14.0,
+        color: const Color(0xff181818),
       ),
     );
   }
@@ -154,7 +172,7 @@ class _ReplyCommentState extends State<ReplyComment> {
   }
 
   Widget buildContent(item) {
-//    print('aaa=====>${userid},${item.user_id}');
+    //    print('aaa=====>${userid},${item.user_id}');
     return Stack(
       children: [
         new Container(
@@ -164,7 +182,7 @@ class _ReplyCommentState extends State<ReplyComment> {
           decoration: new BoxDecoration(
             color: Colors.white,
             border: new BorderDirectional(
-                bottom: new BorderSide(color: Colors.black12, width: 1.0)
+              bottom: new BorderSide(color: Colors.black12, width: 1.0),
             ),
           ),
           child: new Column(
@@ -179,11 +197,11 @@ class _ReplyCommentState extends State<ReplyComment> {
                     new Container(
                       width: 45,
                       height: 45,
-                      margin: const EdgeInsets.only(left:10.0,right: 15.0),
+                      margin: const EdgeInsets.only(left: 10.0, right: 15.0),
                       child: new CircleAvatar(
-                          backgroundColor: rgba(28, 141, 160, 1),
-                          backgroundImage: new NetworkImage(item.avatar),
-                          radius: 11.0
+                        backgroundColor: rgba(28, 141, 160, 1),
+                        backgroundImage: new NetworkImage(item.avatar),
+                        radius: 11.0,
                       ),
                     ),
                     new Column(
@@ -193,89 +211,100 @@ class _ReplyCommentState extends State<ReplyComment> {
                           alignment: Alignment.centerLeft,
                           width: G.screenWidth() * 0.73333,
                           child: new Text(
-                              item.user_name,
-                              maxLines:2,
-                              overflow:TextOverflow.ellipsis,
-                              style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16.0,)
+                            item.user_name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: new TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.only(top: 5.0,bottom:5.0),
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                           width: G.screenWidth() * 0.73333,
                           child: new Text(
-                              item.reply_content,
-                              style: new TextStyle(color: Colors.black,fontSize: 15.0,)
+                            item.reply_content,
+                            style: new TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.0,
+                            ),
                           ),
                         ),
                         Row(
                           children: [
-                            icon_query_builder(size: 13,color: Colors.black54),
-                            Container(
-                              width:5.0,
-                            ),
-                            (item.reply_time.toString() == '') ? Container(): new Text(item.reply_time.toString(), style: new TextStyle(color: Colors.black54,fontSize: 13.0,)),
+                            icon_query_builder(size: 13, color: Colors.black54),
+                            Container(width: 5.0),
+                            (item.reply_time.toString() == '')
+                                ? Container()
+                                : new Text(
+                                    item.reply_time.toString(),
+                                    style: new TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 13.0,
+                                    ),
+                                  ),
                           ],
                         ),
                       ],
                     ),
                   ],
                 ),
-
               ),
             ],
           ),
         ),
       ],
     );
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     var body = [
       new Expanded(
-        child:(items.length > 0 && isloadcomplete == true) ?
-        SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          header: WaterDropHeader(
-            refresh:SizedBox(
-              height: 25,
-              width: 25,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation<Color>(rgba(28, 141, 160, 1)),
-              ),
-            ),
-            complete:Text('√ 加載完成'),
-          ),
-          footer: G.pullToRefresh.footer(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-
-          child: ListView.builder(
-            itemBuilder: (c, f){
-              //          print('fff====>${f},${elandItems.length}');
-              items[f].key = f;
-              return new Container(
-                child: new Column(
-                  children: <Widget>[
-                    buildContent(items[f]),
-                  ],
+        child: (items.length > 0 && isloadcomplete == true)
+            ? SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                header: WaterDropHeader(
+                  refresh: SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        rgba(28, 141, 160, 1),
+                      ),
+                    ),
+                  ),
+                  complete: Text('√ 加載完成'),
                 ),
-              );
-            },
-            itemCount: items.length,
-          ),
-        ) : ((items.length == 0 && isloadcomplete == true)? Container() : _cardListSkeleton()),
+                footer: G.pullToRefresh.footer(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+
+                child: ListView.builder(
+                  itemBuilder: (c, f) {
+                    //          print('fff====>${f},${elandItems.length}');
+                    items[f].key = f;
+                    return new Container(
+                      child: new Column(
+                        children: <Widget>[buildContent(items[f])],
+                      ),
+                    );
+                  },
+                  itemCount: items.length,
+                ),
+              )
+            : ((items.length == 0 && isloadcomplete == true)
+                  ? Container()
+                  : _cardListSkeleton()),
       ),
-      new Container(
-        height: 15.0,
-      ),
-//      new Spacer(),
+      new Container(height: 15.0),
+      //      new Spacer(),
       new Container(
         height: 50.0,
         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -291,25 +320,30 @@ class _ReplyCommentState extends State<ReplyComment> {
           children: <Widget>[
             new Expanded(
               child: new Container(
-                margin: const EdgeInsets.only(top: 7.0, bottom: 7.0, left: 8.0, right: 8.0),
+                margin: const EdgeInsets.only(
+                  top: 7.0,
+                  bottom: 7.0,
+                  left: 8.0,
+                  right: 8.0,
+                ),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.0)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
                 child: new LayoutBuilder(builder: editWidget),
               ),
             ),
             new InkWell(
-              child: icon_send(
-                  size: 35,
-                  color: hex('#333')
-              ),
+              child: icon_send(size: 35, color: hex('#333')),
               onTap: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                if(_textController.text == null || _textController.text.trim() == '') {
+                if (_textController.text.trim() == '') {
                   return G.toast('你還未填寫內容？');
                 }
                 String replyStr = _textController.text.trim();
-                print('bbb====>${userid},${articleid},${commentid},${to_userid},${replyStr}');
+                print(
+                  'bbb====>${userid},${articleid},${commentid},${to_userid},${replyStr}',
+                );
 
                 try {
                   var res = await G.req.article.reply_comment(
@@ -321,41 +355,36 @@ class _ReplyCommentState extends State<ReplyComment> {
                   );
                   var data = res.data;
 
-                  if(data == null) return;
+                  if (data == null) return;
 
-                  if(data['code'] == 200){
+                  if (data['code'] == 200) {
                     _textController.clear();
                     G.toast('提交成功');
                     _onRefresh();
-                  }else{
+                  } else {
                     G.toast('提交失敗，請重試');
                   }
 
                   print('reply===>${res}');
-
-                }catch(e) {
+                } catch (e) {
                   print('add_reply===>${e}');
                 }
-
               },
             ),
           ],
         ),
       ),
-
     ];
     return Scaffold(
-        appBar: customAppbar(context: context,title: '回復'),
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            // 触摸收起键盘
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: new Column(children: body),
-        )
+      appBar: customAppbar(context: context, title: '回復'),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: new Column(children: body),
+      ),
     );
-
   }
-
 }

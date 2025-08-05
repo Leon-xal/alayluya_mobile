@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../utils/global.dart';
 
 class APhotoview {
   final BuildContext context;
+
   /// 图片URL
   final String url;
 
-  APhotoview.show(this.context,{
-    @required this.url,
-  }) {
+  APhotoview.show(this.context, {@required this.url}) {
     Widget photoview = new PhotoView(
       imageProvider: NetworkImage(url),
       onTapUp: (c, f, s) => Navigator.of(context).pop(),
@@ -21,7 +19,7 @@ class APhotoview {
       builder: (BuildContext context) => photoview,
       settings: new RouteSettings(
         name: photoview.toStringShort(),
-//        isInitialRoute: false,
+        //        isInitialRoute: false,
       ),
     );
 
