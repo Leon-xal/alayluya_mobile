@@ -1,5 +1,6 @@
 import '../../components/a_upgrade_app/index.dart';
 import 'package:flutter/material.dart';
+//import 'package:connectivity_plus/connectivity.dart';
 import 'package:connectivity/connectivity.dart';
 import './not_network.dart';
 import './index_page.dart';
@@ -10,7 +11,7 @@ import '../../components/onesignal_wapper/onesignal_wapper.dart';
 import '../../components/a_dialog/index.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity/connectivity.dart';
 
 
 class IntoApp extends StatelessWidget {
