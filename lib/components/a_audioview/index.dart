@@ -1,91 +1,67 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/foundation/constants.dart';
 
-import './player_widget.dart';
-import '../../utils/global.dart';
+import '../../utils/global.dart'; // Assuming this import is correct
 
 class AAudioView {
   final BuildContext context;
-
-  /// 图片URL
   final String url;
-  AAudioView.show(this.context, {@required this.url}) {
-    Widget aview = new AAudioViewScreen(url: url);
-    final route = new CupertinoPageRoute(
-      builder: (BuildContext context) => aview,
-      settings: new RouteSettings(
-        name: aview.toStringShort(),
-        //        isInitialRoute: false,
-      ),
-    );
 
-    G.getCurrentState().push(route);
+  AAudioView.show(this.context, {required this.url}) {
+    Widget aview = AAudioViewScreen(url: url);
+    final route = CupertinoPageRoute(
+      builder: (BuildContext context) => aview,
+      settings: RouteSettings(name: aview.toStringShort()),
+    );
+    G.getCurrentState().push(
+      route,
+    ); // Assuming G.getCurrentState() is correctly defined
   }
 }
 
 class AAudioViewScreen extends StatefulWidget {
-  String url;
-  AAudioViewScreen({Key key, this.url = ''}) : super(key: key);
+  final String url;
+  const AAudioViewScreen({Key? key, required this.url}) : super(key: key);
   @override
-  createState() => _AAudioViewScreenState();
+  State<AAudioViewScreen> createState() => _AAudioViewScreenState();
 }
 
 class _AAudioViewScreenState extends State<AAudioViewScreen> {
-  AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
-  String localFilePath;
+  final AudioPlayer advancedPlayer = AudioPlayer();
+  Duration _duration = Duration.zero;
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
+    _loadAudio(widget.url);
+  }
 
-    if (kIsWeb) {
-      // Calls to Platform.isIOS fails on web
-      return;
-    }
-    if (Platform.isIOS) {
-      if (audioCache.fixedPlayer != null) {
-        audioCache.fixedPlayer.startHeadlessService();
+  Future<void> _loadAudio(String url) async {
+    try {
+      if (url.startsWith('assets/')) {
+        await advancedPlayer.setSourceAsset(url);
+      } else {
+        // CORRECTED:  Handles headers correctly
+        await advancedPlayer.setSourceUrl(url);
       }
-      advancedPlayer.startHeadlessService();
+      final duration = await advancedPlayer.getDuration();
+      setState(() {
+        _duration = duration ?? Duration.zero;
+        _isLoading = false;
+        _errorMessage = null;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Error loading audio: $e';
+        _duration = Duration.zero;
+      });
     }
-  }
-
-  Future<int> _getDuration() async {
-    File audiofile = await audioCache.load('audio2.mp3');
-    await advancedPlayer.setUrl(audiofile.path);
-    int duration = await Future.delayed(
-      Duration(seconds: 2),
-      () => advancedPlayer.getDuration(),
-    );
-    return duration;
-  }
-
-  getLocalFileDuration() {
-    return FutureBuilder<int>(
-      future: _getDuration(),
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Text('No Connection...');
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return Text('Awaiting result...');
-          case ConnectionState.done:
-            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-            return Text(
-              'audio2.mp3 duration is: ${Duration(milliseconds: snapshot.data)}',
-            );
-        }
-        return null; // unreachable
-      },
-    );
   }
 
   @override
@@ -93,17 +69,117 @@ class _AAudioViewScreenState extends State<AAudioViewScreen> {
     return MultiProvider(
       providers: [
         StreamProvider<Duration>.value(
-          initialData: Duration(),
-          value: advancedPlayer.onAudioPositionChanged,
+          initialData: Duration.zero,
+          value: advancedPlayer
+              .onPositionChanged, // Corrected: Use onPositionChanged
         ),
+        Provider.value(value: _duration),
       ],
       child: Scaffold(
-        appBar: customAppbar(context: context, title: '音頻'),
-        body: Container(
-          padding: EdgeInsets.only(top: 20.0),
-          child: PlayerWidget(url: widget.url),
-        ),
+        appBar: customAppbar(
+          context: context,
+          title: '音頻',
+        ), // Assuming customAppbar is defined
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _errorMessage != null
+            ? Center(child: Text(_errorMessage!))
+            : Column(
+                children: [
+                  Text('Audio duration: $_duration'),
+                  Container(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: PlayerWidget(
+                      url: widget.url,
+                      player: advancedPlayer,
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    advancedPlayer.dispose();
+    super.dispose();
+  }
+}
+
+class PlayerWidget extends StatefulWidget {
+  final String url;
+  final AudioPlayer player;
+
+  const PlayerWidget({Key? key, required this.url, required this.player})
+    : super(key: key);
+
+  @override
+  State<PlayerWidget> createState() => _PlayerWidgetState();
+}
+
+class _PlayerWidgetState extends State<PlayerWidget> {
+  bool isPlaying = false;
+  String? position;
+  String? duration;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.player.onPlayerStateChanged.listen((state) {
+      setState(() {
+        isPlaying = state == PlayerState.playing;
+      });
+    });
+    widget.player.onDurationChanged.listen((duration) {
+      setState(() {
+        this.duration = duration.toString();
+      });
+    });
+    widget.player.onPositionChanged.listen((position) {
+      setState(() {
+        this.position = position.toString();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Position: $position'),
+        Text('Duration: $duration'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+              onPressed: () async {
+                if (isPlaying) {
+                  await widget.player.pause();
+                } else {
+                  await widget.player.resume();
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.stop),
+              onPressed: () async {
+                await widget.player.stop();
+                setState(() {
+                  isPlaying = false;
+                });
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.player.dispose();
+    super.dispose();
   }
 }

@@ -4,12 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/a_button/index.dart';
 import '../../utils/global.dart';
-import '../Index/index_page.dart';
-import '../../components/onesignal_wapper/onesignal_wapper.dart';
 import '../../model/user_model/data.dart';
 
 class ArticleReport extends StatefulWidget {

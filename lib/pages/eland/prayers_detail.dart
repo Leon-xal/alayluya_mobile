@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:ui';
 import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
-import 'package:html/parser.dart' show parse;
 import '../../components/a_photoview/index.dart';
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';

@@ -3,11 +3,8 @@ import 'dart:async';
 import 'components/region_code.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../provider/facebookProvider.dart';
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/a_button/index.dart';
 import '../../utils/global.dart';

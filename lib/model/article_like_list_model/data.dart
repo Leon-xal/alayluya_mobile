@@ -9,13 +9,14 @@ class ArticleLikeListModel {
   String msg;
 
   ArticleLikeListModel({
-    this.code,
-    this.list,
-    this.msg,
+    required this.code,
+    required this.list,
+    required this.msg,
   });
 
   //反序列化
-  factory ArticleLikeListModel.fromJson(Map<String, dynamic> json) => _$ArticleLikeListModelFromJson(json);
+  factory ArticleLikeListModel.fromJson(Map<String, dynamic> json) =>
+      _$ArticleLikeListModelFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$ArticleLikeListModelToJson(this);
 }
@@ -37,23 +38,24 @@ class ArticleLikeListDatum {
   List<ArticleLikeListTags> tags;
 
   ArticleLikeListDatum({
-    this.key,
-    this.id,
-    this.eland_id,
-    this.account_id,
-    this.pic,
-    this.title,
-    this.desc,
-    this.author,
-    this.like,
-    this.ilike,
-    this.prayer,
-    this.iprayer,
-    this.tags,
+    required this.key,
+    required this.id,
+    required this.eland_id,
+    required this.account_id,
+    required this.pic,
+    required this.title,
+    required this.desc,
+    required this.author,
+    required this.like,
+    required this.ilike,
+    required this.prayer,
+    required this.iprayer,
+    required this.tags,
   });
 
   //反序列化
-  factory ArticleLikeListDatum.fromJson(Map<String, dynamic> json) => _$ArticleLikeListDatumFromJson(json);
+  factory ArticleLikeListDatum.fromJson(Map<String, dynamic> json) =>
+      _$ArticleLikeListDatumFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$ArticleLikeListDatumToJson(this);
 }
@@ -62,10 +64,7 @@ class ArticleLikeListDatum {
 class ArticleLikeListTags {
   String name;
   String value;
-  ArticleLikeListTags({
-    this.name,
-    this.value,
-  });
+  ArticleLikeListTags({required this.name, required this.value});
 
   //反序列化
   factory ArticleLikeListTags.fromJson(Map<String, dynamic> json) =>

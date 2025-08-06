@@ -1,6 +1,5 @@
 import '../utils/global.dart';
 import 'package:dio/dio.dart';
-import '../utils/global.dart';
 
 /// 初始化dio
 Dio initDio() {

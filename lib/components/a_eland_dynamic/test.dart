@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_skeleton/flutter_skeleton.dart';
+//import 'package:flutter_skeleton/flutter_skeleton.dart';
+import 'package:shimmer/shimmer.dart'; // Import shimmer package
 import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
@@ -188,7 +189,66 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
     }
   }
 
-  Widget _cardListSkeleton() {
+  // Shimmer Loading Widget
+  Widget _shimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 10, // Adjust as needed to match your expected list length
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 16.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Simulate Avatar
+                Container(
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey[300],
+                  ),
+                ),
+                SizedBox(height: 8),
+                // Simulate Title
+                Container(
+                  width: 200, // Adjust width as needed
+                  height: 20,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                // Simulate Content
+                Container(
+                  width: double.infinity,
+                  height: 40,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                // Simulate Image Placeholder (adjust size as needed)
+                Container(
+                  width: double.infinity,
+                  height: 150,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                //Simulate Tags
+                Container(width: 100, height: 20, color: Colors.grey[300]),
+                Divider(), // Add a divider for better visual separation
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // replace with Shimmer
+  /*Widget _cardListSkeleton() {
     return Container(
       child: CardListSkeleton(
         style: SkeletonStyle(
@@ -199,7 +259,7 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
         ),
       ),
     );
-  }
+  }*/
 
   Widget buildContent(item) {
     int imageSize = item.pics.length;
@@ -543,7 +603,8 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
 
     //    super.build(context);
 
-    return (elandItems.length == 0)
+    // replace with Shimmer
+    /*return (elandItems.length == 0)
         ? _cardListSkeleton()
         : SmartRefresher(
             enablePullDown: true,
@@ -600,6 +661,33 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
             //          bottom_contents
             //        ],
             //      ),
-          );
+          );*/
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: widget.isloadmore,
+      header: WaterDropHeader(complete: const Text('√ 加載完成')),
+      footer: G.pullToRefresh.footer(),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: elandItems.isEmpty
+          ? _shimmerLoading() // Use the shimmer loading widget
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: elandItems.length,
+              itemBuilder: (c, f) {
+                elandItems[f].key = f;
+                return Column(
+                  children: [
+                    (f == 0) ? widget.topchild ?? Container() : Container(),
+                    buildContent(elandItems[f]),
+                    (f == elandItems.length - 1)
+                        ? widget.bottomchild ?? Container()
+                        : Container(),
+                  ],
+                );
+              },
+            ),
+    );
   }
 }

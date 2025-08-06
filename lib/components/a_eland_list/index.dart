@@ -2,260 +2,336 @@ import '../../model/user_model/data.dart';
 import '../../main.dart';
 import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
-//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter_skeleton/flutter_skeleton.dart';
+//import 'package:flutter_skeleton/flutter_skeleton.dart';
+import 'package:shimmer/shimmer.dart'; //Import shimmer
 import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
 import '../../model/eland_list_model/data.dart';
 
 class AElandList extends StatefulWidget {
-  //  final ValueChanged<int> onTap;
-  int uid; //用戶id
-  String search_by_name;
-  bool isShowCenterload; //是否顯示加載數據的中間loading圖標
-  bool isloadmore; //是否支持下拉刷新數,前提是有開啟isSmartRefresher
-  int pagelimit; //顯示文章數量
-  bool isreload; //開啟AutomaticKeepAliveClientMixin支持，tab效果支持會有緩存效果
-  final Widget topchild; //上節點插糟
-  final Widget bottomchild; //下節點插糟
-  bool isSmartRefresher;
-  int cateid; //eland分類id
-  String type;
+  final int uid; //用戶id
+  final String searchByName;
+  final bool isShowCenterload; //是否顯示加載數據的中間loading圖標
+  final bool isLoadMore; //是否支持下拉刷新數,前提是有開啟isSmartRefresher
+  final int pageLimit; //顯示文章數量
+  final bool isReload; //開啟AutomaticKeepAliveClientMixin支持，tab效果支持會有緩存效果
+  final Widget topChild; //上節點插糟
+  final Widget bottomChild; //下節點插糟
+  final bool isSmartRefresher;
+  final int cateId; //eland分類id
+  final String type;
 
-  AElandList({
-    Key key,
+  const AElandList({
+    Key? key,
     this.uid = 0,
-    this.search_by_name = '',
+    this.searchByName = '',
     this.isShowCenterload = true,
-    this.isloadmore = true,
-    this.pagelimit = 10,
-    this.isreload = true,
-    this.topchild = null,
-    this.bottomchild = null,
+    this.isLoadMore = true,
+    this.pageLimit = 10,
+    this.isReload = true,
+    this.topChild = const SizedBox.shrink(),
+    this.bottomChild = const SizedBox.shrink(),
     this.isSmartRefresher = true,
-    this.cateid = 0,
+    this.cateId = 0,
     this.type = 'all',
-    //    this.onTap,
   }) : super(key: key);
 
   @override
-  _AElandListState createState() => new _AElandListState();
+  _AElandListState createState() => _AElandListState();
 }
 
-//with AutomaticKeepAliveClientMixin
-class _AElandListState extends State<AElandList> with RouteAware {
-  List<dynamic> dataItems = [];
-  RefreshController _refreshController = RefreshController(
+class _AElandListState extends State<AElandList>
+    with RouteAware, AutomaticKeepAliveClientMixin {
+  final List<ElandListItem> dataItems = []; // Use a typed list
+  final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
-  int page_id = 1;
-  bool isloadcomplete = false;
+  int pageId = 1;
+  bool isLoading = false; //More descriptive variable name
+  bool isLoadComplete = false; //More descriptive variable name
 
-  //  @override
-  //  bool get wantKeepAlive => widget.isreload; ///see AutomaticKeepAliveClientMixin
+  @override
+  bool get wantKeepAlive => widget.isReload;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      //      print('aaa===>${widget.isShowcenterload}');
-      _loadListData(
-        context,
-        isshowloading: widget.isShowCenterload,
-        limit: widget.pagelimit,
-        pageid: page_id,
-        uid: widget.uid,
-        search_by_name: widget.search_by_name,
-        cateid: widget.cateid,
-      );
-    });
+    _loadListData(context, showLoading: widget.isShowCenterload);
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
+    MyApp.routeObserver.subscribe(this, ModalRoute.of(context)!);
   }
 
   @override
   void didPopNext() {
-    // TODO: implement didPopNext
     super.didPopNext();
-    Map popMap = Provider.of<DoLikeMethod>(context, listen: false).popIsLike;
-    Map pushMap = Provider.of<DoLikeMethod>(context, listen: false).pushLike;
-    print("進入詳情2======$pushMap}");
-    print("再次返回頁面2======$popMap}");
+    final doLikeMethod = Provider.of<DoLikeMethod>(context, listen: false);
+    final popMap = doLikeMethod.popIsLike;
+    final pushMap = doLikeMethod.pushLike;
 
     if (pushMap['isLike'] != popMap['isLike']) {
       setState(() {
-        for (var i = 0; i < dataItems.length; i++) {
-          if (dataItems[i].eland_id == popMap['id']) {
-            dataItems[i].ifollow = popMap['isLike'];
-            if (popMap['isLike'] == true) {
-              dataItems[i].follow++;
-            } else {
-              dataItems[i].follow--;
-            }
-          }
-        }
+        final updatedItem = dataItems.firstWhere(
+          (item) => item.elandId == popMap['id'],
+        );
+        updatedItem.ifollow = popMap['isLike'];
+        updatedItem.follow += popMap['isLike'] ? 1 : -1;
       });
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  void _clickFollow(ElandListItem item) async {
+    final uid = G.user.data.id;
+    final itemid = item.elandId;
 
-  _clickFollow(item) {
-    //    print('sss===>${item.eland_name}');
-
-    int uid = G.user.data.id;
-    int itemid = item.eland_id;
-    //    print('aaa===>${uid}/${itemid}/${item.key}');
     try {
-      Future.delayed(Duration.zero, () async {
-        var res = await G.req.eland.dofollow(eland_id: itemid, userid: uid);
-        Map result = res.data;
-        if (result['code'] == 200) {
-          setState(() {
-            if (item.ifollow == true && item.follow > 0) {
-              dataItems[item.key].follow = item.follow - 1;
-              dataItems[item.key].ifollow = false;
-            } else {
-              dataItems[item.key].follow = item.follow + 1;
-              dataItems[item.key].ifollow = true;
-            }
-          });
-        }
-      });
+      final res = await G.req.eland.dofollow(
+        elandId: itemid,
+        userId: uid,
+      ); //More descriptive variable names
+      final result = res.data;
+      if (result['code'] == 200) {
+        setState(() {
+          item.follow += item.ifollow ? -1 : 1;
+          item.ifollow = !item.ifollow;
+        });
+      }
     } catch (e) {
       print('_clickFollow===>${e}');
+      // Show error message to the user
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error updating follow status')));
     }
   }
 
-  Widget buildContent(item) {
-    return new Container(
+  Widget _buildContent(ElandListItem item, int index) {
+    //Added index parameter
+    return Container(
       alignment: Alignment.topLeft,
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
-        border: new BorderDirectional(
-          bottom: new BorderSide(color: Colors.black12, width: 1.0),
+        border: BorderDirectional(
+          bottom: BorderSide(color: Colors.black12, width: 1.0),
         ),
       ),
-      child: new FlatButton(
+      child: FlatButton(
         padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
         onPressed: () {
-          //            print('blockclick====>${item.eland_id}');
-          Map map = {"isLike": item.ifollow, "id": item.eland_id};
+          final map = {"isLike": item.ifollow, "id": item.elandId};
           Provider.of<DoLikeMethod>(context, listen: false).getPushIsLike(map);
-          G.pushNamed('/eland_info', arguments: {'id': item.eland_id});
+          G.pushNamed('/eland_info', arguments: {'id': item.elandId});
         },
-        child: new Container(
-          child: new Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              new Container(
-                width: 60,
-                height: 60,
-                margin: const EdgeInsets.only(right: 15.0),
-                child: new CircleAvatar(
-                  backgroundColor: rgba(28, 141, 160, 1),
-                  backgroundImage: new NetworkImage(item.eland_pic),
-                  radius: 11.0,
-                ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              margin: const EdgeInsets.only(right: 15.0),
+              child: CircleAvatar(
+                backgroundColor: rgba(28, 141, 160, 1),
+                backgroundImage: NetworkImage(item.elandPic),
+                radius: 11.0,
               ),
-              new Expanded(
-                flex: 6,
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: new Text(
-                        item.eland_name,
-                        style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                          height: 1.1,
-                          color: Colors.black,
-                        ),
+            ),
+            Expanded(
+              flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0, right: 4.0),
+                    child: Text(
+                      item.elandName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        height: 1.1,
+                        color: Colors.black,
                       ),
-                      padding: const EdgeInsets.only(bottom: 10.0, right: 4.0),
-                      alignment: Alignment.topLeft,
                     ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: Text(
-                                item.follow.toString() + '用戶',
-                                style: TextStyle(
-                                  color: hex('#333'),
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '關注',
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Text(
+                              '${item.follow}用戶',
                               style: TextStyle(
                                 color: hex('#333'),
                                 fontSize: 13,
                               ),
                             ),
-                          ],
+                          ),
+                          Text(
+                            '關注',
+                            style: TextStyle(color: hex('#333'), fontSize: 13),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: item.ifollow
+                            ? AButton.icon(
+                                width: 70,
+                                height: 25,
+                                borderColor: rgba(28, 141, 160, 1),
+                                bgColor: rgba(28, 141, 160, 1),
+                                plain: true,
+                                textChild: Text(
+                                  '已關注',
+                                  style: TextStyle(
+                                    color: hex('#fff'),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.circular(40),
+                                icon: icon_star(size: 13, color: hex('#fff')),
+                                onPressed: () => _clickFollow(item),
+                              )
+                            : AButton.icon(
+                                width: 70,
+                                height: 25,
+                                borderColor: rgba(28, 141, 160, 1),
+                                bgColor: hex('#fff'),
+                                plain: true,
+                                textChild: Text(
+                                  '關注',
+                                  style: TextStyle(
+                                    color: hex('#333'),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.circular(40),
+                                icon: icon_star_border(
+                                  size: 13,
+                                  color: hex('#333'),
+                                ),
+                                onPressed: () => _clickFollow(item),
+                              ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh() async {
+    pageId = 1;
+    dataItems.clear();
+    await _loadListData(context, showLoading: false);
+    _refreshController.refreshCompleted();
+  }
+
+  Future<void> _onLoading() async {
+    if (isLoadComplete) return; // Prevent loading if already complete
+    await _loadListData(context, showLoading: false, pageId: ++pageId);
+    _refreshController.loadComplete();
+  }
+
+  Future<void> _loadListData(
+    BuildContext context, {
+    bool showLoading = true,
+    int pageId = 1,
+  }) async {
+    if (showLoading) G.loading.show(context);
+    setState(() => isLoading = true); // Indicate loading state
+
+    try {
+      final getElandList = widget.type == 'all'
+          ? G.req.eland.list
+          : G.req.eland.myFollowList; //Improved readability
+      final res = await getElandList(
+        userId: widget.uid,
+        pageId: pageId,
+        limit: widget.pageLimit,
+        searchByName: widget.searchByName,
+        cateId: widget.cateId,
+      );
+      final result = res.data;
+      final elandList = ElandListModel.fromJson(result);
+
+      setState(() {
+        isLoadComplete = elandList.list.isEmpty;
+        dataItems.addAll(elandList.list);
+        isLoading = false; // Update loading state after data is received
+      });
+    } catch (e) {
+      print('articleCatch===>${e}');
+      // Show user-friendly error message
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error loading data')));
+    } finally {
+      if (showLoading) G.loading.hide(context);
+    }
+  }
+
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) => _buildShimmerItem(),
+      ),
+    );
+  }
+
+  Widget _buildShimmerItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[300],
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 20,
+                      color: Colors.grey[300],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 15,
+                          color: Colors.grey[300],
                         ),
                         Container(
-                          margin: EdgeInsets.only(bottom: 10.0),
-                          child: (item.ifollow == true && item.follow > 0)
-                              ? AButton.icon(
-                                  width: 70,
-                                  height: 25,
-                                  borderColor: rgba(28, 141, 160, 1),
-                                  bgColor: rgba(28, 141, 160, 1),
-                                  plain: true,
-                                  textChild: Text(
-                                    '已關注',
-                                    style: TextStyle(
-                                      color: hex('#fff'),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  borderRadius: BorderRadius.circular(40),
-                                  icon: icon_star(size: 13, color: hex('#fff')),
-                                  onPressed: () {
-                                    _clickFollow(item);
-                                  },
-                                )
-                              : AButton.icon(
-                                  width: 70,
-                                  height: 25,
-                                  borderColor: rgba(28, 141, 160, 1),
-                                  bgColor: hex('#fff'),
-                                  plain: true,
-                                  textChild: Text(
-                                    '關注',
-                                    style: TextStyle(
-                                      color: hex('#333'),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  borderRadius: BorderRadius.circular(40),
-                                  icon: icon_star_border(
-                                    size: 13,
-                                    color: hex('#333'),
-                                  ),
-                                  onPressed: () {
-                                    _clickFollow(item);
-                                  },
-                                ),
+                          width: 70,
+                          height: 25,
+                          color: Colors.grey[300],
                         ),
                       ],
                     ),
@@ -264,202 +340,62 @@ class _AElandListState extends State<AElandList> with RouteAware {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  void _onRefresh() async {
-    print('onRefresh===>');
-    // await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero, () async {
-      if (mounted) {
-        page_id = 1;
-        dataItems = [];
-        await _loadListData(
-          context,
-          isshowloading: false,
-          limit: widget.pagelimit,
-          pageid: page_id,
-          cateid: widget.cateid,
-          search_by_name: widget.search_by_name,
-          uid: widget.uid,
-        );
-      }
-      _refreshController.refreshCompleted();
-    });
-  }
-
-  void _onLoading() async {
-    print('onloading1===>');
-    // await Future.delayed(Duration(milliseconds: 1000));
-    Future.delayed(Duration.zero, () {
-      if (mounted) {
-        print('onloading2===>${page_id}');
-        _loadListData(
-          context,
-          isshowloading: false,
-          limit: widget.pagelimit,
-          pageid: ++page_id,
-          uid: widget.uid,
-          search_by_name: widget.search_by_name,
-          cateid: widget.cateid,
-        );
-      }
-      _refreshController.loadComplete();
-    });
-  }
-
-  _loadListData(
-    BuildContext context, {
-    bool isshowloading = true,
-    int pageid = 1,
-    int limit = 5,
-    uid = 0,
-    search_by_name = '',
-    cateid = 0,
-  }) async {
-    if (isshowloading == true) G.loading.show(context);
-    // UserDataModel userDataModel = G.user.data;
-    // print('Leo user id ===== ${userDataModel.id}');
-    // print('Leo user id =====> ${uid}');
-    // print('Leo cateid =====> ${cateid}');
-    try {
-      var res = null;
-      if (widget.type == 'all') {
-        res = await G.req.eland.list(
-          userid: uid,
-          // userid: userDataModel.id,
-          pageid: pageid,
-          limit: limit,
-          search_by_name: search_by_name,
-          cateid: cateid,
-        );
-      } else {
-        res = await G.req.eland.my_follow_list(
-          userid: uid,
-          // userid: userDataModel.id,
-          pageid: pageid,
-          limit: limit,
-          search_by_name: search_by_name,
-          cateid: cateid,
-        );
-      }
-
-      print('Leo======${res}');
-      Map result = res.data;
-      // print("result====>${result}");
-      ElandListModel tempList = ElandListModel.fromJson(result);
-
-      if (mounted) {
-        setState(() {
-          isloadcomplete = true;
-          dataItems.addAll(tempList.list);
-          if (tempList.list.length == 0) {
-            _refreshController.loadNoData();
-          }
-        });
-      }
-      if (isshowloading == true) G.loading.hide(context);
-    } catch (e) {
-      print('articleCatch===>${e}');
-      if (isshowloading == true) G.loading.hide(context);
-    }
-  }
-
-  Widget _cardListSkeleton() {
-    return Container(
-      child: CardListSkeleton(
-        style: SkeletonStyle(
-          theme: SkeletonTheme.Light,
-          isShowAvatar: true,
-          isCircleAvatar: true,
-          barCount: 2,
-        ),
+          const Divider(),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget top_contents = widget.topchild;
-    Widget bottom_contents = widget.bottomchild;
-
-    //    super.build(context);
-
-    if (widget.isSmartRefresher == true) {
-      if (isloadcomplete == true) {
-        return (dataItems.length == 0)
-            ? Container(
-                child: Center(
-                  child: new Image.asset(
-                    "lib/assets/images/empty_img.png",
-                    fit: BoxFit.fill,
+    return widget.isSmartRefresher
+        ? SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: widget.isLoadMore,
+            header: WaterDropHeader(
+              refresh: SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    rgba(28, 141, 160, 1),
                   ),
-                ),
-              )
-            : SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: (widget.isloadmore == true) ? true : false,
-                //        header:G.pullToRefresh.header(),
-                header: WaterDropHeader(
-                  refresh: SizedBox(
-                    height: 25,
-                    width: 25,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        rgba(28, 141, 160, 1),
-                      ),
-                    ),
-                  ),
-                  complete: Text('√ 加載完成'),
-                ),
-                footer: G.pullToRefresh.footer(),
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                onLoading: _onLoading,
-                child: SingleChildScrollView(
-                  child: new Container(
-                    child: new Column(
-                      children: <Widget>[
-                        top_contents,
-                        new Column(
-                          children: dataItems.asMap().keys.map((f) {
-                            dataItems[f].key = f;
-                            return buildContent(dataItems[f]);
-                          }).toList(),
-                        ),
-                        bottom_contents,
-                      ],
-                    ),
-                  ),
-                ),
-              );
-      } else {
-        return _cardListSkeleton();
-      }
-    } else {
-      return (dataItems.length == 0)
-          ? Container()
-          : SingleChildScrollView(
-              child: new Container(
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    top_contents,
-                    new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: dataItems.asMap().keys.map((f) {
-                        dataItems[f].key = f;
-                        return buildContent(dataItems[f]);
-                      }).toList(),
-                    ),
-                    bottom_contents,
-                  ],
                 ),
               ),
-            );
-    }
+              complete: const Text('√ 加載完成'),
+            ),
+            footer: G.pullToRefresh.footer(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: isLoading
+                ? _buildShimmerLoading()
+                : dataItems.isEmpty
+                ? Center(
+                    child: Image.asset(
+                      "lib/assets/images/empty_img.png",
+                      fit: BoxFit.fill,
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: dataItems.length,
+                    itemBuilder: (context, index) =>
+                        _buildContent(dataItems[index], index),
+                  ),
+          )
+        : Column(
+            children: [
+              widget.topChild,
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dataItems.length,
+                itemBuilder: (context, index) =>
+                    _buildContent(dataItems[index], index),
+              ),
+              widget.bottomChild,
+            ],
+          );
   }
 }

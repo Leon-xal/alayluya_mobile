@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_skeleton/flutter_skeleton.dart';
+//import 'package:flutter_skeleton/flutter_skeleton.dart';
+import 'package:shimmer/shimmer.dart'; // Import shimmer package
 import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
@@ -100,6 +101,49 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  // Shimmer Loading Widget
+  Widget _shimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 10, // Adjust the number of shimmer items as needed
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 16.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 45,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  height: 20,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  height: 150,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                Container(width: 100, height: 20, color: Colors.grey[300]),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void _onRefresh() async {
@@ -236,6 +280,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
             : 1);
     elandTagsItems = item.tags;
     //    return Text('hello=====>${item.content}');
+
     return Stack(
       children: [
         new Column(
@@ -622,8 +667,47 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
     Widget bottom_contents = widget.bottomchild;
 
     //    super.build(context);
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: (widget.isloadmore == true) ? true : false,
+      header: WaterDropHeader(
+        refresh: SizedBox(
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.0,
+            valueColor: const AlwaysStoppedAnimation<Color>(
+              Color.fromARGB(255, 28, 141, 160),
+            ),
+          ),
+        ),
+        complete: const Text('√ 加載完成'),
+      ),
+      footer: G.pullToRefresh.footer(),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      child: (elandItems.isEmpty)
+          ? _shimmerLoading() // Use shimmer loading widget
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: elandItems.length,
+              itemBuilder: (c, f) {
+                elandItems[f].key = f;
+                return Column(
+                  children: [
+                    (f == 0) ? widget.topchild ?? Container() : Container(),
+                    buildContent(elandItems[f]),
+                    (f == elandItems.length - 1)
+                        ? widget.bottomchild ?? Container()
+                        : Container(),
+                  ],
+                );
+              },
+            ),
+    );
 
-    return (elandItems.length == 0)
+    /*return (elandItems.length == 0)
         ? _cardListSkeleton()
         : SmartRefresher(
             enablePullDown: true,
@@ -669,6 +753,6 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                 );
               },
             ),
-          );
+          );*/
   }
 }

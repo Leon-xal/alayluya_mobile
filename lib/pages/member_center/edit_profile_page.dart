@@ -1,11 +1,8 @@
 import 'dart:async';
 //import 'package:color_dart/color_dart.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../components/a_button/index.dart';
 import '../../utils/global.dart';
-import '../../components/a_dialog/index.dart';
 import '../../model/user_model/data.dart';
 
 class EditProfilePage extends StatefulWidget {

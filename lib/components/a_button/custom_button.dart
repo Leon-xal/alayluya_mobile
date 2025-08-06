@@ -10,37 +10,29 @@ import 'package:flutter/material.dart';
 class CustomButton {
   static Map _buttonTypeConfig = {
     "warning": {
-      "color": hex('#fff'),
-      "bgColor": hex('#ff976a'),
-      "borderColor": hex('#ff976a'),
+      "color": '#fff',
+      "bgColor": '#ff976a',
+      "borderColor": '#ff976a',
     },
-    "danger": {
-      "color": hex('#fff'),
-      "bgColor": hex('#f44'),
-      "borderColor": hex('#f44'),
-    },
-    "info": {
-      "color": hex('#fff'),
-      "bgColor": hex('#1989fa'),
-      "borderColor": hex('#1989fa'),
-    },
+    "danger": {"color": '#fff', "bgColor": '#f44', "borderColor": '#f44'},
+    "info": {"color": '#fff', "bgColor": '#1989fa', "borderColor": '#1989fa'},
     "primary": {
-      "color": hex('#fff'),
-      "bgColor": hex('#07c160'),
-      "borderColor": hex('#07c160'),
+      "color": '#fff',
+      "bgColor": '#07c160',
+      "borderColor": '#07c160',
     },
     "default": {
-      "color": hex('#323233'),
-      "bgColor": hex('#fff'),
-      "borderColor": hex('#ebedf0'),
+      "color": '#323233',
+      "bgColor": '#fff',
+      "borderColor": '#ebedf0',
     },
   };
 
   Widget widget;
 
-  static Color _bgColor;
-  static Color _color;
-  static Color _borderColor;
+  static Color _bgColor = new Color(0xFFff976a); // Example color
+  static Color _color = new Color(0xFFFFFFFF); // White
+  static Color _borderColor = new Color(0xFFff976a); // Example color
 
   final String type;
   final Color color;
