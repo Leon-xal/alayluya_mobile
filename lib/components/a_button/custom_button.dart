@@ -1,199 +1,199 @@
-/*
- * @Author: meetqy
- * @since: 2019-08-30 14:34:02
- * @lastTime: 2019-09-23 16:19:54
- * @LastEditors: meetqy
- */
-//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
 
-class CustomButton {
-  static Map _buttonTypeConfig = {
-    "warning": {
-      "color": '#fff',
-      "bgColor": '#ff976a',
-      "borderColor": '#ff976a',
-    },
-    "danger": {"color": '#fff', "bgColor": '#f44', "borderColor": '#f44'},
-    "info": {"color": '#fff', "bgColor": '#1989fa', "borderColor": '#1989fa'},
-    "primary": {
-      "color": '#fff',
-      "bgColor": '#07c160',
-      "borderColor": '#07c160',
-    },
-    "default": {
-      "color": '#323233',
-      "bgColor": '#fff',
-      "borderColor": '#ebedf0',
-    },
-  };
+enum ButtonType { warning, danger, info, primary, defaultType }
 
-  Widget widget;
-
-  static Color _bgColor = new Color(0xFFff976a); // Example color
-  static Color _color = new Color(0xFFFFFFFF); // White
-  static Color _borderColor = new Color(0xFFff976a); // Example color
-
-  final String type;
+class CustomButton extends StatelessWidget {
+  final ButtonType type;
   final Color color;
   final Color bgColor;
   final Color borderColor;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final bool plain;
-  final VoidCallback onPressed;
-  final EdgeInsetsGeometry padding;
-  final BorderRadius borderRadius;
+  final VoidCallback? onPressed;
+  final EdgeInsetsGeometry? padding;
+  final BorderRadiusGeometry? borderRadius;
+  final Widget child;
 
-  CustomButton.normal({
+  static final Map<ButtonType, Map<String, Color>> _buttonTypeConfig = {
+    ButtonType.warning: {
+      'color': const Color(0xFFFFFFFF),
+      'bgColor': const Color(0xFFff976a),
+      'borderColor': const Color(0xFFff976a),
+    },
+    ButtonType.danger: {
+      'color': const Color(0xFFFFFFFF),
+      'bgColor': const Color(0xFFf44),
+      'borderColor': const Color(0xFFf44),
+    },
+    ButtonType.info: {
+      'color': const Color(0xFFFFFFFF),
+      'bgColor': const Color(0xFF1989fa),
+      'borderColor': const Color(0xFF1989fa),
+    },
+    ButtonType.primary: {
+      'color': const Color(0xFFFFFFFF),
+      'bgColor': const Color(0xFF07c160),
+      'borderColor': const Color(0xFF07c160),
+    },
+    ButtonType.defaultType: {
+      'color': const Color(0xFF323233),
+      'bgColor': const Color(0xFFFFFFFF),
+      'borderColor': const Color(0xFFebedf0),
+    },
+  };
+
+  CustomButton._internal({
+    Key? key,
+    required this.type,
+    required this.color,
+    required this.bgColor,
+    required this.borderColor,
     this.width,
     this.height,
-    this.type,
-    this.color,
-    this.bgColor,
-    this.borderColor,
-    this.plain,
+    this.plain = false,
     this.onPressed,
     this.padding,
     this.borderRadius,
-    Widget child,
+    required this.child,
+  }) : super(key: key);
+
+  factory CustomButton.normal({
+    Key? key,
+    ButtonType type = ButtonType.defaultType,
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
+    double? width,
+    double? height,
+    bool plain = false,
+    VoidCallback? onPressed,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? borderRadius,
+    required Widget child,
   }) {
-    _setColor();
-
-    widget = _init(child);
-  }
-
-  CustomButton.icon({
-    this.width,
-    this.height,
-    this.type,
-    this.color,
-    this.bgColor,
-    this.borderColor,
-    this.plain,
-    this.onPressed,
-    this.padding,
-    this.borderRadius,
-    Widget textChild,
-    Widget icon,
-  }) {
-    _setColor();
-
-    widget = _initIcon(textChild, icon);
-  }
-
-  CustomButton.loading({
-    this.width,
-    this.height,
-    this.type,
-    this.color,
-    this.bgColor,
-    this.borderColor,
-    this.plain,
-    this.onPressed,
-    this.padding,
-    this.borderRadius,
-    Widget textChild,
-    Widget loadingChild,
-  }) {
-    _setColor();
-
-    Widget defaultLoading = Transform.scale(
-      scale: 0.7,
-      child: CircularProgressIndicator(
-        strokeWidth: 2,
-        backgroundColor: Colors.transparent,
-        valueColor: AlwaysStoppedAnimation(_color),
-      ),
-    );
-
-    widget = _initIcon(textChild, defaultLoading);
-  }
-
-  _init(Widget child) {
-    return Container(
+    final buttonConfig = _buttonTypeConfig[type]!;
+    return CustomButton._internal(
+      key: key,
+      type: type,
+      color: color ?? buttonConfig['color']!,
+      bgColor: bgColor ?? buttonConfig['bgColor']!,
+      borderColor: borderColor ?? buttonConfig['borderColor']!,
       width: width,
       height: height,
-      child: FlatButton(
-        padding: padding == null ? EdgeInsets.all(0) : padding,
-        shape: RoundedRectangleBorder(
-          borderRadius: borderRadius == null
-              ? BorderRadius.circular(4)
-              : borderRadius,
-          side: BorderSide(
-            width: 1,
-            color: !plain ? Colors.transparent : _borderColor,
-          ),
-        ),
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: child,
-        textColor: _color,
-        color: _bgColor,
-        splashColor: onPressed == null ? Colors.transparent : null,
-        highlightColor: onPressed == null ? Colors.transparent : null,
-        disabledColor: _bgColor,
-        onPressed: onPressed == null ? () {} : onPressed,
+      plain: plain,
+      onPressed: onPressed,
+      padding: padding,
+      borderRadius: borderRadius,
+      child: child,
+    );
+  }
+
+  factory CustomButton.icon({
+    Key? key,
+    ButtonType type = ButtonType.defaultType,
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
+    double? width,
+    double? height,
+    bool plain = false,
+    VoidCallback? onPressed,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? borderRadius,
+    required Widget textChild,
+    required Widget icon,
+  }) {
+    final buttonConfig = _buttonTypeConfig[type]!;
+    return CustomButton._internal(
+      key: key,
+      type: type,
+      color: color ?? buttonConfig['color']!,
+      bgColor: bgColor ?? buttonConfig['bgColor']!,
+      borderColor: borderColor ?? buttonConfig['borderColor']!,
+      width: width,
+      height: height,
+      plain: plain,
+      onPressed: onPressed,
+      padding: padding,
+      borderRadius: borderRadius,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[icon, SizedBox(width: 5), textChild],
       ),
     );
   }
 
-  _initIcon(Widget textChild, Widget icon) {
-    Widget iconChild = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(child: icon),
-        Container(
-          margin: EdgeInsets.only(left: textChild == null ? 0 : 5),
-          child: textChild,
-        ),
-      ],
+  factory CustomButton.loading({
+    Key? key,
+    ButtonType type = ButtonType.defaultType,
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
+    double? width,
+    double? height,
+    bool plain = false,
+    VoidCallback? onPressed,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? borderRadius,
+    required Widget textChild,
+  }) {
+    final buttonConfig = _buttonTypeConfig[type]!;
+    return CustomButton._internal(
+      key: key,
+      type: type,
+      color: color ?? buttonConfig['color']!,
+      bgColor: bgColor ?? buttonConfig['bgColor']!,
+      borderColor: borderColor ?? buttonConfig['borderColor']!,
+      width: width,
+      height: height,
+      plain: plain,
+      onPressed: onPressed,
+      padding: padding,
+      borderRadius: borderRadius,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Transform.scale(
+            scale: 0.7,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              backgroundColor: Colors.transparent,
+              valueColor: AlwaysStoppedAnimation(
+                color ?? buttonConfig['color']!,
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          textChild,
+        ],
+      ),
     );
-
-    return _init(iconChild);
   }
 
-  _getType() {
-    var buttonColor = _buttonTypeConfig["$type"];
-
-    // type不符合要求，设置为defalut
-    if (buttonColor == null) buttonColor = _buttonTypeConfig['default'];
-
-    return buttonColor;
-  }
-
-  /// 设置color
-  /// disabled状态  color透明度设置为0.5
-  _setColor() {
-    Map buttonColor = _getType();
-
-    // color  传入的
-    // buttonColor['xxx'] 默认的
-    // $color 最终结果
-    Color $color = color ?? buttonColor['color'];
-    Color $bgColor = bgColor ?? buttonColor['bgColor'];
-    Color $borderColor = borderColor ?? buttonColor['borderColor'];
-
-    // 通过plain属性将按钮设置为朴素按钮，朴素按钮的文字为按钮颜色
-    // 默认背景颜色为白色
-    if (plain) {
-      // 如果调用者传入的color为空，文字颜色 = 背景颜色
-      // 默认背景颜色为白色
-      _color = onPressed == null ? $color.withOpacity(.5) : $color;
-
-      // 如果调用者传入的borderColor为空，边框颜色 = 背景颜色
-      // 默认背景颜色为白色
-      _borderColor = onPressed == null
-          ? $borderColor.withOpacity(.5)
-          : $borderColor;
-
-      _bgColor = bgColor ?? hex('#fff');
-    } else {
-      _color = onPressed == null ? $color.withOpacity(.5) : $color;
-      _bgColor = onPressed == null ? $bgColor.withOpacity(.5) : $bgColor;
-      _borderColor = onPressed == null
-          ? $borderColor.withOpacity(.5)
-          : $borderColor;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: padding ?? EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            borderRadius: borderRadius ?? BorderRadius.circular(4),
+            side: BorderSide(
+              width: 1,
+              color: plain ? borderColor : Colors.transparent,
+            ),
+          ),
+          backgroundColor: bgColor,
+          foregroundColor: color,
+        ),
+        onPressed: onPressed ?? () {},
+        child: child,
+      ),
+    );
   }
 }
