@@ -268,7 +268,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
     }
   }
 
-  Widget _cardListSkeleton() {
+  /*Widget _cardListSkeleton() {
     return Container(
       child: CardListSkeleton(
         style: SkeletonStyle(
@@ -279,7 +279,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
         ),
       ),
     );
-  }
+  }*/
 
   Widget buildContent(item) {
     int imageSize = item.pics.length;
