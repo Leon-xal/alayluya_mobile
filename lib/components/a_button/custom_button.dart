@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 
 enum ButtonType { warning, danger, info, primary, defaultType }
 
+class ButtonConfig {
+  final Color color;
+  final Color bgColor;
+  final Color borderColor;
+
+  const ButtonConfig({
+    required this.color,
+    required this.bgColor,
+    required this.borderColor,
+  });
+}
+
 class CustomButton extends StatelessWidget {
   final ButtonType type;
+  //final ButtonConfig buttonConfig; // Use ButtonConfig
   final Color color;
   final Color bgColor;
   final Color borderColor;
@@ -15,37 +28,38 @@ class CustomButton extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final Widget child;
 
-  static final Map<ButtonType, Map<String, Color>> _buttonTypeConfig = {
-    ButtonType.warning: {
-      'color': const Color(0xFFFFFFFF),
-      'bgColor': const Color(0xFFff976a),
-      'borderColor': const Color(0xFFff976a),
-    },
-    ButtonType.danger: {
-      'color': const Color(0xFFFFFFFF),
-      'bgColor': const Color(0xFFf44),
-      'borderColor': const Color(0xFFf44),
-    },
-    ButtonType.info: {
-      'color': const Color(0xFFFFFFFF),
-      'bgColor': const Color(0xFF1989fa),
-      'borderColor': const Color(0xFF1989fa),
-    },
-    ButtonType.primary: {
-      'color': const Color(0xFFFFFFFF),
-      'bgColor': const Color(0xFF07c160),
-      'borderColor': const Color(0xFF07c160),
-    },
-    ButtonType.defaultType: {
-      'color': const Color(0xFF323233),
-      'bgColor': const Color(0xFFFFFFFF),
-      'borderColor': const Color(0xFFebedf0),
-    },
+  static final Map<ButtonType, ButtonConfig> _buttonTypeConfig = {
+    ButtonType.warning: const ButtonConfig(
+      color: Color(0xFFFFFFFF),
+      bgColor: Color(0xFFff976a),
+      borderColor: Color(0xFFff976a),
+    ),
+    ButtonType.danger: const ButtonConfig(
+      color: Color(0xFFFFFFFF),
+      bgColor: Color(0xFFf44),
+      borderColor: Color(0xFFf44),
+    ),
+    ButtonType.info: const ButtonConfig(
+      color: Color(0xFFFFFFFF),
+      bgColor: Color(0xFF1989fa),
+      borderColor: Color(0xFF1989fa),
+    ),
+    ButtonType.primary: const ButtonConfig(
+      color: Color(0xFFFFFFFF),
+      bgColor: Color(0xFF07c160),
+      borderColor: Color(0xFF07c160),
+    ),
+    ButtonType.defaultType: const ButtonConfig(
+      color: Color(0xFF323233),
+      bgColor: Color(0xFFFFFFFF),
+      borderColor: Color(0xFFebedf0),
+    ),
   };
 
   CustomButton._internal({
     Key? key,
     required this.type,
+    //required this.buttonConfig,
     required this.color,
     required this.bgColor,
     required this.borderColor,
@@ -72,13 +86,17 @@ class CustomButton extends StatelessWidget {
     BorderRadiusGeometry? borderRadius,
     required Widget child,
   }) {
-    final buttonConfig = _buttonTypeConfig[type]!;
+    final buttonConfig =
+        _buttonTypeConfig[type] ??
+        _buttonTypeConfig[ButtonType
+            .defaultType]!; // Default to defaultType if type is not found
     return CustomButton._internal(
       key: key,
       type: type,
-      color: color ?? buttonConfig['color']!,
-      bgColor: bgColor ?? buttonConfig['bgColor']!,
-      borderColor: borderColor ?? buttonConfig['borderColor']!,
+      //buttonConfig: buttonConfig,
+      color: color ?? buttonConfig.color,
+      bgColor: bgColor ?? buttonConfig.bgColor,
+      borderColor: borderColor ?? buttonConfig.borderColor,
       width: width,
       height: height,
       plain: plain,
@@ -104,13 +122,17 @@ class CustomButton extends StatelessWidget {
     required Widget textChild,
     required Widget icon,
   }) {
-    final buttonConfig = _buttonTypeConfig[type]!;
+    final buttonConfig =
+        _buttonTypeConfig[type] ??
+        _buttonTypeConfig[ButtonType
+            .defaultType]!; // Default to defaultType if type is not found
     return CustomButton._internal(
       key: key,
       type: type,
-      color: color ?? buttonConfig['color']!,
-      bgColor: bgColor ?? buttonConfig['bgColor']!,
-      borderColor: borderColor ?? buttonConfig['borderColor']!,
+      //buttonConfig: buttonConfig,
+      color: color ?? buttonConfig.color,
+      bgColor: bgColor ?? buttonConfig.bgColor,
+      borderColor: borderColor ?? buttonConfig.borderColor,
       width: width,
       height: height,
       plain: plain,
@@ -139,13 +161,17 @@ class CustomButton extends StatelessWidget {
     BorderRadiusGeometry? borderRadius,
     required Widget textChild,
   }) {
-    final buttonConfig = _buttonTypeConfig[type]!;
+    final buttonConfig =
+        _buttonTypeConfig[type] ??
+        _buttonTypeConfig[ButtonType
+            .defaultType]!; // Default to defaultType if type is not found
     return CustomButton._internal(
       key: key,
       type: type,
-      color: color ?? buttonConfig['color']!,
-      bgColor: bgColor ?? buttonConfig['bgColor']!,
-      borderColor: borderColor ?? buttonConfig['borderColor']!,
+      //buttonConfig: buttonConfig,
+      color: color ?? buttonConfig.color,
+      bgColor: bgColor ?? buttonConfig.bgColor,
+      borderColor: borderColor ?? buttonConfig.borderColor,
       width: width,
       height: height,
       plain: plain,
@@ -162,7 +188,8 @@ class CustomButton extends StatelessWidget {
               strokeWidth: 2,
               backgroundColor: Colors.transparent,
               valueColor: AlwaysStoppedAnimation(
-                color ?? buttonConfig['color']!,
+                //color ?? buttonConfig['color']!,
+                buttonConfig.color,
               ),
             ),
           ),
@@ -186,10 +213,15 @@ class CustomButton extends StatelessWidget {
             side: BorderSide(
               width: 1,
               color: plain ? borderColor : Colors.transparent,
+              //color: plain
+              //    ? buttonConfig.borderColor
+              //    : Colors.transparent, // Use buttonConfig
             ),
           ),
           backgroundColor: bgColor,
           foregroundColor: color,
+          //backgroundColor: buttonConfig.bgColor, // Use buttonConfig
+          //foregroundColor: buttonConfig.color, // Use buttonConfig
         ),
         onPressed: onPressed ?? () {},
         child: child,

@@ -8,11 +8,29 @@ import 'package:flutter/material.dart';
 
 import './custom_button.dart';
 
+// Helper function to convert String to ButtonType
+ButtonType _stringToButtonType(String typeString) {
+  switch (typeString.toLowerCase()) {
+    case 'warning':
+      return ButtonType.warning;
+    case 'danger':
+      return ButtonType.danger;
+    case 'info':
+      return ButtonType.info;
+    case 'primary':
+      return ButtonType.primary;
+    case 'defaultType': // Handle potential case mismatch
+    case 'default':
+      return ButtonType.defaultType;
+    default:
+      return ButtonType.defaultType; // Default to defaultType if invalid
+  }
+}
 
 /// 暴露button 相当于工厂函数
 class AButton {
   /// 按钮
-  /// 
+  ///
   /// ```
   /// @param {double} width 宽度
   /// @param {double} height  高度
@@ -27,22 +45,23 @@ class AButton {
   /// @param {BorderRadius} borderRadius  圆角
   /// ```
   static Widget normal({
-    double width,
+    double width = 0,
     double height = 44,
-    String type = 'default',
-    Color color,
-    Color bgColor,
-    Color borderColor,
+    String typeString = 'defaultType',
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
     bool plain = false,
-    VoidCallback onPressed,
-    Widget child,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius
+    VoidCallback? onPressed,
+    Widget child = const SizedBox.shrink(), // <-- Default empty widget
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
   }) {
+    final buttonType = _stringToButtonType(typeString); // Convert to ButtonType
     return CustomButton.normal(
       width: width,
       height: height,
-      type: type,
+      type: buttonType,
       color: color,
       bgColor: bgColor,
       borderColor: borderColor,
@@ -50,12 +69,12 @@ class AButton {
       onPressed: onPressed,
       child: child,
       padding: padding,
-      borderRadius: borderRadius
-    ).widget;
+      borderRadius: borderRadius,
+    );
   }
 
   /// 按钮
-  /// 
+  ///
   /// ```
   /// @param {double} width 宽度
   /// @param {double} height  高度
@@ -71,23 +90,26 @@ class AButton {
   /// @param {BorderRadius} borderRadius  圆角
   /// ```
   static Widget icon({
-    double width,
+    double width = 0,
     double height = 44,
-    String type = 'default',
-    Color color,
-    Color bgColor,
-    Color borderColor,
+    String typeString = 'defaultType',
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
     bool plain = false,
-    VoidCallback onPressed,
-    Widget textChild,
-    Widget icon,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius
+    VoidCallback? onPressed,
+    Widget textChild = const SizedBox.shrink(), // <-- Default empty widget
+    //Widget textChild,
+    Widget icon = const SizedBox.shrink(), // Provide a default empty widget
+    //Widget? icon,
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
   }) {
+    final buttonType = _stringToButtonType(typeString); // Convert to ButtonType
     return CustomButton.icon(
       width: width,
       height: height,
-      type: type,
+      type: buttonType,
       color: color,
       bgColor: bgColor,
       borderColor: borderColor,
@@ -96,12 +118,12 @@ class AButton {
       textChild: textChild,
       icon: icon,
       padding: padding,
-      borderRadius: borderRadius
-    ).widget;
+      borderRadius: borderRadius,
+    );
   }
 
   /// loading 按钮
-  /// 
+  ///
   /// ```
   /// @param {double} width 宽度
   /// @param {double} height  高度
@@ -116,22 +138,25 @@ class AButton {
   /// @param {BorderRadius} borderRadius  圆角
   /// ```
   static Widget loading({
-    double width,
+    double width = 0,
     double height = 44,
-    String type = 'default',
-    Color color,
-    Color bgColor,
-    Color borderColor,
+    String typeString = 'defaultType',
+    Color? color,
+    Color? bgColor,
+    Color? borderColor,
     bool plain = false,
-    VoidCallback onPressed,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius,
-    Widget loadingChild,
+    VoidCallback? onPressed,
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
+    //Widget loadingChild,
+    Widget loadingChild =
+        const SizedBox.shrink(), // Provide a default empty widget
   }) {
+    final buttonType = _stringToButtonType(typeString); // Convert to ButtonType
     return CustomButton.loading(
       width: width,
       height: height,
-      type: type,
+      type: buttonType,
       color: color,
       bgColor: bgColor,
       borderColor: borderColor,
@@ -139,7 +164,7 @@ class AButton {
       onPressed: onPressed,
       padding: padding,
       borderRadius: borderRadius,
-      loadingChild: loadingChild,
-    ).widget;
+      textChild: loadingChild,
+    );
   }
 }

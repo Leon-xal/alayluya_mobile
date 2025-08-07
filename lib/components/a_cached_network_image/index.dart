@@ -22,9 +22,9 @@ class AcachedNetworkImage extends StatelessWidget {
 
   AcachedNetworkImage(
     this.path, {
-    Key key,
-    this.width,
-    this.height,
+    Key? key,
+    this.width = 0,
+    this.height = 0,
     this.fit = BoxFit.fill,
     this.borderRadius = const BorderRadius.all(Radius.circular(0.0)),
   });

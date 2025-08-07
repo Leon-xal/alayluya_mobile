@@ -5,12 +5,15 @@ import '../../utils/global.dart';
 
 class ADialog {
   final BuildContext context;
-  String title;
-  String content;
+  String title = "";
+  String content = "";
 
-  static Widget _title;
-  static Widget _content;
-  static Widget _bottom;
+  static Widget _title =
+      const SizedBox.shrink(); // Provide a default empty widget;
+  static Widget _content =
+      const SizedBox.shrink(); // Provide a default empty widget;
+  static Widget _bottom =
+      const SizedBox.shrink(); // Provide a default empty widget;
 
   /// 提示弹窗
   ///
@@ -23,10 +26,10 @@ class ADialog {
   /// ```
   ADialog.alert(
     this.context, {
-    this.title,
-    @required this.content,
-    Function confirmButtonPress,
-    Text confirmButtonText,
+    this.title = "",
+    required this.content,
+    Function? confirmButtonPress,
+    Text? confirmButtonText,
   }) {
     _title = _initTitle();
     _content = _initContent();
@@ -56,23 +59,19 @@ class ADialog {
   /// ```
   ADialog.confirm(
     this.context, {
-    this.title,
-    @required this.content,
-    Function confirmButtonPress,
-    Text confirmButtonText,
-    Function cancelButtonPress,
-    Text cancelButtonText,
+    this.title = "",
+    required this.content,
+    Function? confirmButtonPress,
+    Text confirmButtonText = const Text('確認'),
+    Function? cancelButtonPress,
+    Text cancelButtonText = const Text('取消'),
   }) {
     _title = _initTitle();
     _content = _initContent();
     _bottom = _initBottom(
       confirmButtonPress: confirmButtonPress,
-      confirmButtonText: confirmButtonText == null
-          ? Text('確認')
-          : confirmButtonText,
-      cancelButtonText: cancelButtonText == null
-          ? Text('取消')
-          : cancelButtonText,
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText,
       cancelButtonPress: cancelButtonPress,
       cancelBorderRadius: BorderRadius.only(bottomLeft: Radius.circular(4)),
       confirmBorderRadius: BorderRadius.only(bottomRight: Radius.circular(4)),
@@ -84,8 +83,8 @@ class ADialog {
     this.context, {
     //    this.title,
     //    @required this.content,
-    Widget contentChild,
-    Widget bottomChild,
+    required Widget contentChild,
+    required Widget bottomChild,
     //    Function confirmButtonPress,
     //    Text confirmButtonText,
   }) {
@@ -95,7 +94,10 @@ class ADialog {
           Align(
             //              child: Icon(Icons.search, size: 40, color: rgba(28, 141, 160, 1)),
             child: InkWell(
-              child: icon_close(size: 30, color: rgba(28, 141, 160, 1)),
+              child: icon_close(
+                size: 30,
+                color: Color.fromARGB(255, 28, 141, 160),
+              ),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -115,7 +117,7 @@ class ADialog {
       ),
       child: contentChild,
     );
-    _bottom = bottomChild == null ? Container() : bottomChild;
+    _bottom = bottomChild;
     //    _bottom = _initBottom(
     //        confirmButtonPress: confirmButtonPress,
     //        confirmButtonText: confirmButtonText == null ? Text('确认') : confirmButtonText,
@@ -126,20 +128,18 @@ class ADialog {
 
   // 标题部分
   Widget _initTitle() {
-    return title == null
-        ? Container()
-        : Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(top: 12),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: rgba(56, 56, 56, 1),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(top: 12),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Color.fromARGB(255, 56, 56, 56),
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   // 内容部分
@@ -148,7 +148,10 @@ class ADialog {
       padding: EdgeInsets.symmetric(vertical: 24, horizontal: 15),
       child: Text(
         content,
-        style: TextStyle(color: rgba(153, 153, 153, 1), fontSize: 14),
+        style: TextStyle(
+          color: Color.fromARGB(255, 153, 153, 153),
+          fontSize: 14,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -156,16 +159,18 @@ class ADialog {
 
   // 底部按钮 如果 confirmButtonText || cancelButtonText 为null 代表不显示改按钮
   Widget _initBottom({
-    Text confirmButtonText,
-    Text cancelButtonText,
-    Function confirmButtonPress,
-    Function cancelButtonPress,
-    BorderRadius cancelBorderRadius,
-    BorderRadius confirmBorderRadius,
+    Text confirmButtonText = const Text('确认'),
+    Text cancelButtonText = const Text('取消'),
+    Function? confirmButtonPress,
+    Function? cancelButtonPress,
+    BorderRadius? cancelBorderRadius,
+    BorderRadius? confirmBorderRadius,
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: rgba(242, 242, 242, 1))),
+        border: Border(
+          top: BorderSide(color: Color.fromARGB(255, 242, 242, 242)),
+        ),
       ),
       child: Row(
         children: <Widget>[
@@ -177,15 +182,19 @@ class ADialog {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border(
-                          right: BorderSide(color: rgba(242, 242, 242, 1)),
+                          right: BorderSide(
+                            color: Color.fromARGB(255, 242, 242, 242),
+                          ),
                         ),
                       ),
                       child: AButton.normal(
                         child: cancelButtonText,
-                        color: rgba(56, 56, 56, 1),
+                        color: Color.fromARGB(255, 56, 56, 56),
                         borderRadius: cancelBorderRadius,
                         onPressed: () {
-                          cancelButtonPress();
+                          if (cancelButtonPress != null) {
+                            cancelButtonPress();
+                          }
                         },
                       ),
                     ),
@@ -199,10 +208,12 @@ class ADialog {
                     child: AButton.normal(
                       child: confirmButtonText,
                       borderRadius: confirmBorderRadius,
-                      color: rgba(28, 141, 160, 1),
+                      color: Color.fromARGB(255, 141, 160, 1),
                       onPressed: () {
                         Navigator.pop(context);
-                        confirmButtonPress();
+                        if (confirmButtonPress != null) {
+                          confirmButtonPress();
+                        }
                       },
                     ),
                   ),
