@@ -9,10 +9,10 @@ class ElandListModel {
   String msg;
 
   ElandListModel({
-    this.code,
-    this.list,
-    this.msg,
-  });
+    required this.code,
+    required this.list,
+    required this.msg,
+  }) 
 
   //反序列化
   factory ElandListModel.fromJson(Map<String, dynamic> json) => _$ElandListModelFromJson(json);
@@ -32,15 +32,15 @@ class ElandListDatum {
   bool ifollow;
 
   ElandListDatum({
-    this.key,
-    this.eland_id,
-    this.eland_name,
-    this.eland_desc,
-    this.eland_pic,
-    this.eland_has_news,
-    this.follow,
-    this.ifollow,
-  });
+    required this.key,
+    required this.eland_id,
+    required this.eland_name,
+    required this.eland_desc,
+    required this.eland_pic,
+    required this.eland_has_news,
+    required this.follow,
+    required this.ifollow,
+  }) 
 
   //反序列化
   factory ElandListDatum.fromJson(Map<String, dynamic> json) => _$ElandListDatumFromJson(json);

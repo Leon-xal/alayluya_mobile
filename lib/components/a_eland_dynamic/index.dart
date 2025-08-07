@@ -23,13 +23,13 @@ class AElandDynamic extends StatefulWidget {
   final Widget bottomchild;
   int uid;
   AElandDynamic({
-    Key key,
+    Key? key,
     this.isshowcenterload = true,
     this.isloadmore = true,
     this.pagelimit = 10,
     this.isreload = true,
-    this.topchild = null,
-    this.bottomchild = null,
+    this.topchild = const SizedBox(),
+    this.bottomchild = const SizedBox(),
     this.uid = 0,
     //    this.onTap,
   }) : super(key: key);
@@ -71,9 +71,15 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
   //###Leo
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      // Check if it's a PageRoute
+      MyApp.routeObserver.subscribe(this, route);
+    } else {
+      // Handle the case where route is null or not a PageRoute
+      print('Warning: ModalRoute.of(context) is not a PageRoute');
+    }
   }
 
   //###Leo
@@ -201,7 +207,13 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
         search_by_content: '',
         userid: userid,
       );
-      Map result = res.data;
+      Map<String, dynamic> result = {};
+      ElandDynamicModel tempElandList = ElandDynamicModel(
+        code: 0,
+        list: [],
+        msg: '',
+      ); // Default value
+      //Map result = res.data;
       //      print('_result===>${result}');
       //###Leo
       Future.delayed(Duration.zero, () {
