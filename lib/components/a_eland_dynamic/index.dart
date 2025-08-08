@@ -4,11 +4,11 @@ import '../../provider/do_like_method.dart';
 //import 'package:color_dart/RgbaColor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+//import 'package:flutter/cupertino.dart';
 //import 'package:flutter_skeleton/flutter_skeleton.dart';
 import 'package:shimmer/shimmer.dart'; // Import shimmer package
-import '../../utils/Icon.dart';
+//import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
 import '../../components/a_cached_network_image/index.dart';
@@ -213,11 +213,11 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
         list: [],
         msg: '',
       ); // Default value
-      //Map result = res.data;
+      result = res.data;
       //      print('_result===>${result}');
       //###Leo
       Future.delayed(Duration.zero, () {
-        ElandDynamicModel tempElandList = ElandDynamicModel.fromJson(result);
+        tempElandList = ElandDynamicModel.fromJson(result);
         if (mounted) {
           setState(() {
             elandItems.addAll(tempElandList.list);
@@ -307,7 +307,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                   bottom: new BorderSide(color: Colors.black12, width: 1.0),
                 ),
               ),
-              child: new FlatButton(
+              child: new ElevatedButton(
                 onPressed: () {
                   if (item.type == 2) {
                     //###Leo
@@ -350,7 +350,12 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                                   height: 45,
                                   margin: const EdgeInsets.only(right: 15.0),
                                   child: new CircleAvatar(
-                                    backgroundColor: rgba(28, 141, 160, 1),
+                                    backgroundColor: Color.fromARGB(
+                                      255,
+                                      28,
+                                      141,
+                                      160,
+                                    ),
                                     backgroundImage: new NetworkImage(
                                       item.eland_pic,
                                     ),
@@ -392,13 +397,18 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                               ? AButton.icon(
                                   width: 70,
                                   height: 25,
-                                  borderColor: rgba(28, 141, 160, 1),
-                                  bgColor: rgba(28, 141, 160, 1),
+                                  borderColor: Color.fromARGB(
+                                    255,
+                                    28,
+                                    141,
+                                    160,
+                                  ),
+                                  bgColor: Color.fromARGB(255, 28, 141, 160),
                                   plain: true,
                                   textChild: Text(
                                     item.collect.toString(),
                                     style: TextStyle(
-                                      color: hex('#fff'),
+                                      color: Color.fromARGB(255, 255, 255, 255),
                                       fontSize: 13,
                                     ),
                                   ),
@@ -406,11 +416,21 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                                   icon: (item.type == 5)
                                       ? icon_prayer(
                                           size: 13,
-                                          color: hex('#fff'),
+                                          color: Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
                                         )
                                       : icon_favorite(
                                           size: 13,
-                                          color: hex('#fff'),
+                                          color: Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
                                         ),
                                   onPressed: () {
                                     _clickCollect(item);
@@ -419,13 +439,18 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                               : AButton.icon(
                                   width: 70,
                                   height: 25,
-                                  borderColor: rgba(28, 141, 160, 1),
-                                  bgColor: hex('#fff'),
+                                  borderColor: Color.fromARGB(
+                                    255,
+                                    28,
+                                    141,
+                                    161,
+                                  ),
+                                  bgColor: Color.fromARGB(255, 255, 255, 255),
                                   plain: true,
                                   textChild: Text(
                                     item.collect.toString(),
                                     style: TextStyle(
-                                      color: hex('#333'),
+                                      color: Color(0xff333333),
                                       fontSize: 13,
                                     ),
                                   ),
@@ -433,11 +458,11 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                                   icon: (item.type == 5)
                                       ? icon_prayer(
                                           size: 13,
-                                          color: hex('#333'),
+                                          color: Color(0xff333333),
                                         )
                                       : icon_favorite_border(
                                           size: 13,
-                                          color: hex('#333'),
+                                          color: Color(0xff333333),
                                         ),
                                   onPressed: () {
                                     _clickCollect(item);
@@ -523,7 +548,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                                     childAspectRatio: 1,
                                   ),
                               itemBuilder: (context, index) {
-                                Widget buildItem = null;
+                                Widget? buildItem = null;
                                 if (index == (imageSize - 1)) {
                                   buildItem = Stack(
                                     alignment: Alignment.center,
@@ -541,11 +566,11 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                                           width: imageWidth,
                                           height: imageWidth,
                                           alignment: Alignment.center,
-                                          color: rgba(0, 0, 0, 0.5),
+                                          color: Color.fromARGB(128, 0, 0, 0),
                                           child: Text(
                                             'more...',
                                             style: new TextStyle(
-                                              color: hex('#fff'),
+                                              color: Color(0xffffffff),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16.0,
                                             ),

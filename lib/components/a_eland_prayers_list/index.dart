@@ -1,7 +1,7 @@
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../utils/Icon.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+//import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
 import '../../model/eland_prayers_list_model/data.dart';
@@ -25,15 +25,15 @@ class AElandPrayersList extends StatefulWidget {
   int user_id;
   int eland_id;
   AElandPrayersList({
-    Key key,
+    Key? key,
     this.search_by_title = '',
     this.isShowCenterload = true,
     this.isloadmore = true,
     this.pagelimit = 10,
     this.cateid = 0,
     this.isreload = true,
-    this.topchild = null,
-    this.bottomchild = null,
+    this.topchild = const SizedBox(),
+    this.bottomchild = const SizedBox(),
     this.isSmartRefresher = true,
     this.isShowDesc = true,
     this.isShowTag = true,
@@ -51,7 +51,7 @@ class AElandPrayersList extends StatefulWidget {
 
 //with AutomaticKeepAliveClientMixin
 class _AElandPrayersListState extends State<AElandPrayersList> {
-  List<dynamic> articleItems = [];
+  List<ElandPrayersListDatum> articleItems = [];
   List<dynamic> articleTagsItems = [];
   RefreshController _refreshController = RefreshController(
     initialRefresh: false,
@@ -154,8 +154,10 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
           bottom: new BorderSide(color: Colors.black12, width: 1.0),
         ),
       ),
-      child: new FlatButton(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
+      child: new ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
+        ),
         onPressed: () {
           G.pushNamed('/prayers_detail', arguments: {'id': item.id});
         },
@@ -256,20 +258,30 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                 ? AButton.icon(
                                     width: 70,
                                     height: 25,
-                                    borderColor: rgba(28, 141, 160, 1),
-                                    bgColor: rgba(28, 141, 160, 1),
+                                    borderColor: Color.fromARGB(
+                                      255,
+                                      28,
+                                      141,
+                                      160,
+                                    ),
+                                    bgColor: Color.fromARGB(255, 28, 141, 160),
                                     plain: true,
                                     textChild: Text(
                                       item.prayer.toString(),
                                       style: TextStyle(
-                                        color: hex('#fff'),
+                                        color: Color.fromARGB(
+                                          255,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
                                         fontSize: 13,
                                       ),
                                     ),
                                     borderRadius: BorderRadius.circular(40),
                                     icon: icon_prayer(
                                       size: 13,
-                                      color: hex('#fff'),
+                                      color: Color.fromARGB(255, 255, 255, 255),
                                     ),
                                     onPressed: () {
                                       _clickPrayer(item);
@@ -278,20 +290,25 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                 : AButton.icon(
                                     width: 70,
                                     height: 25,
-                                    borderColor: rgba(28, 141, 160, 1),
-                                    bgColor: hex('#fff'),
+                                    borderColor: Color.fromARGB(
+                                      255,
+                                      28,
+                                      141,
+                                      160,
+                                    ),
+                                    bgColor: Color.fromARGB(255, 255, 255, 255),
                                     plain: true,
                                     textChild: Text(
                                       item.prayer.toString(),
                                       style: TextStyle(
-                                        color: hex('#333'),
+                                        color: Color(0xff333333),
                                         fontSize: 13,
                                       ),
                                     ),
                                     borderRadius: BorderRadius.circular(40),
                                     icon: icon_prayer(
                                       size: 13,
-                                      color: hex('#333'),
+                                      color: Color(0xff333333),
                                     ),
                                     onPressed: () {
                                       _clickPrayer(item);
@@ -310,7 +327,7 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                     padding: EdgeInsets.only(right: 10.0),
                                     child: icon_author(
                                       size: 18,
-                                      color: hex('#737373'),
+                                      color: Color(0xff737373),
                                     ),
                                   ),
                                   Container(
@@ -326,7 +343,7 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: hex('#333'),
+                                        color: Color(0xff333333),
                                         fontSize: 13,
                                       ),
                                     ),
@@ -381,20 +398,30 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                     ? AButton.icon(
                                         width: 70,
                                         height: 25,
-                                        borderColor: rgba(28, 141, 160, 1),
-                                        bgColor: rgba(28, 141, 160, 1),
+                                        borderColor: Color.fromARGB(
+                                          255,
+                                          28,
+                                          141,
+                                          160,
+                                        ),
+                                        bgColor: Color.fromARGB(
+                                          255,
+                                          28,
+                                          141,
+                                          160,
+                                        ),
                                         plain: true,
                                         textChild: Text(
                                           item.like.toString(),
                                           style: TextStyle(
-                                            color: hex('#fff'),
+                                            color: Color(0xffffffff),
                                             fontSize: 13,
                                           ),
                                         ),
                                         borderRadius: BorderRadius.circular(40),
                                         icon: icon_favorite(
                                           size: 13,
-                                          color: hex('#fff'),
+                                          color: Color(0xffffffff),
                                         ),
                                         onPressed: () {
                                           _clickDoLike(item);
@@ -403,20 +430,25 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
                                     : AButton.icon(
                                         width: 70,
                                         height: 25,
-                                        borderColor: rgba(28, 141, 160, 1),
-                                        bgColor: hex('#fff'),
+                                        borderColor: Color.fromARGB(
+                                          255,
+                                          28,
+                                          141,
+                                          160,
+                                        ),
+                                        bgColor: Color(0xffffffff),
                                         plain: true,
                                         textChild: Text(
                                           item.like.toString(),
                                           style: TextStyle(
-                                            color: hex('#333'),
+                                            color: Color(0xff333333),
                                             fontSize: 13,
                                           ),
                                         ),
                                         borderRadius: BorderRadius.circular(40),
                                         icon: icon_favorite_border(
                                           size: 13,
-                                          color: hex('#333'),
+                                          color: Color(0xff333333),
                                         ),
                                         onPressed: () {
                                           _clickDoLike(item);
@@ -500,15 +532,22 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
         userid: user_id,
         eland_id: eland_id,
       );
-      Map result = res.data;
+      Map<String, dynamic> result = {};
+      ElandPrayersListModel tempArticleLikeList = ElandPrayersListModel(
+        code: 0,
+        list: [],
+        msg: '',
+      ); // Default value
+      result = res.data;
       // print('result===>${result}');
-      ElandPrayersListModel tempArticleLikeList =
-          ElandPrayersListModel.fromJson(result);
+      tempArticleLikeList = ElandPrayersListModel.fromJson(result);
+
       if (mounted) {
         setState(() {
-          articleItems.addAll(tempArticleLikeList.list);
+          articleItems.addAll(tempArticleLikeList.list!);
           //        print('_loadListData===>${tempArticleList.list.length}');
-          if (tempArticleLikeList.list.length == 0) {
+          if (tempArticleLikeList.list != null &&
+              tempArticleLikeList.list!.length == 0) {
             isloadcomplete = true;
             _refreshController.loadNoData();
             //          print('_loadListData===>${articleList.list.length}');

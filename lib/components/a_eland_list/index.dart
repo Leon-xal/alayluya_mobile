@@ -1,12 +1,12 @@
-import '../../model/user_model/data.dart';
+//import '../../model/user_model/data.dart';
 import '../../main.dart';
 import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 //import 'package:flutter_skeleton/flutter_skeleton.dart';
 import 'package:shimmer/shimmer.dart'; //Import shimmer
-import '../../utils/Icon.dart';
+//import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 import '../../components/a_button/index.dart';
 import '../../model/eland_list_model/data.dart';
@@ -45,7 +45,7 @@ class AElandList extends StatefulWidget {
 
 class _AElandListState extends State<AElandList>
     with RouteAware, AutomaticKeepAliveClientMixin {
-  final List<ElandListItem> dataItems = []; // Use a typed list
+  final List<dynamic> dataItems = []; // Use a typed list
   final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -65,7 +65,10 @@ class _AElandListState extends State<AElandList>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    MyApp.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    MyApp.routeObserver.subscribe(
+      this,
+      ModalRoute.of(context)! as PageRoute<dynamic>,
+    );
   }
 
   @override
@@ -86,14 +89,14 @@ class _AElandListState extends State<AElandList>
     }
   }
 
-  void _clickFollow(ElandListItem item) async {
+  void _clickFollow(item) async {
     final uid = G.user.data.id;
-    final itemid = item.elandId;
+    final itemid = item.eland_id;
 
     try {
       final res = await G.req.eland.dofollow(
-        elandId: itemid,
-        userId: uid,
+        eland_id: itemid,
+        userid: uid,
       ); //More descriptive variable names
       final result = res.data;
       if (result['code'] == 200) {
@@ -111,7 +114,7 @@ class _AElandListState extends State<AElandList>
     }
   }
 
-  Widget _buildContent(ElandListItem item, int index) {
+  Widget _buildContent(item, int index) {
     //Added index parameter
     return Container(
       alignment: Alignment.topLeft,
@@ -121,8 +124,10 @@ class _AElandListState extends State<AElandList>
           bottom: BorderSide(color: Colors.black12, width: 1.0),
         ),
       ),
-      child: FlatButton(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+        ),
         onPressed: () {
           final map = {"isLike": item.ifollow, "id": item.elandId};
           Provider.of<DoLikeMethod>(context, listen: false).getPushIsLike(map);
@@ -136,7 +141,7 @@ class _AElandListState extends State<AElandList>
               height: 60,
               margin: const EdgeInsets.only(right: 15.0),
               child: CircleAvatar(
-                backgroundColor: rgba(28, 141, 160, 1),
+                backgroundColor: Color.fromARGB(255, 28, 141, 160),
                 backgroundImage: NetworkImage(item.elandPic),
                 radius: 11.0,
               ),
@@ -168,14 +173,17 @@ class _AElandListState extends State<AElandList>
                             child: Text(
                               '${item.follow}用戶',
                               style: TextStyle(
-                                color: hex('#333'),
+                                color: Color(0xff333333),
                                 fontSize: 13,
                               ),
                             ),
                           ),
                           Text(
                             '關注',
-                            style: TextStyle(color: hex('#333'), fontSize: 13),
+                            style: TextStyle(
+                              color: Color(0xff333333),
+                              fontSize: 13,
+                            ),
                           ),
                         ],
                       ),
@@ -185,37 +193,40 @@ class _AElandListState extends State<AElandList>
                             ? AButton.icon(
                                 width: 70,
                                 height: 25,
-                                borderColor: rgba(28, 141, 160, 1),
-                                bgColor: rgba(28, 141, 160, 1),
+                                borderColor: Color.fromARGB(255, 28, 141, 160),
+                                bgColor: Color.fromARGB(255, 28, 141, 160),
                                 plain: true,
                                 textChild: Text(
                                   '已關注',
                                   style: TextStyle(
-                                    color: hex('#fff'),
+                                    color: Color.fromARGB(255, 255, 255, 255),
                                     fontSize: 13,
                                   ),
                                 ),
                                 borderRadius: BorderRadius.circular(40),
-                                icon: icon_star(size: 13, color: hex('#fff')),
+                                icon: icon_star(
+                                  size: 13,
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
                                 onPressed: () => _clickFollow(item),
                               )
                             : AButton.icon(
                                 width: 70,
                                 height: 25,
-                                borderColor: rgba(28, 141, 160, 1),
-                                bgColor: hex('#fff'),
+                                borderColor: Color.fromARGB(255, 28, 141, 160),
+                                bgColor: Color.fromARGB(255, 255, 255, 255),
                                 plain: true,
                                 textChild: Text(
                                   '關注',
                                   style: TextStyle(
-                                    color: hex('#333'),
+                                    color: Color(0xff333333),
                                     fontSize: 13,
                                   ),
                                 ),
                                 borderRadius: BorderRadius.circular(40),
                                 icon: icon_star_border(
                                   size: 13,
-                                  color: hex('#333'),
+                                  color: Color(0xff333333),
                                 ),
                                 onPressed: () => _clickFollow(item),
                               ),
@@ -255,13 +266,13 @@ class _AElandListState extends State<AElandList>
     try {
       final getElandList = widget.type == 'all'
           ? G.req.eland.list
-          : G.req.eland.myFollowList; //Improved readability
+          : G.req.eland.my_follow_list; //Improved readability
       final res = await getElandList(
-        userId: widget.uid,
-        pageId: pageId,
+        userid: widget.uid,
+        pageid: pageId,
         limit: widget.pageLimit,
-        searchByName: widget.searchByName,
-        cateId: widget.cateId,
+        search_by_name: widget.searchByName,
+        cateid: widget.cateId,
       );
       final result = res.data;
       final elandList = ElandListModel.fromJson(result);
@@ -359,7 +370,7 @@ class _AElandListState extends State<AElandList>
                 child: CircularProgressIndicator(
                   strokeWidth: 2.0,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    rgba(28, 141, 160, 1),
+                    Color.fromARGB(255, 28, 141, 160),
                   ),
                 ),
               ),

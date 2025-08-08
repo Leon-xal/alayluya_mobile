@@ -32,10 +32,10 @@ class ALoading {
                         //                       radius: 14,
                         //                     ),
                         child: new CircularProgressIndicator(
-                          backgroundColor: hex('#fff'),
+                          backgroundColor: Color(0xffffffff),
                           strokeWidth: 2.0,
                           valueColor: new AlwaysStoppedAnimation<Color>(
-                            rgba(0, 0, 0, 0.5),
+                            Color.fromARGB(128, 0, 0, 0),
                           ),
                         ),
                       ),
@@ -47,7 +47,7 @@ class ALoading {
           },
       barrierDismissible: false,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: rgba(255, 255, 255, 0),
+      barrierColor: Color.fromARGB(0, 255, 255, 255),
       //      barrierColor: Colors.white,
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder:

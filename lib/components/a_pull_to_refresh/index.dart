@@ -1,14 +1,13 @@
-//import 'package:color_dart/color_dart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 /// 下拉刷新样式
 class APullToRefresh {
   /// 顶部样式
-  header() {
+  Widget header() {
+    // Changed return type to Widget
     return CustomHeader(
       builder: (BuildContext context, RefreshStatus mode) {
-        //        print("header===>${mode}");
         return Container(
           height: 44.0,
           child: Center(child: CupertinoActivityIndicator()),
@@ -18,20 +17,29 @@ class APullToRefresh {
   }
 
   /// 底部样式
-  footer() {
+  Widget footer() {
+    // Changed return type to Widget
     return CustomFooter(
       builder: (BuildContext context, LoadStatus mode) {
-        //        print("footer===>${mode}");
         Widget body;
         if (mode == LoadStatus.noMore) {
           body = Text(
             '--- 沒有更多了哦~ ---',
-            style: TextStyle(color: rgba(28, 141, 160, 1)),
+            style: TextStyle(
+              color: const Color.fromARGB(255, 28, 141, 160),
+            ), //Added const
           );
+        } else if (mode == LoadStatus.loading) {
+          //Explicitly handle loading state
+          body = const CupertinoActivityIndicator(); //Added const
         } else {
-          body = CupertinoActivityIndicator();
+          body =
+              const SizedBox.shrink(); //Added to handle other LoadStatus cases
         }
-        return Container(height: 44.0, child: Center(child: body));
+        return SizedBox(
+          height: 44.0,
+          child: Center(child: body),
+        ); //Using SizedBox for better layout
       },
     );
   }

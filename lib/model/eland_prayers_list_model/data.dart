@@ -4,9 +4,9 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class ElandPrayersListModel {
-  int code;
+  int? code;
   List<ElandPrayersListDatum>? list;
-  String msg;
+  String? msg;
 
   ElandPrayersListModel({this.code, this.list, this.msg});
 

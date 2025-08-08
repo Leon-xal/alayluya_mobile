@@ -11,50 +11,40 @@ import '../../utils/global.dart';
 
 class APdfview {
   final BuildContext context;
+
   /// 图片URL
   final String url;
-  APdfview.show(this.context,{
-    @required this.url,
-  }) {
+  APdfview.show(this.context, {required this.url}) {
+    //    String reurl = "http://192.168.4.45/plugins/icon/awana/assets/images/test.pdf";
 
-//    String reurl = "http://192.168.4.45/plugins/icon/awana/assets/images/test.pdf";
-
-    Widget pdfview = new APdfviewScreen(
-        url: url,
-    );
-//    Widget photoview = new PDFScreen(pathPDF);
+    Widget pdfview = new APdfviewScreen(url: url);
+    //    Widget photoview = new PDFScreen(pathPDF);
     final route = new CupertinoPageRoute(
       builder: (BuildContext context) => pdfview,
       settings: new RouteSettings(
         name: pdfview.toStringShort(),
-//        isInitialRoute: false,
+        //        isInitialRoute: false,
       ),
     );
 
     G.getCurrentState().push(route);
-
   }
 }
 
-
 class APdfviewScreen extends StatefulWidget {
   String url;
-  APdfviewScreen({
-    Key key,
-    this.url='',
-  }) : super(key: key);
+  APdfviewScreen({Key? key, this.url = ''}) : super(key: key);
   @override
   createState() => _APdfviewScreenState();
 }
 
 class _APdfviewScreenState extends State<APdfviewScreen> {
-
   String pathPDF = "";
 
   @override
   void initState() {
     super.initState();
-//    G.loading.show(context);
+    //    G.loading.show(context);
     createFileOfPdfUrl(widget.url).then((f) {
       setState(() {
         pathPDF = f.path;
@@ -69,8 +59,8 @@ class _APdfviewScreenState extends State<APdfviewScreen> {
   }
 
   Future<File> createFileOfPdfUrl(String url) async {
-//    final url = "http://africau.edu/images/default/sample.pdf";
-//    final url = "http://192.168.4.45/plugins/icon/awana/assets/images/test.pdf";
+    //    final url = "http://africau.edu/images/default/sample.pdf";
+    //    final url = "http://192.168.4.45/plugins/icon/awana/assets/images/test.pdf";
 
     final filename = url.substring(url.lastIndexOf("/") + 1);
     var request = await HttpClient().getUrl(Uri.parse(url));
@@ -89,11 +79,13 @@ class _APdfviewScreenState extends State<APdfviewScreen> {
         child: new Opacity(
           opacity: 1.0,
           child: new CircularProgressIndicator(
-            backgroundColor: rgba(28, 141, 160, 1),
-//            value: 0.3,
-            valueColor: new AlwaysStoppedAnimation<Color>(rgba(255, 255, 255, 1)),
+            backgroundColor: Color.fromARGB(255, 28, 141, 160),
+            //            value: 0.3,
+            valueColor: new AlwaysStoppedAnimation<Color>(
+              Color.fromARGB(255, 255, 255, 255),
+            ),
           ),
-//          child: Text('loading'),
+          //          child: Text('loading'),
         ),
       ),
     );
@@ -101,21 +93,19 @@ class _APdfviewScreenState extends State<APdfviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return (pathPDF == '')
+        ? Scaffold(
+            appBar: customAppbar(context: context, title: 'Pdf'),
+            body: _buildProgressIndicator(),
+          )
+        : PDFViewerScaffold(
+            appBar: customAppbar(context: context, title: 'Pdf'),
+            path: pathPDF,
+          );
 
-    return (pathPDF == '')? Scaffold(
-        appBar: customAppbar(context: context,title: 'Pdf'),
-        body: _buildProgressIndicator()
-    ): PDFViewerScaffold(
-        appBar: customAppbar(context: context,title: 'Pdf'),
-        path: pathPDF
-    );
-
-
-    return Scaffold(
+    /*return Scaffold(
         appBar: customAppbar(context: context,title: 'Pdf'),
         body: Text('loading')
-    );
-
+    );*/
   }
-
 }

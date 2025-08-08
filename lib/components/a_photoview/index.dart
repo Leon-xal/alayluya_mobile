@@ -8,7 +8,7 @@ class APhotoview {
   /// 图片URL
   final String url;
 
-  APhotoview.show(this.context, {@required this.url}) {
+  APhotoview.show(this.context, {required this.url}) {
     Widget photoview = new PhotoView(
       imageProvider: NetworkImage(url),
       onTapUp: (c, f, s) => Navigator.of(context).pop(),
