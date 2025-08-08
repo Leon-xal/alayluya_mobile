@@ -18,17 +18,14 @@ class ASwiper extends StatelessWidget {
   /// @param {int} index - 初始下标位置
   /// @param {double} height - 容器高度
   /// ```
-  ASwiper(this.images, {
-    this.index,
-    this.height = 288
-  });
+  ASwiper(this.images, {this.index = 0, this.height = 288});
 
-  void toDetails(int type,var val){
-    if (type== 1) {
-      launch(val);
-    }else if(type == 2){
+  void toDetails(int type, var val) {
+    if (type == 1) {
+      launchUrl(val);
+    } else if (type == 2) {
       G.pushNamed('/article_detail', arguments: {'id': val});
-    }else if(type == 5){
+    } else if (type == 5) {
       G.pushNamed('/prayers_detail', arguments: {'id': val});
     }
   }
@@ -38,45 +35,44 @@ class ASwiper extends StatelessWidget {
     return Container(
       height: height,
       child: Swiper(
-          index: index,
-          itemBuilder: (BuildContext context, int index) {
-            // if(G.is_http(images[index])){
-            //   return Image.network(
-            //     images[index],
-            //     fit: BoxFit.cover,);
-            // }else{
-            //   return Image.asset(images[index], fit: BoxFit.cover);
-            // }
-            if (G.is_http(images[index].pic)) {
-              return GestureDetector(
-                onTap: () {
-                  toDetails(images[index].type,images[index].type_val);
-                },
-                child: Image.network(
-                  images[index].pic,
-                  fit: BoxFit.cover,
-                ),
-              );
-            } else {
-              return GestureDetector(
-                onTap: () {
-                  toDetails(images[index].type,images[index].type_val);
-                },
-                child: Image.asset(images[index].pic, fit: BoxFit.cover),
-              );
-            }
-          },
-          itemCount: images.length,
-          pagination: SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                size: 8,
-                activeSize: 8,
-                color: Colors.white,
-                activeColor: rgba(28, 141, 160, 1),
-              )),
-          autoplay: true,
-          duration: 500,
-          autoplayDelay: 5000),
+        index: index,
+        itemBuilder: (BuildContext context, int index) {
+          // if(G.is_http(images[index])){
+          //   return Image.network(
+          //     images[index],
+          //     fit: BoxFit.cover,);
+          // }else{
+          //   return Image.asset(images[index], fit: BoxFit.cover);
+          // }
+          if (G.is_http(images[index].pic)) {
+            return GestureDetector(
+              onTap: () {
+                toDetails(images[index].type, images[index].type_val);
+              },
+              child: Image.network(images[index].pic, fit: BoxFit.cover),
+            );
+          } else {
+            return GestureDetector(
+              onTap: () {
+                toDetails(images[index].type, images[index].type_val);
+              },
+              child: Image.asset(images[index].pic, fit: BoxFit.cover),
+            );
+          }
+        },
+        itemCount: images.length,
+        pagination: SwiperPagination(
+          builder: DotSwiperPaginationBuilder(
+            size: 8,
+            activeSize: 8,
+            color: Colors.white,
+            activeColor: Color.fromARGB(255, 28, 141, 160),
+          ),
+        ),
+        autoplay: true,
+        duration: 500,
+        autoplayDelay: 5000,
+      ),
     );
   }
 }

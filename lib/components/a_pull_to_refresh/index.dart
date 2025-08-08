@@ -7,7 +7,7 @@ class APullToRefresh {
   Widget header() {
     // Changed return type to Widget
     return CustomHeader(
-      builder: (BuildContext context, RefreshStatus mode) {
+      builder: (context, mode) {
         return Container(
           height: 44.0,
           child: Center(child: CupertinoActivityIndicator()),
@@ -20,7 +20,7 @@ class APullToRefresh {
   Widget footer() {
     // Changed return type to Widget
     return CustomFooter(
-      builder: (BuildContext context, LoadStatus mode) {
+      builder: (context, mode) {
         Widget body;
         if (mode == LoadStatus.noMore) {
           body = Text(

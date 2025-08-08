@@ -13,7 +13,7 @@ class AWebview {
   /// 图片URL
   final String url;
   final String title;
-  AWebview.open(this.context, {@required this.url, this.title = ""}) {
+  AWebview.open(this.context, {required this.url, this.title = ""}) {
     //    print('sss===>${title}');
     String mytitle = '';
     if (title == '') {
@@ -51,17 +51,17 @@ class AWebViewState extends State<AWebViewPage> {
 
   bool isloading = true;
 
-  JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
+  JavascriptChannel _toasterJavascriptChannel = (BuildContext context) {
     return new JavascriptChannel(
       name: 'Toaster',
-      onMessageReceived: (JavascriptMessage message) {
+      onMessageReceived: (JavaScriptMessage message) {
         print('message=====>${message.message}');
-        Scaffold.of(
+        ScaffoldMessenger.of(
           context,
         ).showSnackBar(new SnackBar(content: Text(message.message)));
       },
     );
-  }
+  };
 
   Widget body() {
     return new Builder(
@@ -103,9 +103,9 @@ class AWebViewState extends State<AWebViewPage> {
                     child: new Opacity(
                       opacity: 1.0,
                       child: new CircularProgressIndicator(
-                        backgroundColor: rgba(28, 141, 160, 1),
+                        backgroundColor: Color.fromARGB(255, 28, 141, 160),
                         valueColor: new AlwaysStoppedAnimation<Color>(
-                          rgba(255, 255, 255, 1),
+                          Color.fromARGB(255, 255, 255, 255),
                         ),
                       ),
                     ),
