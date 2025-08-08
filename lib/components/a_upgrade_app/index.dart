@@ -1,15 +1,16 @@
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/syncs.dart';
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+//import 'package:flutter/rendering.dart';
 import '../../components/a_button/index.dart';
 import '../../utils/global.dart';
 import 'dart:io';
 import 'package:launch_review_latest/launch_review_latest.dart';
 import 'package:google_api_availability/google_api_availability.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class AUpgradeApp {
@@ -109,15 +110,15 @@ class AUpgradeApp {
           playStoreAvailability == GooglePlayServicesAvailability.unknown) {
         //要到官网下载apk就可以了。
         // https://testapi2.alayluya.com/apk/alayluya-1.0.0+100.apk
-        launchUrl('${G.baseurl}/apk/alayluya-${show_version}.apk');
+        launchUrlString('${G.baseurl}/apk/alayluya-${show_version}.apk');
       } else {
-        LaunchReview.launch(
+        LaunchReviewLatest.launch(
           androidAppId: 'com.loopin.nepalayluya',
           iOSAppId: 'id1506175100',
         );
       }
     } else {
-      LaunchReview.launch(
+      LaunchReviewLatest.launch(
         androidAppId: 'com.loopin.nepalayluya',
         iOSAppId: 'id1506175100',
       );
@@ -164,7 +165,7 @@ class AUpgradeApp {
                       child: Text(
                         '新版本，${show_version}',
                         style: TextStyle(
-                          color: rgba(153, 153, 153, 1),
+                          color: Color.fromARGB(255, 153, 153, 153),
                           fontSize: 14,
                         ),
                         textAlign: TextAlign.center,
@@ -173,7 +174,9 @@ class AUpgradeApp {
                     Container(
                       decoration: BoxDecoration(
                         border: Border(
-                          top: BorderSide(color: rgba(242, 242, 242, 1)),
+                          top: BorderSide(
+                            color: Color.fromARGB(255, 242, 242, 242),
+                          ),
                         ),
                       ),
                       child: Row(
@@ -185,7 +188,7 @@ class AUpgradeApp {
                                 decoration: BoxDecoration(
                                   border: Border(
                                     right: BorderSide(
-                                      color: rgba(242, 242, 242, 1),
+                                      color: Color.fromARGB(255, 242, 242, 242),
                                     ),
                                   ),
                                 ),
@@ -195,7 +198,7 @@ class AUpgradeApp {
                                     bottomLeft: Radius.circular(4),
                                     bottomRight: Radius.circular(4),
                                   ),
-                                  color: rgba(153, 153, 153, 1),
+                                  color: Color.fromARGB(255, 153, 153, 153),
                                   onPressed: () async {
                                     print(
                                       'alayluya-app-release=======>${G.baseurl}/apk/alayluya-${show_version}.apk',
@@ -214,7 +217,7 @@ class AUpgradeApp {
                                   bottomLeft: Radius.circular(4),
                                   bottomRight: Radius.circular(4),
                                 ),
-                                color: rgba(28, 141, 160, 1),
+                                color: Color.fromARGB(255, 28, 141, 160),
                                 onPressed: () async {
                                   await AUpgradeApp.goLaunch();
                                 },
