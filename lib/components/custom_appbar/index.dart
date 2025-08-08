@@ -1,7 +1,7 @@
 //import 'package:color_dart/color_dart.dart';
-//import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../model/user_model/data.dart';
-import '../../utils/Icon.dart';
+//import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 
 /// 通用appbar
@@ -12,15 +12,15 @@ import '../../utils/global.dart';
 /// @param {bool} borderBottom - 是否显示底部border
 /// ```
 AppBar customAppbar({
-  BuildContext context,
+  BuildContext? context,
   String title = '',
   bool textcenter = false,
   bool borderBottom = true,
   bool default_actions = false,
   bool is_search = false,
-  List actions,
-  Theme TabContainer,
-  Function onGoBackPressed = null,
+  List? actions,
+  Theme? TabContainer,
+  Function? onGoBackPressed = null,
 }) {
   //  print('aaaaaaa:${context}');
   //  context = null;
@@ -32,7 +32,7 @@ AppBar customAppbar({
         UserDataModel userData = G.user.data;
         int userid = userData.id;
         var res = await G.req.search.dosearch(search_key: str, uid: userid);
-        Map result = res.data;
+        //Map result = res.data;
         //        print('dosearch====>${result}');
       } catch (e) {
         print('dosearchCatch===>${e}');
@@ -40,12 +40,12 @@ AppBar customAppbar({
     }
 
     return new AppBar(
-      brightness: Brightness.light,
+      //brightness: Brightness.light,
       title: Container(
         child: new Row(
           children: <Widget>[
             new Container(
-              child: new FlatButton.icon(
+              child: new ElevatedButton.icon(
                 onPressed: () {
                   //                  Navigator.of(context).pop();
                   if (context == null) {
@@ -71,11 +71,14 @@ AppBar customAppbar({
                   //                  print('onSubmitted:${result}');
                   //                  G.pushNamed('/search_result');
                   _doSearch(result);
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  Navigator.of(context).pushReplacementNamed(
-                    '/search_result',
-                    arguments: {'result': result},
-                  );
+                  //FocusScope.of(context).requestFocus(FocusNode());
+                  if (context != null) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    Navigator.of(context).pushReplacementNamed(
+                      '/search_result',
+                      arguments: {'result': result},
+                    );
+                  }
                 },
               ),
             ),
@@ -86,7 +89,7 @@ AppBar customAppbar({
           color: new Color(0xFFEBEBEB),
         ),
       ),
-      backgroundColor: hex('#fff'),
+      backgroundColor: Color(0xffffffff),
       elevation: 0,
       leading: null,
       automaticallyImplyLeading: false,
@@ -100,28 +103,28 @@ AppBar customAppbar({
     );
   } else {
     return AppBar(
-      brightness: Brightness.light,
+      //brightness: Brightness.light,
       centerTitle: textcenter,
       title: Container(
         child: Text(
           title,
           style: TextStyle(
-            color: rgba(56, 56, 56, 1),
+            color: Color.fromARGB(255, 56, 56, 56),
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         padding: EdgeInsets.only(left: 0),
       ),
-      backgroundColor: hex('#fff'),
+      backgroundColor: Color(0xffffffff),
       //    backgroundColor: rgba(255, 255, 255, 1),
       elevation: 0,
       leading: context == null
           ? null
           : InkWell(
-              child: icon_left(color: rgba(0, 0, 0, 1), size: 25),
+              child: icon_left(color: Color.fromARGB(255, 0, 0, 0), size: 25),
               onTap: () {
-                onGoBackPressed();
+                onGoBackPressed!();
               },
             ),
       automaticallyImplyLeading: context == null ? false : true,
@@ -165,8 +168,11 @@ AppBar customAppbar({
                       child: InkWell(
                         child: CircleAvatar(
                           radius: 20.0,
-                          child: icon_search(color: rgba(0, 0, 0, 1), size: 20),
-                          backgroundColor: rgba(229, 229, 229, 1),
+                          child: icon_search(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            size: 20,
+                          ),
+                          backgroundColor: Color.fromARGB(255, 229, 229, 229),
                         ),
                         onTap: () {
                           //                      print('icontest1 click<<<<<<===============');
@@ -195,7 +201,7 @@ AppBar customAppbar({
                 ),
               ),
             ]
-          : actions,
+          : actions as List<Widget>,
     );
   }
 }
