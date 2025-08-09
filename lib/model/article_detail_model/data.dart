@@ -8,14 +8,11 @@ class ArticleDetailModel {
   ArticleDetailData? data;
   String? msg;
 
-  ArticleDetailModel({
-    this.code,
-    this.data,
-    this.msg,
-  });
+  ArticleDetailModel({this.code, this.data, this.msg});
 
   //反序列化
-  factory ArticleDetailModel.fromJson(Map<String, dynamic> json) => _$ArticleDetailModelFromJson(json);
+  factory ArticleDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$ArticleDetailModelFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$ArticleDetailModelToJson(this);
 }
@@ -40,7 +37,7 @@ class ArticleDetailData {
   bool? eland_ifollow;
   List<ArticleDetailTags>? tags;
   String? content_link;
-  String? content_app_link;
+  String content_app_link = '';
   String? MobileViewUrl;
   String? MobileAppViewUrl;
   String? cover;
@@ -65,7 +62,7 @@ class ArticleDetailData {
     this.eland_ifollow,
     this.tags,
     this.content_link,
-    this.content_app_link,
+    required this.content_app_link,
     this.MobileViewUrl,
     this.MobileAppViewUrl,
     this.cover,
@@ -74,7 +71,7 @@ class ArticleDetailData {
 
   //反序列化
   factory ArticleDetailData.fromJson(Map<String, dynamic> json) {
-//    print('UserDataFromJson=====>${json}');
+    //    print('UserDataFromJson=====>${json}');
     return _$ArticleDetailDataFromJson(json);
   }
 
@@ -88,10 +85,7 @@ class ArticleDetailData {
 class ArticleDetailTags {
   String? name;
   String? value;
-  ArticleDetailTags({
-    this.name,
-    this.value,
-  });
+  ArticleDetailTags({this.name, this.value});
 
   //反序列化
   factory ArticleDetailTags.fromJson(Map<String, dynamic> json) =>

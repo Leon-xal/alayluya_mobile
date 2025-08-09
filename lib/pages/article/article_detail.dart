@@ -36,7 +36,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   ScrollController? scrollController = ScrollController();
   InAppWebViewController? webView;
   bool? isloading;
-  String? share_url;
+  String share_url = '';
   String? share_text;
 
   double custom_font_size = 16.0;
@@ -94,7 +94,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
           // share_url = 'https://alayluya.com/article/${id}';
           // print('result111===>${share_url}');
-          share_url = article?.content_app_link;
+          share_url = article?.content_app_link ?? '';
+          //share_url = article.content_app_link;
           // print('result112===>${article.content_app_link}');
           // print('result113===>${article.MobileViewUrl}');
           // print('result114===>${article.MobileAppViewUrl}');
@@ -514,7 +515,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   height: G.screenHeight(),
                   child: InAppWebView(
                     initialUrl:
-                        article.MobileAppViewUrl + "/?user_id=${userid}",
+                        article?.MobileAppViewUrl + "/?user_id=${userid}",
                     //              initialUrl: 'https://juejin.im/post/6844904048148086791',
                     initialHeaders: {},
                     initialOptions: InAppWebViewGroupOptions(
@@ -540,13 +541,13 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         'onWebViewCreated=====>${article.MobileAppViewUrl + "/?user_id=${userid}"}',
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewGetReadyCallback",
                         callback: (arguments) async {
                           print(
                             "InAppWebViewGetReadyCallback====>${arguments}",
                           );
-                          webView.evaluateJavascript(
+                          webView?.evaluateJavascript(
                             source:
                                 """
                         var _dom = document.getElementById('article-content');
@@ -558,7 +559,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewFacebookCallback",
                         callback: (arguments) async {
                           print(
@@ -608,7 +609,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewTwitterFuncCallback",
                         callback: (arguments) async {
                           //                      print('InAppWebViewTwitterFuncCallback=========>${arguments}');
@@ -632,14 +633,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
                           print('shareToTwitter======>${share_url}');
                           var response = FlutterShareMe().shareToTwitter(
-                            url: share_url,
-                            msg: share_text,
+                            url: share_url!,
+                            msg: share_text!,
                           );
                           print('shareToTwitter======>${response}');
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewWhatsAppFuncCallback",
                         callback: (arguments) async {
                           print(
@@ -648,8 +649,12 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
                           if (Platform.isAndroid) {
                             //                        print('ANDROID自动登陆开发中====>');
-                            String response = await FlutterShareMe()
-                                .shareToWhatsApp(msg: share_url);
+                            String response =
+                                await FlutterShareMe().shareToWhatsApp(
+                                  msg: share_url,
+                                ) ??
+                                '';
+
                             if (response == 'false' || response == false) {
                               await G.toast('請安裝WhatsApp');
                             }
@@ -676,11 +681,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewEmailFuncCallback",
                         callback: (arguments) async {
                           //                      print('InAppWebViewEmailFuncCallback=========>${arguments}');
-                          String share_text2 = Uri.encodeComponent(share_text);
+                          String share_text2 = Uri.encodeComponent(share_text!);
                           String share_url2 = Uri.encodeComponent(share_url);
                           try {
                             Future<bool> canToEmail = canLaunch(
@@ -702,7 +707,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewCopyFuncCallback",
                         callback: (arguments) async {
                           //                      print('InAppWebViewCopyFuncCallback=========>${arguments}');
@@ -712,7 +717,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName:
                             "InAppWebViewHotArticleClickFuncFuncCallback",
                         callback: (arguments) async {
@@ -727,7 +732,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewMoreArticleFuncCallback",
                         callback: (arguments) async {
                           print(
@@ -740,7 +745,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewFollowElandFuncCallback",
                         callback: (arguments) async {
                           print(
@@ -750,18 +755,18 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName: "InAppWebViewGoElandPageFuncCallback",
                         callback: (arguments) async {
                           //                      print('InAppWebViewGoElandPageFuncCallback=========>${arguments},${article.eland_id}');
                           G.pushNamed(
                             '/eland_info',
-                            arguments: {'id': article.eland_id},
+                            arguments: {'id': article?.eland_id},
                           );
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName:
                             "InAppWebViewOpenImageByContentFuncCallback",
                         callback: (arguments) async {
@@ -775,7 +780,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                       );
 
-                      webView.addJavaScriptHandler(
+                      webView?.addJavaScriptHandler(
                         handlerName:
                             "InAppWebViewOpenHrefByContentFuncCallback",
                         callback: (arguments) async {
@@ -849,9 +854,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         child: new Opacity(
                           opacity: 1.0,
                           child: new CircularProgressIndicator(
-                            backgroundColor: rgba(28, 141, 160, 1),
+                            backgroundColor: Color.fromARGB(255, 28, 141, 160),
                             valueColor: new AlwaysStoppedAnimation<Color>(
-                              rgba(255, 255, 255, 1),
+                              Color.fromARGB(255, 255, 255, 255),
                             ),
                           ),
                         ),
@@ -860,9 +865,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   bottom: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: hex('#fff'),
+                      color: Color(0xfffffff),
                       border: new Border(
-                        top: BorderSide(width: 2.0, color: hex('#cacbd1')),
+                        top: BorderSide(width: 2.0, color: Color(0xffcacbd1)),
                       ),
                     ),
                     padding: EdgeInsets.only(
@@ -889,7 +894,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                   Text.rich(
                                     new TextSpan(
                                       style: new TextStyle(
-                                        color: hex('#333'),
+                                        color: Color(0xff333333),
                                         fontSize: 15,
                                         height: 2,
                                         //                              letterSpacing: 10.0,
@@ -898,7 +903,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       children: <TextSpan>[
                                         new TextSpan(text: "閱讀量："),
                                         new TextSpan(
-                                          text: article.read.toString(),
+                                          text: article?.read.toString(),
                                         ),
                                       ],
                                     ),
@@ -909,7 +914,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           ),
                           new Row(
                             children: <Widget>[
-                              (article.ilike == true && article.like > 0)
+                              (article?.ilike == true && article?.like > 0)
                                   ? AButton.icon(
                                       width: 70,
                                       height: 25,
@@ -919,14 +924,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       textChild: Text(
                                         article.like.toString(),
                                         style: TextStyle(
-                                          color: hex('#fff'),
+                                          color: Color(0xfffffff),
                                           fontSize: 13,
                                         ),
                                       ),
                                       borderRadius: BorderRadius.circular(40),
                                       icon: icon_favorite(
                                         size: 13,
-                                        color: hex('#fff'),
+                                        color: Color(0xfffffff),
                                       ),
                                       onPressed: () {
                                         _clickDoLike(article);
@@ -938,7 +943,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                         Map map = {
                                           "isLike": false,
                                           'id': initMap['id'],
-                                          'num': article.like - 1,
+                                          'num': article?.like - 1,
                                         };
                                         Provider.of<DoLikeMethod>(
                                           context,
@@ -950,7 +955,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       width: 70,
                                       height: 25,
                                       borderColor: Colors.pink,
-                                      bgColor: hex('#fff'),
+                                      bgColor: Color(0xfffffff),
                                       plain: true,
                                       textChild: Text(
                                         article.like.toString(),
