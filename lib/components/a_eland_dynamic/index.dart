@@ -220,12 +220,12 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
         tempElandList = ElandDynamicModel.fromJson(result);
         if (mounted) {
           setState(() {
-            elandItems.addAll(tempElandList.list);
+            elandItems.addAll(tempElandList.list!);
             // print("aaa===>${pageid},${elandItems.length}");
             //          print("bbb===>${elandItems}");
             isloadcomplete = true;
           });
-          if (tempElandList.list.length == 0) {
+          if (tempElandList.list?.length == 0) {
             _refreshController.loadNoData();
           }
         }
@@ -238,7 +238,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
   }
 
   _clickCollect(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {

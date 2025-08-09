@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../../provider/do_like_method.dart';
 import 'package:provider/provider.dart';
-
 import '../../components/a_web_view/index.dart';
-
 import '../../components/a_pdfview/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
@@ -23,27 +21,27 @@ import '../../components/a_photoview/index.dart';
 
 class ArticleDetail extends StatefulWidget {
   final Map args;
-  ArticleDetail({Key key, this.args}) : super(key: key);
+  ArticleDetail({Key? key, required this.args}) : super(key: key);
   @override
   createState() => _ArticleDetailState();
 }
 
 class _ArticleDetailState extends State<ArticleDetail> {
-  static Map args;
+  static Map? args;
   int id = 0;
   int userid = 0;
   String header_title = '';
-  ArticleDetailModel article_info;
-  ArticleDetailData article;
-  ScrollController scrollController = ScrollController();
-  InAppWebViewController webView;
-  bool isloading = true;
-  String share_url = "";
-  String share_text = "";
+  ArticleDetailModel? article_info;
+  ArticleDetailData? article;
+  ScrollController? scrollController = ScrollController();
+  InAppWebViewController? webView;
+  bool? isloading;
+  String? share_url;
+  String? share_text;
 
   double custom_font_size = 16.0;
 
-  SharedPreferences _prefs;
+  SharedPreferences? _prefs;
 
   bool _submit_i = false;
 
@@ -51,16 +49,16 @@ class _ArticleDetailState extends State<ArticleDetail> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id!;
     args = widget.args;
-    id = args['id'];
+    id = args?['id'];
     Future.delayed(Duration.zero, () async {
       _prefs = await SharedPreferences.getInstance();
-      String _custom_font_size_str = _prefs.getString('_custom_font_size');
-      if (_custom_font_size_str.isNotEmpty) {
+      String? _custom_font_size_str = _prefs?.getString('_custom_font_size');
+      if (_custom_font_size_str!.isNotEmpty) {
         custom_font_size = double.parse(_custom_font_size_str);
       } else {
-        _prefs.setString('_custom_font_size', custom_font_size.toString());
+        _prefs?.setString('_custom_font_size', custom_font_size.toString());
       }
       _loadData(id: id, uid: userid);
     });
@@ -78,27 +76,36 @@ class _ArticleDetailState extends State<ArticleDetail> {
       var res = await G.req.article.detail(id: id, userid: uid);
 
       if (res.data != null) {
-        Map result = res.data;
+        // Map result = res.data;
+        Map<String, dynamic> result = Map<String, dynamic>.from(res.data);
         // print('result111===>${result}');
         setState(() {
           article_info = ArticleDetailModel.fromJson(result);
-          header_title = article_info.data.title;
+          //header_title = article_info.data.title;
+          // Assuming article_info.data is of type Map<dynamic, dynamic>
+          Map<String, dynamic>? data =
+              article_info?.data as Map<String, dynamic>?;
 
-          article = article_info.data;
+          // Check if data is not null and then access the title property
+          if (data != null) {
+            header_title = data['title'];
+            article = article_info?.data;
+          }
+
           // share_url = 'https://alayluya.com/article/${id}';
           // print('result111===>${share_url}');
-          share_url = article.content_app_link;
+          share_url = article?.content_app_link;
           // print('result112===>${article.content_app_link}');
           // print('result113===>${article.MobileViewUrl}');
           // print('result114===>${article.MobileAppViewUrl}');
-          share_text = article.title;
+          share_text = article?.title;
           //            print('result222===>${article.MobileAppViewUrl + "/?user_id=${userid}"}');
           //            print('result222===>${article_info.data.tags[0].name}');
 
           Map map = {
-            "isLike": article.ilike,
-            'id': article.id,
-            'num': article.like,
+            "isLike": article?.ilike,
+            'id': article?.id,
+            'num': article?.like,
           };
           Provider.of<DoLikeMethod>(context, listen: false).getPopIsLike(map);
         });
@@ -109,7 +116,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   _clickElandFollow(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id!;
     int itemid = item.eland_id;
     //    print('aaa===>${uid}/${itemid}');
     try {
@@ -120,20 +127,20 @@ class _ArticleDetailState extends State<ArticleDetail> {
           setState(() {
             //            print("aaaa=====>"+article.content_app_link+"/?user_id=${userid}");
             if (item.eland_ifollow == true && item.eland_follow > 0) {
-              article.eland_follow = item.eland_follow - 1;
-              article.eland_ifollow = false;
+              article?.eland_follow = item.eland_follow - 1;
+              article?.eland_ifollow = false;
               //              print("follow_eland_dom===>false");
-              webView.evaluateJavascript(
+              webView?.evaluateJavascript(
                 source: """
               var follow_eland_dom = document.getElementById('follow_eland');
               follow_eland_dom.innerHTML = '關注';
               """,
               );
             } else {
-              article.eland_follow = item.eland_follow + 1;
-              article.eland_ifollow = true;
+              article?.eland_follow = item.eland_follow + 1;
+              article?.eland_ifollow = true;
               //              print("follow_eland_dom===>true");
-              webView.evaluateJavascript(
+              webView?.evaluateJavascript(
                 source: """
               var follow_eland_dom = document.getElementById('follow_eland');
               follow_eland_dom.innerHTML = '已關注';
@@ -149,7 +156,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   _clickDoLike(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -162,11 +169,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
         if (result['code'] == 200) {
           setState(() {
             if (item.ilike == true && item.like > 0) {
-              article.like = item.like - 1;
-              article.ilike = false;
+              article?.like = item.like - 1;
+              article?.ilike = false;
             } else {
-              article.like = item.like + 1;
-              article.ilike = true;
+              article?.like = item.like + 1;
+              article?.ilike = true;
             }
           });
         }
@@ -177,7 +184,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   _clickDoReport(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -199,9 +206,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
         child: new Opacity(
           opacity: 1.0,
           child: new CircularProgressIndicator(
-            backgroundColor: rgba(28, 141, 160, 1),
+            backgroundColor: Color.fromARGB(255, 28, 141, 160),
             valueColor: new AlwaysStoppedAnimation<Color>(
-              rgba(255, 255, 255, 1),
+              Color.fromARGB(255, 255, 255, 255),
             ),
           ),
         ),
@@ -210,131 +217,152 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   Widget _showSetFontSizeBlock() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            //                print("state===>${setDialogState}");
-            return Dialog(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    new Container(
-                      child: Stack(
-                        children: <Widget>[
-                          Align(
-                            child: InkWell(
-                              child: icon_close(
-                                size: 30,
-                                color: rgba(28, 141, 160, 1),
-                              ),
-                              onTap: () {
-                                _prefs.setString(
-                                  '_custom_font_size',
-                                  custom_font_size.toString(),
-                                );
-                                webView.evaluateJavascript(
-                                  source:
-                                      """
+    return FutureBuilder<void>(
+      future: showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              //                print("state===>${setDialogState}");
+              return Dialog(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      new Container(
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              child: InkWell(
+                                child: icon_close(
+                                  size: 30,
+                                  color: Color.fromARGB(255, 28, 141, 160),
+                                ),
+                                onTap: () {
+                                  _prefs?.setString(
+                                    '_custom_font_size',
+                                    custom_font_size.toString(),
+                                  );
+                                  webView?.evaluateJavascript(
+                                    source:
+                                        """
                                             var _dom = document.getElementById('article-content');
                                             reFontSize(_dom,""" +
-                                      custom_font_size.toString() +
-                                      """);                                            
+                                        custom_font_size.toString() +
+                                        """);                                            
                                             """,
-                                );
-                                Navigator.pop(context);
-                              },
-                            ),
-                            alignment: Alignment.topRight,
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      height: 120,
-                      child: new Container(
-                        alignment: Alignment.center,
-                        child: new Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            new Text(
-                              '你的字大小',
-                              style: new TextStyle(
-                                color: Colors.black,
-                                fontSize: custom_font_size,
+                                  );
+                                  Navigator.pop(context);
+                                },
                               ),
+                              alignment: Alignment.topRight,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    new Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(color: rgba(242, 242, 242, 1)),
+                      new Container(
+                        height: 120,
+                        child: new Container(
+                          alignment: Alignment.center,
+                          child: new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              new Text(
+                                '你的字大小',
+                                style: new TextStyle(
+                                  color: Colors.black,
+                                  fontSize: custom_font_size,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          // 取消按钮
-                          Container(
-                            child: Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: rgba(242, 242, 242, 1),
+                      new Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: Color.fromARGB(255, 242, 242, 242),
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            // 取消按钮
+                            Container(
+                              child: Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color: Color.fromARGB(
+                                          255,
+                                          242,
+                                          242,
+                                          242,
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                  child: AButton.normal(
+                                    child: Text('加大'),
+                                    color: Color.fromARGB(255, 28, 141, 160),
+                                    onPressed: () {
+                                      setDialogState(() {
+                                        custom_font_size = custom_font_size + 1;
+                                        if (custom_font_size > 45.0) {
+                                          custom_font_size = 45.0;
+                                        }
+                                      });
+                                    },
+                                  ),
                                 ),
+                              ),
+                            ),
+                            // 确认按钮
+                            Container(
+                              child: Expanded(
                                 child: AButton.normal(
-                                  child: Text('加大'),
-                                  color: rgba(28, 141, 160, 1),
+                                  child: Text('縮小'),
+                                  color: Color.fromARGB(255, 28, 141, 160),
                                   onPressed: () {
                                     setDialogState(() {
-                                      custom_font_size = custom_font_size + 1;
-                                      if (custom_font_size > 45.0) {
-                                        custom_font_size = 45.0;
+                                      custom_font_size = custom_font_size - 1;
+                                      if (custom_font_size < 13.0) {
+                                        custom_font_size = 13.0;
                                       }
                                     });
                                   },
                                 ),
                               ),
                             ),
-                          ),
-                          // 确认按钮
-                          Container(
-                            child: Expanded(
-                              child: AButton.normal(
-                                child: Text('縮小'),
-                                color: rgba(28, 141, 160, 1),
-                                onPressed: () {
-                                  setDialogState(() {
-                                    custom_font_size = custom_font_size - 1;
-                                    if (custom_font_size < 13.0) {
-                                      custom_font_size = 13.0;
-                                    }
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
+        },
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a loading indicator while the dialog is open.  This is optional.
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // Handle errors, if any.
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // Dialog is finished.  Return a placeholder or nothing.
+          return const SizedBox.shrink(); // Or return any other suitable widget
+        }
       },
     );
   }
@@ -342,7 +370,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hex('#ccc'),
+      backgroundColor: Color(0xffccccc),
       appBar: customAppbar(
         context: context,
         title: header_title,
@@ -360,7 +388,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
             decoration: BoxDecoration(
               //                  color: hex('#fff'),
               border: new Border(
-                left: BorderSide(width: 1.0, color: rgba(229, 229, 229, 1)),
+                left: BorderSide(
+                  width: 1.0,
+                  color: Color.fromARGB(255, 229, 229, 229),
+                ),
               ),
             ),
             //                child: InkWell(
@@ -370,12 +401,19 @@ class _ArticleDetailState extends State<ArticleDetail> {
             //                    }
             //                ),
             child: new PopupMenuButton<String>(
-              icon: icon_more_vert(color: rgba(0, 0, 0, 1), size: 20),
+              icon: icon_more_vert(
+                color: Color.fromARGB(255, 0, 0, 0),
+                size: 20,
+              ),
               //这是点击弹出菜单的操作，点击对应菜单后，改变屏幕中间文本状态，将点击的菜单值赋予屏幕中间文本
               onSelected: (String value) {
                 if (value == 'copylink') {
-                  Clipboard.setData(ClipboardData(text: share_url));
-                  G.toast('已復制連結');
+                  if (share_url != null && share_url!.isEmpty) {
+                    Clipboard.setData(ClipboardData(text: share_url!));
+                    G.toast('已復制連結');
+                  } else {
+                    G.toast('沒有可復制的連結');
+                  }
                 } else if (value == 'report') {
                   Navigator.pushNamed(
                     context,
@@ -405,7 +443,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       : new Row(
                           //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            icon_content_copy(size: 20, color: hex('#333')),
+                            icon_content_copy(
+                              size: 20,
+                              color: Color(0xff333333),
+                            ),
                             SizedBox(width: 10),
                             new Text('復制邀請連結'),
                             //                          new Icon(Icons.add_circle)
@@ -419,7 +460,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       : new Row(
                           //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            icon_report(size: 20, color: hex('#333')),
+                            icon_report(size: 20, color: Color(0xff333333)),
                             SizedBox(width: 10),
                             new Text('報告'),
                             //                          new Icon(Icons.add_circle)
@@ -434,7 +475,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       : new Row(
                           //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            icon_text_rotate_up(size: 20, color: hex('#333')),
+                            icon_text_rotate_up(
+                              size: 20,
+                              color: Color(0xff333333),
+                            ),
                             SizedBox(width: 10),
                             new Text('調整字體大小'),
                             //                          new Icon(Icons.add_circle)
@@ -465,7 +509,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     right: 20.0,
                     top: 20.0,
                   ),
-                  color: hex('#fff'),
+                  color: Color(0xffffffff),
                   width: G.screenWidth(),
                   height: G.screenHeight(),
                   child: InAppWebView(

@@ -9,11 +9,17 @@ part of 'data.dart';
 ElandCateModel _$ElandCateModelFromJson(Map<String, dynamic> json) {
   return ElandCateModel(
     code: json['code'] as int,
-    list: (json['list'] as List)
-        ?.map((e) => e == null
+    list: (json['list'] as List?)
+        ?.map<ElandCateDatum>(
+          (e) => e == null
+              ? ElandCateDatum()
+              : ElandCateDatum.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map((e) => e == null
             ? null
             : ElandCateDatum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
     msg: json['msg'] as String,
   );
 }

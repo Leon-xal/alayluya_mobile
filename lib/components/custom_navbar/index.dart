@@ -14,7 +14,7 @@ import '../../utils/global.dart';
 class CustomNavbar extends StatefulWidget {
   final ValueChanged<int> onTap;
 
-  CustomNavbar({Key key, this.onTap}) : super(key: key);
+  CustomNavbar({Key? key, required this.onTap}) : super(key: key);
   // 通过 routeName 获取对应页面的索引
   getPageIndex(routeName) {
     // print('ssss1====>${routeName}');
@@ -44,7 +44,14 @@ class _CustomNavbarState extends State<CustomNavbar> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      String routeName = ModalRoute.of(context).settings.name;
+      String? routeName;
+      if (ModalRoute.of(context) == null) {
+        // 如果 ModalRoute 不存在，可能是因为当前页面没有路由
+        routeName = '/home'; // 默认设置为首页
+      } else {
+        routeName = ModalRoute.of(context)!.settings.name;
+      }
+      //String routeName = ModalRoute.of(context).settings.name;
       // print('ssss2====>${routeName}');
       tempCurrentIndex = widget.getPageIndex(routeName);
       setState(() {
@@ -74,7 +81,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
       ),
       child: Container(
         child: BottomNavigationBar(
-          backgroundColor: rgba(247, 247, 247, 1),
+          backgroundColor: Color.fromARGB(255, 247, 247, 247),
           //          backgroundColor: rgba(0,0,0,1),
           type: BottomNavigationBarType.fixed,
           items: [
@@ -89,10 +96,10 @@ class _CustomNavbarState extends State<CustomNavbar> {
           ],
           unselectedFontSize: 10, // 未选中字体大小
           selectedFontSize: 10, // 选中字体大小
-          unselectedItemColor: hex('#333'),
+          unselectedItemColor: Color(0xff333333),
           selectedItemColor: (isnotInNavpage == true)
-              ? rgba(0, 0, 0, 0.7)
-              : rgba(28, 141, 160, 1), // 选中字体颜色
+              ? Color.fromARGB(179, 0, 0, 0)
+              : Color.fromARGB(255, 28, 141, 160), // 选中字体颜色
           currentIndex: currentIndex,
           onTap: (index) {
             if (G.isLogin == false) {
@@ -111,7 +118,10 @@ class _CustomNavbarState extends State<CustomNavbar> {
         ),
         decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: rgba(247, 247, 247, 1), width: 1),
+            top: BorderSide(
+              color: Color.fromARGB(255, 247, 247, 247),
+              width: 1,
+            ),
           ),
         ),
       ),

@@ -10,11 +10,14 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
   return CommentModel(
     json['msg'] as String,
     json['code'] as int,
-    (json['list'] as List)
-        ?.map((e) => e == null
-            ? null
-            : CommentListDatum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    (json['list'] as List<dynamic>?)
+            ?.map<CommentListDatum>(
+              (e) => e == null
+                  ? CommentListDatum(0, '', 0, '', '', '', 0, 0, 0)
+                  : CommentListDatum.fromJson(e as Map<String, dynamic>),
+            )
+            .toList() ??
+        [],
   );
 }
 

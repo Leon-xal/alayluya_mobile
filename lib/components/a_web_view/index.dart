@@ -51,17 +51,18 @@ class AWebViewState extends State<AWebViewPage> {
 
   bool isloading = true;
 
-  JavascriptChannel _toasterJavascriptChannel = (BuildContext context) {
-    return new JavascriptChannel(
-      name: 'Toaster',
-      onMessageReceived: (JavaScriptMessage message) {
-        print('message=====>${message.message}');
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(new SnackBar(content: Text(message.message)));
-      },
-    );
-  };
+  JavascriptChannel Function(BuildContext) _toasterJavascriptChannel =
+      (BuildContext context) {
+        return new JavascriptChannel(
+          name: 'Toaster',
+          onMessageReceived: (JavascriptMessage message) {
+            print('message=====>${message.message}');
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(new SnackBar(content: Text(message.message)));
+          },
+        );
+      };
 
   Widget body() {
     return new Builder(

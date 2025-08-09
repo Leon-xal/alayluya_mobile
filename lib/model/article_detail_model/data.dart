@@ -4,9 +4,9 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class ArticleDetailModel {
-  int code;
-  ArticleDetailData data;
-  String msg;
+  int? code;
+  ArticleDetailData? data;
+  String? msg;
 
   ArticleDetailModel({
     this.code,
@@ -22,29 +22,29 @@ class ArticleDetailModel {
 
 @JsonSerializable()
 class ArticleDetailData {
-  int id;
-  String title;
-  String time;
-  String article_cate;
-  String content;
-  int read;
-  int like;
-  bool ilike;
-  int prayer;
-  bool iprayer;
-  int eland_id;
-  String eland_pic;
-  String eland_name;
-  String eland_desc;
-  int eland_follow;
-  bool eland_ifollow;
-  List<ArticleDetailTags> tags;
-  String content_link;
-  String content_app_link;
-  String MobileViewUrl;
-  String MobileAppViewUrl;
-  String cover;
-  int comment_num;
+  int? id;
+  String? title;
+  String? time;
+  String? article_cate;
+  String? content;
+  int? read;
+  int? like;
+  bool? ilike;
+  int? prayer;
+  bool? iprayer;
+  int? eland_id;
+  String? eland_pic;
+  String? eland_name;
+  String? eland_desc;
+  int? eland_follow;
+  bool? eland_ifollow;
+  List<ArticleDetailTags>? tags;
+  String? content_link;
+  String? content_app_link;
+  String? MobileViewUrl;
+  String? MobileAppViewUrl;
+  String? cover;
+  int? comment_num;
 
   ArticleDetailData({
     this.id,
@@ -86,8 +86,8 @@ class ArticleDetailData {
 
 @JsonSerializable()
 class ArticleDetailTags {
-  String name;
-  String value;
+  String? name;
+  String? value;
   ArticleDetailTags({
     this.name,
     this.value,

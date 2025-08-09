@@ -10,11 +10,18 @@ ReplyModel _$ReplyModelFromJson(Map<String, dynamic> json) {
   return ReplyModel(
     json['msg'] as String,
     json['code'] as int,
-    (json['list'] as List)
-        ?.map((e) => e == null
+    (json['list'] as List?)
+            ?.map<ReplyListDatum>(
+              (e) => e == null
+                  ? ReplyListDatum.fromJson({})
+                  : ReplyListDatum.fromJson(e as Map<String, dynamic>),
+            )
+            .toList() ??
+        [],
+    /*?.map((e) => e == null
             ? null
             : ReplyListDatum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
   );
 }
 

@@ -96,7 +96,7 @@ class _AElandListState extends State<AElandList>
     try {
       final res = await G.req.eland.dofollow(
         eland_id: itemid,
-        userid: uid,
+        userid: uid!,
       ); //More descriptive variable names
       final result = res.data;
       if (result['code'] == 200) {
@@ -278,8 +278,9 @@ class _AElandListState extends State<AElandList>
       final elandList = ElandListModel.fromJson(result);
 
       setState(() {
-        isLoadComplete = elandList.list.isEmpty;
-        dataItems.addAll(elandList.list);
+        isLoadComplete = elandList.list == null || elandList.list!.isEmpty;
+        //isLoadComplete = elandList.list.isEmpty;
+        dataItems.addAll(elandList.list!);
         isLoading = false; // Update loading state after data is received
       });
     } catch (e) {

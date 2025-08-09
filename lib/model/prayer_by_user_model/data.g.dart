@@ -9,11 +9,19 @@ part of 'data.dart';
 PrayerByUserModel _$PrayerByUserModelFromJson(Map<String, dynamic> json) {
   return PrayerByUserModel(
     code: json['code'] as int,
-    list: (json['list'] as List)
-        ?.map((e) => e == null
+    list:
+        (json['list'] as List?)
+            ?.map<PrayerByUserDatum>(
+              (e) => e == null
+                  ? PrayerByUserDatum.fromJson({})
+                  : PrayerByUserDatum.fromJson(e as Map<String, dynamic>),
+            )
+            .toList() ??
+        [],
+    /*?.map((e) => e == null
             ? null
             : PrayerByUserDatum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
     msg: json['msg'] as String,
   );
 }

@@ -149,12 +149,12 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
         //          elandItems.removeAt(10);
         //        }
         setState(() {
-          elandItems.addAll(tempElandList.list);
+          elandItems.addAll(tempElandList.list!);
           // print("aaa===>${pageid},${elandItems.length}");
           //          print("bbb===>${elandItems}");
           isloadcomplete = true;
         });
-        if (tempElandList.list.length == 0) {
+        if (tempElandList.list?.length == 0) {
           _refreshController.loadNoData();
         }
       }
@@ -168,7 +168,7 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
   }
 
   _clickCollect(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -648,10 +648,10 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
 
   @override
   Widget build(BuildContext context) {
-    Widget top_contents = widget.topchild;
-    Widget bottom_contents = widget.bottomchild;
+    //Widget top_contents = widget.topchild;
+    //Widget bottom_contents = widget.bottomchild;
 
-    //    super.build(context);
+    super.build(context);
 
     // replace with Shimmer
     /*return (elandItems.length == 0)

@@ -19,17 +19,17 @@ class ElandPrayersListModel {
 
 @JsonSerializable()
 class ElandPrayersListDatum {
-  int key;
-  int id;
-  String pic;
-  String title;
-  String desc;
-  String author;
-  int like;
-  bool ilike;
-  int prayer;
-  bool iprayer;
-  List<ElandPrayersListTags> tags;
+  int? key;
+  int? id;
+  String? pic;
+  String? title;
+  String? desc;
+  String? author;
+  int? like;
+  bool? ilike;
+  int? prayer;
+  bool? iprayer;
+  List<ElandPrayersListTags>? tags;
 
   ElandPrayersListDatum({
     this.key,
@@ -54,8 +54,8 @@ class ElandPrayersListDatum {
 
 @JsonSerializable()
 class ElandPrayersListTags {
-  String name;
-  String value;
+  String? name;
+  String? value;
   ElandPrayersListTags({this.name, this.value});
 
   //反序列化

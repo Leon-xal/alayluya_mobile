@@ -44,19 +44,19 @@ class ASwiper extends StatelessWidget {
           // }else{
           //   return Image.asset(images[index], fit: BoxFit.cover);
           // }
-          if (G.is_http(images[index].pic)) {
+          if (G.is_http(images[index].pic!)) {
             return GestureDetector(
               onTap: () {
-                toDetails(images[index].type, images[index].type_val);
+                toDetails(images[index].type!, images[index].type_val);
               },
-              child: Image.network(images[index].pic, fit: BoxFit.cover),
+              child: Image.network(images[index].pic!, fit: BoxFit.cover),
             );
           } else {
             return GestureDetector(
               onTap: () {
-                toDetails(images[index].type, images[index].type_val);
+                toDetails(images[index].type!, images[index].type_val);
               },
-              child: Image.asset(images[index].pic, fit: BoxFit.cover),
+              child: Image.asset(images[index].pic!, fit: BoxFit.cover),
             );
           }
         },

@@ -87,7 +87,7 @@ class _ElandCardState extends State<AElandCard>
 
       if (mounted) {
         setState(() {
-          elandItem.addAll(eland_list.list);
+          elandItem.addAll(eland_list.list!);
         });
       }
     } catch (e) {

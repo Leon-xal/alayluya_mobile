@@ -18,14 +18,14 @@ import 'package:flutter/material.dart';
 // import 'package:flui/flui.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './provider/do_like_method.dart';
 import './provider/facebookProvider.dart';
 import './routes/index.dart' as myRouter;
 import './utils/global.dart';
-import './utils/syncsdart';
+//import './utils/syncs.dart';
 
 final myRouter.Router router = myRouter.Router();
 
@@ -53,7 +53,7 @@ void main() async {
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //  _shoppingCart = prefs.getString('shoppingCart');
-  String user = prefs.getString('user');
+  String? user = prefs.getString('user');
   // G.oldApi = prefs.getBool('apiType') ?? true;
   //
   // if(G.oldApi == true){
@@ -63,7 +63,7 @@ void main() async {
   // }
 
   //    print('user===>${json.decode(user)}');
-  if (user.isNotEmpty) {
+  if (user != null && user.isNotEmpty) {
     /// 初始化user
 
     G.user.init(json.decode(user));
@@ -72,9 +72,9 @@ void main() async {
     G.isLogin = false;
   }
 
-  String domain = prefs.getString('domain');
+  String? domain = prefs.getString('domain');
   //  prefs.setString('domain', null);
-  if (domain.isNotEmpty) {
+  if (domain != null && domain.isNotEmpty) {
     G.isDev = true;
     G.baseurl = domain;
     // G.baseurl = 'http://testapi2.alayluya.com';
@@ -102,7 +102,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
   //###Leo
   static final RouteObserver<PageRoute> routeObserver =
       RouteObserver<PageRoute>();
@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           fontFamily: "yahei",
           appBarTheme: AppBarTheme(
-            actionsIconTheme: IconThemeData(color: rgba(0, 0, 0, 0)),
+            actionsIconTheme: IconThemeData(color: Color.fromARGB(0, 0, 0, 0)),
             elevation: 0,
           ),
         ),
@@ -166,8 +166,8 @@ class _MyAppState extends State<MyApp> {
         onGenerateRoute: router.getRoutes,
         //###Leo
         navigatorObservers: [MyApp.routeObserver],
-        builder: (BuildContext context, Widget child) {
-          return child;
+        builder: (context, child) {
+          return child!;
           // return FLToastProvider(
           //     defaults: _toastDefaults,
           //     child: child

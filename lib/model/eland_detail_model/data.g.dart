@@ -41,16 +41,26 @@ ElandDetailData _$ElandDetailDataFromJson(Map<String, dynamic> json) {
     link3: json['link3'] as String,
     follow: json['follow'] as int,
     ifollow: json['ifollow'] as bool,
-    album: (json['album'] as List)
-        ?.map((e) => e == null
+    album: (json['album'] as List?)
+        ?.map<ElandDetailAlbum>(
+          (e) => e == null
+              ? ElandDetailAlbum()
+              : ElandDetailAlbum.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map((e) => e == null
             ? null
             : ElandDetailAlbum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    brochure: (json['brochure'] as List)
-        ?.map((e) => e == null
+        ?.toList(),*/
+    brochure: (json['brochure'] as List?)
+        ?.map<ElandDetailBrochure>(
+          (e) => ElandDetailBrochure.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map((e) => e == null
             ? null
             : ElandDetailBrochure.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
     map: json['map'] == null
         ? null
         : ElandDetailMap.fromJson(json['map'] as Map<String, dynamic>),
@@ -92,10 +102,7 @@ ElandDetailAlbum _$ElandDetailAlbumFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ElandDetailAlbumToJson(ElandDetailAlbum instance) =>
-    <String, dynamic>{
-      'img': instance.img,
-      'desc': instance.desc,
-    };
+    <String, dynamic>{'img': instance.img, 'desc': instance.desc};
 
 ElandDetailBrochure _$ElandDetailBrochureFromJson(Map<String, dynamic> json) {
   return ElandDetailBrochure(
@@ -107,23 +114,17 @@ ElandDetailBrochure _$ElandDetailBrochureFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ElandDetailBrochureToJson(
-        ElandDetailBrochure instance) =>
-    <String, dynamic>{
-      'img': instance.img,
-      'desc': instance.desc,
-      'type': instance.type,
-      'source': instance.source,
-    };
+  ElandDetailBrochure instance,
+) => <String, dynamic>{
+  'img': instance.img,
+  'desc': instance.desc,
+  'type': instance.type,
+  'source': instance.source,
+};
 
 ElandDetailMap _$ElandDetailMapFromJson(Map<String, dynamic> json) {
-  return ElandDetailMap(
-    lat: json['lat'] as String,
-    lng: json['lng'] as String,
-  );
+  return ElandDetailMap(lat: json['lat'] as String, lng: json['lng'] as String);
 }
 
 Map<String, dynamic> _$ElandDetailMapToJson(ElandDetailMap instance) =>
-    <String, dynamic>{
-      'lat': instance.lat,
-      'lng': instance.lng,
-    };
+    <String, dynamic>{'lat': instance.lat, 'lng': instance.lng};

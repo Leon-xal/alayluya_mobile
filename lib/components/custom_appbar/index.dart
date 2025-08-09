@@ -1,6 +1,6 @@
 //import 'package:color_dart/color_dart.dart';
 import 'package:flutter/material.dart';
-import '../../model/user_model/data.dart';
+//import '../../model/user_model/data.dart';
 //import '../../utils/Icon.dart';
 import '../../utils/global.dart';
 
@@ -29,9 +29,9 @@ AppBar customAppbar({
   if (is_search == true) {
     _doSearch(String str) async {
       try {
-        UserDataModel userData = G.user.data;
-        int userid = userData.id;
-        var res = await G.req.search.dosearch(search_key: str, uid: userid);
+        //UserDataModel userData = G.user.data;
+        //int userid = userData.id!;
+        //var res = await G.req.search.dosearch(search_key: str, uid: userid);
         //Map result = res.data;
         //        print('dosearch====>${result}');
       } catch (e) {

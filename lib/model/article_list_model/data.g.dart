@@ -9,11 +9,17 @@ part of 'data.dart';
 ArticleListModel _$ArticleListModelFromJson(Map<String, dynamic> json) {
   return ArticleListModel(
     code: json['code'] as int,
-    list: (json['list'] as List)
-        ?.map((e) => e == null
+    list: (json['list'] as List?)
+        ?.map<ArticleListDatum>(
+          (e) => e == null
+              ? ArticleListDatum()
+              : ArticleListDatum.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map((e) => e == null
             ? null
             : ArticleListDatum.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
     msg: json['msg'] as String,
   );
 }
@@ -39,11 +45,19 @@ ArticleListDatum _$ArticleListDatumFromJson(Map<String, dynamic> json) {
     ilike: json['ilike'] as bool,
     prayer: json['prayer'] as int,
     iprayer: json['iprayer'] as bool,
-    tags: (json['tags'] as List)
-        ?.map((e) => e == null
-            ? null
-            : ArticleListTags.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    tags: (json['tags'] as List?)
+        ?.map<ArticleListTags>(
+          (e) => e == null
+              ? ArticleListTags()
+              : ArticleListTags.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map(
+          (e) => e == null
+              ? null
+              : ArticleListTags.fromJson(e as Map<String, dynamic>),
+        )
+        ?.toList(),*/
   );
 }
 
@@ -72,7 +86,4 @@ ArticleListTags _$ArticleListTagsFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ArticleListTagsToJson(ArticleListTags instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'value': instance.value,
-    };
+    <String, dynamic>{'name': instance.name, 'value': instance.value};

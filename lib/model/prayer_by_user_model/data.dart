@@ -4,29 +4,26 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class PrayerByUserModel {
-  int code;
-  List<PrayerByUserDatum> list;
-  String msg;
+  int? code;
+  List<PrayerByUserDatum>? list;
+  String? msg;
 
-  PrayerByUserModel({
-    this.code,
-    this.list,
-    this.msg,
-  });
+  PrayerByUserModel({this.code, this.list, this.msg});
 
   //反序列化
-  factory PrayerByUserModel.fromJson(Map<String, dynamic> json) => _$PrayerByUserModelFromJson(json);
+  factory PrayerByUserModel.fromJson(Map<String, dynamic> json) =>
+      _$PrayerByUserModelFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$PrayerByUserModelToJson(this);
 }
 
 @JsonSerializable()
 class PrayerByUserDatum {
-  int key;
-  int f_uid;
-  String f_avatar;
-  String f_uname;
-  bool my_is_follow;
+  int? key;
+  int? f_uid;
+  String? f_avatar;
+  String? f_uname;
+  bool? my_is_follow;
 
   PrayerByUserDatum({
     this.key,
@@ -37,7 +34,8 @@ class PrayerByUserDatum {
   });
 
   //反序列化
-  factory PrayerByUserDatum.fromJson(Map<String, dynamic> json) => _$PrayerByUserDatumFromJson(json);
+  factory PrayerByUserDatum.fromJson(Map<String, dynamic> json) =>
+      _$PrayerByUserDatumFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$PrayerByUserDatumToJson(this);
 }

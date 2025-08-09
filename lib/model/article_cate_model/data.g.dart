@@ -6,7 +6,7 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ArticleCateModel _$ArticleCateModelFromJson(Map<String, dynamic> json) {
+/*ArticleCateModel _$ArticleCateModelFromJson(Map<String, dynamic> json) {
   return ArticleCateModel(
     code: json['code'] as int,
     list: (json['list'] as List)
@@ -14,6 +14,20 @@ ArticleCateModel _$ArticleCateModelFromJson(Map<String, dynamic> json) {
             ? null
             : ArticleCateDatum.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    msg: json['msg'] as String,
+  );
+}*/
+
+ArticleCateModel _$ArticleCateModelFromJson(Map<String, dynamic> json) {
+  return ArticleCateModel(
+    code: json['code'] as int,
+    list: (json['list'] as List?)
+        ?.map<ArticleCateDatum>(
+          (e) => e == null
+              ? ArticleCateDatum()
+              : ArticleCateDatum.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
     msg: json['msg'] as String,
   );
 }
@@ -30,11 +44,17 @@ ArticleCateDatum _$ArticleCateDatumFromJson(Map<String, dynamic> json) {
     key: json['key'] as int,
     cateid: json['cateid'] as int,
     catename: json['catename'] as String,
-    catepic: (json['catepic'] as List)
-        ?.map((e) => e == null
+    catepic: (json['catepic'] as List?)
+        ?.map<ArticleCatePic>(
+          (e) => e == null
+              ? ArticleCatePic()
+              : ArticleCatePic.fromJson(e as Map<String, dynamic>),
+        )
+        .toList(),
+    /*?.map((e) => e == null
             ? null
             : ArticleCatePic.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
   );
 }
 

@@ -2,23 +2,23 @@ import 'dart:convert';
 
 import '../../components/a_web_view/index.dart';
 //import 'package:color_dart/RgbaColor.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 
 import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import '../../config/config.dart';
 import '../../utils/syncs.dart';
-import '../../components/a_dialog/index.dart';
-import '../../components/a_button/index.dart';
+//import '../../components/a_dialog/index.dart';
+//import '../../components/a_button/index.dart';
 
 class OneSignalWapper {
   bool _requireConsent = true;
-  SharedPreferences _prefs;
+  //SharedPreferences? _prefs;
   String linkUrl = '';
   bool is_open_onesignal_push = false;
 
@@ -39,11 +39,11 @@ class OneSignalWapper {
 
             OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
-            var settings = {
+            /*var settings = {
               OSiOSSettings.autoPrompt: false,
               OSiOSSettings.inAppLaunchUrl: false,
               OSiOSSettings.promptBeforeOpeningPushUrl: true,
-            };
+            };*/
             // OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
             //   print("Received notification=======>: \n${notification.jsonRepresentation().replaceAll("\\n", "\n")}");
             // });
@@ -60,9 +60,9 @@ class OneSignalWapper {
 
               var custom = null;
               if (Platform.isAndroid) {
-                custom = jsonDecode(result.notification.rawPayload['custom']);
+                custom = jsonDecode(result.notification.rawPayload!['custom']);
               } else {
-                custom = result.notification.rawPayload['custom'];
+                custom = result.notification.rawPayload!['custom'];
               }
 
               print('Opened notification4=======>${custom}');
@@ -119,7 +119,7 @@ class OneSignalWapper {
               );
             });
 
-            await OneSignal.shared.setAppId(kOneSignalKey['appID']);
+            await OneSignal.shared.setAppId(kOneSignalKey['appID']!);
 
             // NOTE: Replace with your own app ID from https://www.onesignal.com
             // await OneSignal.shared.init(kOneSignalKey['appID'], iOSSettings: settings);

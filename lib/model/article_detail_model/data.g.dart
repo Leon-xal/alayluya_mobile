@@ -41,11 +41,14 @@ ArticleDetailData _$ArticleDetailDataFromJson(Map<String, dynamic> json) {
     eland_desc: json['eland_desc'] as String,
     eland_follow: json['eland_follow'] as int,
     eland_ifollow: json['eland_ifollow'] as bool,
-    tags: (json['tags'] as List)
-        ?.map((e) => e == null
+    tags: (json['tags'] as List?)
+            ?.map<ArticleDetailTags>((e) =>
+            e == null ? ArticleDetailTags() : ArticleDetailTags.fromJson(e as Map<String, dynamic>))
+        .toList(),
+        /*?.map((e) => e == null
             ? null
             : ArticleDetailTags.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        ?.toList(),*/
     content_link: json['content_link'] as String,
     content_app_link: json['content_app_link'] as String,
     MobileViewUrl: json['MobileViewUrl'] as String,

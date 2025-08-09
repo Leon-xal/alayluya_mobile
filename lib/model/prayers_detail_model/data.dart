@@ -4,33 +4,30 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class PrayersDetailModel {
-  int code;
-  PrayersDetailData data;
-  String msg;
+  int? code;
+  PrayersDetailData? data;
+  String? msg;
 
-  PrayersDetailModel({
-    this.code,
-    this.data,
-    this.msg,
-  });
+  PrayersDetailModel({this.code, this.data, this.msg});
 
   //反序列化
-  factory PrayersDetailModel.fromJson(Map<String, dynamic> json) => _$PrayersDetailModelFromJson(json);
+  factory PrayersDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$PrayersDetailModelFromJson(json);
   //序列化
   Map<String, dynamic> toJson() => _$PrayersDetailModelToJson(this);
 }
 
 @JsonSerializable()
 class PrayersDetailData {
-  int id;
-  String author;
-  String avatar;
-  String time;
-  String content;
-  String cover;
-  int prayer;
-  bool iprayer;
-  String content_app_link;
+  int? id;
+  String? author;
+  String? avatar;
+  String? time;
+  String? content;
+  String? cover;
+  int? prayer;
+  bool? iprayer;
+  String? content_app_link;
 
   PrayersDetailData({
     this.id,
@@ -46,7 +43,7 @@ class PrayersDetailData {
 
   //反序列化
   factory PrayersDetailData.fromJson(Map<String, dynamic> json) {
-//    print('UserDataFromJson=====>${json}');
+    //    print('UserDataFromJson=====>${json}');
     return _$PrayersDetailDataFromJson(json);
   }
 

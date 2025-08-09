@@ -4,9 +4,9 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class ArticleListModel {
-  int code;
-  List<ArticleListDatum> list;
-  String msg;
+  int? code;
+  List<ArticleListDatum>? list;
+  String? msg;
 
   ArticleListModel({
     this.code,
@@ -22,19 +22,19 @@ class ArticleListModel {
 
 @JsonSerializable()
 class ArticleListDatum {
-  int key;
-  int id;
-  int eland_id;
-  int account_id;
-  String pic;
-  String title;
-  String desc;
-  String author;
-  int like;
-  bool ilike;
-  int prayer;
-  bool iprayer;
-  List<ArticleListTags> tags;
+  int? key;
+  int? id;
+  int? eland_id;
+  int? account_id;
+  String? pic;
+  String? title;
+  String? desc;
+  String? author;
+  int? like;
+  bool? ilike;
+  int? prayer;
+  bool? iprayer;
+  List<ArticleListTags>? tags;
 
   ArticleListDatum({
     this.key,
@@ -60,8 +60,8 @@ class ArticleListDatum {
 
 @JsonSerializable()
 class ArticleListTags {
-  String name;
-  String value;
+  String? name;
+  String? value;
   ArticleListTags({
     this.name,
     this.value,
