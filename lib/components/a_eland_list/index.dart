@@ -12,17 +12,17 @@ import '../../components/a_button/index.dart';
 import '../../model/eland_list_model/data.dart';
 
 class AElandList extends StatefulWidget {
-  final int uid; //用戶id
-  final String searchByName;
-  final bool isShowCenterload; //是否顯示加載數據的中間loading圖標
-  final bool isLoadMore; //是否支持下拉刷新數,前提是有開啟isSmartRefresher
-  final int pageLimit; //顯示文章數量
-  final bool isReload; //開啟AutomaticKeepAliveClientMixin支持，tab效果支持會有緩存效果
-  final Widget topChild; //上節點插糟
-  final Widget bottomChild; //下節點插糟
-  final bool isSmartRefresher;
-  final int cateId; //eland分類id
-  final String type;
+  final int? uid; //用戶id
+  final String? searchByName;
+  final bool? isShowCenterload; //是否顯示加載數據的中間loading圖標
+  final bool? isLoadMore; //是否支持下拉刷新數,前提是有開啟isSmartRefresher
+  final int? pageLimit; //顯示文章數量
+  final bool? isReload; //開啟AutomaticKeepAliveClientMixin支持，tab效果支持會有緩存效果
+  final Widget? topChild; //上節點插糟
+  final Widget? bottomChild; //下節點插糟
+  final bool? isSmartRefresher;
+  final int? cateId; //eland分類id
+  final String? type;
 
   const AElandList({
     Key? key,
@@ -54,12 +54,12 @@ class _AElandListState extends State<AElandList>
   bool isLoadComplete = false; //More descriptive variable name
 
   @override
-  bool get wantKeepAlive => widget.isReload;
+  bool get wantKeepAlive => widget.isReload!;
 
   @override
   void initState() {
     super.initState();
-    _loadListData(context, showLoading: widget.isShowCenterload);
+    _loadListData(context, showLoading: widget.isShowCenterload!);
   }
 
   @override
@@ -268,11 +268,11 @@ class _AElandListState extends State<AElandList>
           ? G.req.eland.list
           : G.req.eland.my_follow_list; //Improved readability
       final res = await getElandList(
-        userid: widget.uid,
+        userid: widget.uid!,
         pageid: pageId,
-        limit: widget.pageLimit,
-        search_by_name: widget.searchByName,
-        cateid: widget.cateId,
+        limit: widget.pageLimit!,
+        search_by_name: widget.searchByName!,
+        cateid: widget.cateId!,
       );
       final result = res.data;
       final elandList = ElandListModel.fromJson(result);
@@ -360,10 +360,11 @@ class _AElandListState extends State<AElandList>
 
   @override
   Widget build(BuildContext context) {
-    return widget.isSmartRefresher
+    super.build(context); // Call super.build to maintain state
+    return widget.isSmartRefresher!
         ? SmartRefresher(
             enablePullDown: true,
-            enablePullUp: widget.isLoadMore,
+            enablePullUp: widget.isLoadMore!,
             header: WaterDropHeader(
               refresh: SizedBox(
                 height: 25,
@@ -398,7 +399,7 @@ class _AElandListState extends State<AElandList>
           )
         : Column(
             children: [
-              widget.topChild,
+              widget.topChild!,
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -406,7 +407,7 @@ class _AElandListState extends State<AElandList>
                 itemBuilder: (context, index) =>
                     _buildContent(dataItems[index], index),
               ),
-              widget.bottomChild,
+              widget.bottomChild!,
             ],
           );
   }

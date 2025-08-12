@@ -20,13 +20,13 @@ import '../../components/onesignal_wapper/onesignal_wapper.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginStart extends StatefulWidget {
-  LoginStart({Key key}) : super(key: key);
+  LoginStart({Key? key}) : super(key: key);
 
   _LoginStartState createState() => _LoginStartState();
 }
 
 class _LoginStartState extends State<LoginStart> {
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   bool is_open_facebook_login = false;
   bool is_open_apple_login = false;
   bool _loginByFacebook_i = false;
@@ -100,6 +100,15 @@ class _LoginStartState extends State<LoginStart> {
             'Leo sign in with apple id err========>>>>>>>>${err.toString()}',
           );
           // print('Leo sign in with apple id err2========>>>>>>>>${errInt}');
+          return AuthorizationCredentialAppleID(
+            userIdentifier: '', // Replace with a suitable default
+            authorizationCode: '', // Replace with a suitable default
+            identityToken: null, // Or a suitable default
+            email: null, // Or a suitable default
+            familyName: null, // Or a suitable default
+            givenName: null, // Or a suitable default
+            state: null, // Or a suitable default
+          ); // Return default credential
         });
     if (errInt > 0) {
       return;
@@ -114,17 +123,17 @@ class _LoginStartState extends State<LoginStart> {
     // print('credential.state=====>${credential.state}');
     print('credential.authorizationCode=====>${credential.authorizationCode}');
     // 登录前移除user， 不然登录会提示token错误
-    prefs.remove('user');
+    prefs?.remove('user');
 
     try {
       if (_login_i == true) return;
       _login_i = true;
 
       var res = await G.req.user.loginByApple(
-        first_name: credential.familyName,
-        last_name: credential.givenName,
-        email: credential.email,
-        apple_id: credential.userIdentifier,
+        first_name: credential.familyName!,
+        last_name: credential.givenName!,
+        email: credential.email!,
+        apple_id: credential.userIdentifier!,
         apple_token: credential.authorizationCode,
       );
 
@@ -190,7 +199,8 @@ class _LoginStartState extends State<LoginStart> {
         G.isLogin = true;
         await Future.delayed(Duration.zero, () async {
           await G.toast(
-            Provider.of<FacebookProvider>(context, listen: false).message,
+            Provider.of<FacebookProvider>(context, listen: false).message ??
+                '登錄成功',
           );
           await Future.delayed(Duration(seconds: 3), () async {
             _loginByFacebook_i = false;
@@ -214,7 +224,8 @@ class _LoginStartState extends State<LoginStart> {
         await Future.delayed(Duration.zero, () async {
           _loginByFacebook_i = false;
           await G.toast(
-            Provider.of<FacebookProvider>(context, listen: false).message,
+            Provider.of<FacebookProvider>(context, listen: false).message ??
+                '登錄失敗',
           );
         });
       }
@@ -329,7 +340,7 @@ class _LoginStartState extends State<LoginStart> {
                       child: Text(
                         '讓你分享勵志文章、見證影音、呼籲代禱及結連互助的社交平台。',
                         style: TextStyle(
-                          color: rgba(255, 255, 255, 1),
+                          color: Color.fromARGB(255, 255, 255, 255),
                           fontSize: 15,
                         ),
                         textAlign: TextAlign.center,
@@ -348,10 +359,10 @@ class _LoginStartState extends State<LoginStart> {
                   child: AButton.normal(
                     width: 250,
                     child: Text('登入'),
-                    color: hex('#fff'),
+                    color: Color(0xffffffff),
                     //                    color: rgba(255, 255, 255, 1),
-                    borderColor: rgba(28, 141, 160, 1),
-                    bgColor: rgba(28, 141, 160, 1),
+                    borderColor: Color.fromARGB(255, 28, 141, 160),
+                    bgColor: Color.fromARGB(255, 28, 141, 160),
                     plain: true,
                     borderRadius: BorderRadius.circular(40),
                     onPressed: () => G.pushNamed('/login_mail'),
@@ -379,9 +390,9 @@ class _LoginStartState extends State<LoginStart> {
                         child: AButton.normal(
                           width: 250,
                           child: new Text('Sign In via Facebook'),
-                          color: hex('#fff'),
-                          bgColor: rgba(42, 117, 163, 1),
-                          borderColor: rgba(42, 117, 163, 1),
+                          color: Color(0xffffffff),
+                          bgColor: Color.fromARGB(255, 42, 117, 163),
+                          borderColor: Color.fromARGB(255, 42, 117, 163),
                           plain: true,
                           borderRadius: BorderRadius.circular(40),
                           onPressed: () {
@@ -395,9 +406,9 @@ class _LoginStartState extends State<LoginStart> {
                   child: AButton.normal(
                     width: 250,
                     child: new Text('註冊'),
-                    color: rgba(255, 255, 255, 1),
-                    bgColor: rgba(255, 255, 255, 0),
-                    borderColor: rgba(255, 255, 255, 1),
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    bgColor: Color.fromARGB(0, 255, 255, 255),
+                    borderColor: Color.fromARGB(255, 255, 255, 255),
                     plain: true,
                     borderRadius: BorderRadius.circular(40),
                     onPressed: () => G.pushNamed('/register'),

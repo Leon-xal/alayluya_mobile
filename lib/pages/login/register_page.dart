@@ -11,7 +11,7 @@ import '../../components/a_dialog/index.dart';
 //import '../pages/index_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+  RegisterPage({Key? key}) : super(key: key);
 
   _RegisterPage createState() => _RegisterPage();
 }
@@ -33,7 +33,7 @@ class _RegisterPage extends State<RegisterPage> {
   //  SharedPreferences prefs;
   bool usePhoneNumberToRegister = true;
   var areaCode = regionCode[0]['code'];
-  String sid = null;
+  String? sid;
 
   bool _submit_i = false;
 
@@ -90,7 +90,7 @@ class _RegisterPage extends State<RegisterPage> {
         phoneCode: phoneCode['value'],
         password: phonePassword['value'],
         repassword: phoneRepassword['value'],
-        sid: sid,
+        sid: sid!,
       );
       var data = res.data;
       if (data == null) {
@@ -215,7 +215,7 @@ class _RegisterPage extends State<RegisterPage> {
           },
           child: Container(
             // height: G.screenHeight()-100,
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: Column(
               children: <Widget>[
@@ -230,7 +230,9 @@ class _RegisterPage extends State<RegisterPage> {
                     margin: EdgeInsets.symmetric(vertical: 12),
                     child: Text(
                       usePhoneNumberToRegister ? '電子郵箱註冊?' : '手機號碼註冊?',
-                      style: TextStyle(color: rgba(28, 141, 160, 0.7)),
+                      style: TextStyle(
+                        color: Color.fromARGB(176, 28, 141, 160),
+                      ),
                     ),
                   ),
                 ),
@@ -388,9 +390,9 @@ class _RegisterPage extends State<RegisterPage> {
                   child: AButton.normal(
                     width: 250,
                     child: Text('註冊'),
-                    bgColor: rgba(28, 141, 160, 0.7),
-                    color: hex('#fff'),
-                    borderColor: rgba(28, 141, 160, 0.7),
+                    bgColor: Color.fromARGB(176, 28, 141, 160),
+                    color: Color(0xfffffffff),
+                    borderColor: Color.fromARGB(176, 28, 141, 160),
                     plain: true,
                     borderRadius: BorderRadius.circular(40),
                     // onPressed: () => register()
@@ -412,7 +414,7 @@ class _RegisterPage extends State<RegisterPage> {
                           text:
                               "By Sign up you agree to Alayluya terms and condition.For more details please read out ",
                           style: new TextStyle(
-                            color: rgba(51, 51, 51, 1),
+                            color: Color.fromARGB(255, 51, 51, 51),
                             fontSize: 10,
                             height: 2,
                             //                              letterSpacing: 10.0,
@@ -422,7 +424,7 @@ class _RegisterPage extends State<RegisterPage> {
                         new TextSpan(
                           text: "terms of use",
                           style: new TextStyle(
-                            color: rgba(57, 139, 161, 1),
+                            color: Color.fromARGB(255, 57, 139, 161),
                             fontSize: 10,
                             height: 2,
                             decoration: TextDecoration.underline,

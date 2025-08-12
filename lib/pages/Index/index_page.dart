@@ -55,9 +55,9 @@ class IndexPage extends StatefulWidget {
   /// ```
   static Map _createPage(
     Widget page, {
-    AppBar appbar,
-    String routeName,
-    Object arg,
+    AppBar? appbar,
+    String? routeName,
+    Object? arg,
   }) {
     return {
       "widget": page,
@@ -72,12 +72,12 @@ class IndexPage extends StatefulWidget {
   //   this.arguments,
   // }) : super(key: key);
 
-  static IndexPage _singleton;
+  static IndexPage? _singleton;
 
-  IndexPage.singleton({this.routeName, this.arguments});
+  IndexPage.singleton({required this.routeName, required this.arguments});
 
-  factory IndexPage({Key key, String routeName, Object arguments}) {
-    return _singleton;
+  factory IndexPage({Key? key, String? routeName, Object? arguments}) {
+    return _singleton!;
   }
 
   // 通过 routeName 获取对应页面的索引
@@ -101,7 +101,7 @@ class IndexPage extends StatefulWidget {
 
 class _NavigationState extends State<IndexPage> {
   // final Map arguments;
-  PageController _pageController;
+  PageController _pageController = PageController(initialPage: 0);
 
   static int currentIndex = 0;
 
@@ -128,15 +128,15 @@ class _NavigationState extends State<IndexPage> {
     // }
 
     this._pageController = PageController(initialPage: currentIndex);
-    _pages.add(widget.pages[0]['widget']);
-    _pages.add(widget.pages[1]['widget']);
-    _pages.add(widget.pages[2]['widget']);
-    _pages.add(widget.pages[3]['widget']);
+    _pages.add(widget.pages[0]?['widget']);
+    _pages.add(widget.pages[1]?['widget']);
+    _pages.add(widget.pages[2]?['widget']);
+    _pages.add(widget.pages[3]?['widget']);
 
     // print('argumentsCurrentIndex1====>${currentIndex}');
 
     Future.delayed(Duration.zero, () {
-      String routeName = ModalRoute.of(context).settings.name;
+      String? routeName = ModalRoute.of(context)?.settings.name;
       setState(() {
         int tempCurrentIndex = widget.getPageIndex(routeName);
         if (tempCurrentIndex != currentIndex) {
@@ -151,18 +151,18 @@ class _NavigationState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic arg = ModalRoute.of(context).settings.arguments;
+    dynamic arg = ModalRoute.of(context)?.settings.arguments;
     if (arg != null) {
       print('argumentsIndex====>${arg}');
     }
     //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
 
-    Map page = widget.pages[currentIndex];
+    Map? page = widget.pages[currentIndex];
     //    List<Widget> _pages = [page[0]['widget'],page[1]['widget'],page[2]['widget'],page[3]['widget']];
     //    return Text('qwe');
     return Scaffold(
       // appBar: (currentIndex == 1)?null:page['appbar'],
-      appBar: page['appbar'],
+      appBar: page?['appbar'],
       body: PageView(
         physics: NeverScrollableScrollPhysics(), //禁止滑动
         controller: this._pageController,

@@ -19,25 +19,25 @@ class ReqArticle {
     int userid = 0,
     bool ishot = false,
   }) {
-   print('cateid======>${cateid}');
-   print('pageid======>${pageid}');
-   print('limit======>${limit}');
-   print('search_by_title======>${search_by_title}');
-   print('eland_id======>${eland_id}');
-   print('userid======>${userid}');
-   print('ishot======>${ishot}');
+    print('cateid======>${cateid}');
+    print('pageid======>${pageid}');
+    print('limit======>${limit}');
+    print('search_by_title======>${search_by_title}');
+    print('eland_id======>${eland_id}');
+    print('userid======>${userid}');
+    print('ishot======>${ishot}');
     return _dio.post(
-        G.prdapi+'/article-list',
-//        '/article-list',
-        queryParameters: {
-          'cateid': cateid,
-          'page': pageid,
-          'limit': limit,
-          'search_by_title': search_by_title,
-          'eland_id': eland_id,
-          'user_id': userid,
-          'ishot': ishot,
-        }
+      G.prdapi + '/article-list',
+      //        '/article-list',
+      queryParameters: {
+        'cateid': cateid,
+        'page': pageid,
+        'limit': limit,
+        'search_by_title': search_by_title,
+        'eland_id': eland_id,
+        'user_id': userid,
+        'ishot': ishot,
+      },
     );
   }
 
@@ -50,97 +50,80 @@ class ReqArticle {
     int eland_id = 0,
     int userid = 0,
   }) {
-//    print('cateid======>${cateid}');
-//    print('page======>${pageid}');
-//    print('limit======>${limit}');
-//    print('search_by_title======>${search_by_title}');
-//    print('eland_id======>${eland_id}');
-//    print('user_id======>${userid}');
+    //    print('cateid======>${cateid}');
+    //    print('page======>${pageid}');
+    //    print('limit======>${limit}');
+    //    print('search_by_title======>${search_by_title}');
+    //    print('eland_id======>${eland_id}');
+    //    print('user_id======>${userid}');
 
     return _dio.post(
-        G.prdapi+'/article-like-list',
-//        '/article-like-list',
-        queryParameters: {
-          'cateid': cateid,
-          'page': pageid,
-          'limit': limit,
-          'search_by_title': search_by_title,
-          'eland_id': eland_id,
-          'user_id': userid
-        }
+      G.prdapi + '/article-like-list',
+      //        '/article-like-list',
+      queryParameters: {
+        'cateid': cateid,
+        'page': pageid,
+        'limit': limit,
+        'search_by_title': search_by_title,
+        'eland_id': eland_id,
+        'user_id': userid,
+      },
     );
   }
 
   /// 點擊喜歡
-  Future<Response> dolike({
-    @required int articleid,
-    @required int userid,
-  }) {
+  Future<Response> dolike({required int articleid, required int userid}) {
     print('dolike-articleid====>${articleid}');
     print('dolike-user_id====>${userid}');
     return _dio.post(
-        G.prdapi+'/do-like',
-//        '/do-like',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-        }
+      G.prdapi + '/do-like',
+      //        '/do-like',
+      queryParameters: {'articleid': articleid, 'user_id': userid},
     );
   }
 
   /// 获取详情
-  Future<Response> detail({
-    @required int id,
-    int userid = 0,
-  }) {
+  Future<Response> detail({required int id, int userid = 0}) {
     print('article-detail====>${id}');
     print('article-user_id====>${userid}');
     return _dio.post(
-        G.prdapi+'/article-detail',
-//        '/article-detail',
-        queryParameters: {
-          "id": id,
-          'user_id': userid,
-        }
+      G.prdapi + '/article-detail',
+      //        '/article-detail',
+      queryParameters: {"id": id, 'user_id': userid},
     );
   }
+
   /// 點擊报告
-  Future<Response> report({
-    @required int articleid,
-    @required int userid,
-  }) {
+  Future<Response> report({required int articleid, required int userid}) {
     return _dio.post(
-        G.prdapi+'/do-report',
-//        '/do-like',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-        }
+      G.prdapi + '/do-report',
+      //        '/do-like',
+      queryParameters: {'articleid': articleid, 'user_id': userid},
     );
   }
 
   /// 點擊报告
   Future<Response> reportArticle({
-    @required int articleid,
-    @required int userid,
-    @required String content,
-    @required String name,
-    @required String phone,
-    @required String email,
-    @required String shop,
+    required int articleid,
+    required int userid,
+    required String content,
+    required String name,
+    required String phone,
+    required String email,
+    required String shop,
   }) {
     return _dio.post(
-        G.prdapi+'/report-article',
-//        '/do-like',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'content': content,
-          'name': name,
-          'phone': phone,
-          'email': email,
-          'shop': shop,
-        }
+      G.prdapi + '/report-article',
+      //        '/do-like',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'content': content,
+        'name': name,
+        'phone': phone,
+        'email': email,
+        'shop': shop,
+      },
     );
   }
 
@@ -152,13 +135,13 @@ class ReqArticle {
     int limit = 20,
   }) {
     return _dio.post(
-        G.prdapi+'/comment-list',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'page': pageid,
-          'limit': limit,
-        }
+      G.prdapi + '/comment-list',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'page': pageid,
+        'limit': limit,
+      },
     );
   }
 
@@ -169,12 +152,12 @@ class ReqArticle {
     @required String textStr,
   }) {
     return _dio.post(
-        G.prdapi+'/add-comment',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'text':textStr
-        }
+      G.prdapi + '/add-comment',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'text': textStr,
+      },
     );
   }
 
@@ -186,13 +169,13 @@ class ReqArticle {
     @required int to_userid,
   }) {
     return _dio.post(
-        G.prdapi+'/do-like-comment',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'comment_id': comment_id,
-          'to_userid': to_userid,
-        }
+      G.prdapi + '/do-like-comment',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'comment_id': comment_id,
+        'to_userid': to_userid,
+      },
     );
   }
 
@@ -205,14 +188,14 @@ class ReqArticle {
     @required String textStr,
   }) {
     return _dio.post(
-        G.prdapi+'/reply-comment',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'comment_id': comment_id,
-          'to_userid': to_userid,
-          'text': textStr
-        }
+      G.prdapi + '/reply-comment',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'comment_id': comment_id,
+        'to_userid': to_userid,
+        'text': textStr,
+      },
     );
   }
 
@@ -225,15 +208,12 @@ class ReqArticle {
     int limit = 20,
   }) {
     return _dio.post(
-        G.prdapi+'/reply-comment-list',
-        queryParameters: {
-          'articleid': articleid,
-          'user_id': userid,
-          'comment_id': comment_id,
-        }
+      G.prdapi + '/reply-comment-list',
+      queryParameters: {
+        'articleid': articleid,
+        'user_id': userid,
+        'comment_id': comment_id,
+      },
     );
   }
-
 }
-
-

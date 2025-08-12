@@ -9,16 +9,16 @@ import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 
 class SearchResult extends StatefulWidget {
-  final Map args;
+  final Map? args;
 
-  SearchResult({Key key, this.args}) : super(key: key);
+  SearchResult({Key? key, this.args}) : super(key: key);
 
   @override
   createState() => _SearchResultState();
 }
 
 class _SearchResultState extends State<SearchResult> {
-  static Map args;
+  static Map? args;
   int userid = 0;
   String _result = '';
   String _showresult = '';
@@ -26,14 +26,14 @@ class _SearchResultState extends State<SearchResult> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id!;
     //    dynamic arg = ModalRoute.of(context).settings.arguments;
     //    if (arg != null) {
     //      _result = arg["result"];
     //      _showresult = (_result.length > 10)?_result.substring(0,10)+'...':_result;
     //    }
     args = widget.args;
-    _result = args['result'];
+    _result = args?['result'];
     _showresult = (_result.length > 10)
         ? _result.substring(0, 10) + '...'
         : _result;
@@ -48,11 +48,11 @@ class _SearchResultState extends State<SearchResult> {
 
   Widget barSearch() {
     return new Container(
-      color: rgba(51, 51, 51, 0.3),
+      color: Color.fromARGB(77, 51, 51, 51),
       padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       //        child: Text('123')
-      child: new FlatButton(
+      child: new ElevatedButton(
         onPressed: () {
           Navigator.of(context).pushReplacementNamed('/search');
         },
@@ -72,8 +72,9 @@ class _SearchResultState extends State<SearchResult> {
               ),
             ),
             new Container(
-              child: new FlatButton(
+              child: new ElevatedButton(
                 child: new Icon(Icons.cancel, size: 18.0, color: Colors.black),
+                onPressed: () {},
               ),
               width: 40.0,
             ),
@@ -123,7 +124,7 @@ class _SearchResultState extends State<SearchResult> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 2.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -154,9 +155,9 @@ class _SearchResultState extends State<SearchResult> {
                         child: AButton.normal(
                           width: MediaQuery.of(context).size.width,
                           child: Text('更多'),
-                          bgColor: rgba(229, 229, 229, 1.0),
-                          color: hex('#000'),
-                          borderColor: rgba(229, 229, 229, 1.0),
+                          bgColor: Color.fromARGB(255, 229, 229, 229),
+                          color: Color(0x00000000),
+                          borderColor: Color.fromARGB(255, 229, 229, 229),
                           plain: true,
                           borderRadius: BorderRadius.circular(5),
                           onPressed: () {
@@ -175,15 +176,15 @@ class _SearchResultState extends State<SearchResult> {
                       uid: userid,
                       isSmartRefresher: false,
                       isShowCenterload: false,
-                      pagelimit: 3,
-                      search_by_name: _result,
-                      topchild: Container(
+                      pageLimit: 3,
+                      searchByName: _result,
+                      topChild: Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           border: new Border(
                             bottom: BorderSide(
                               width: 2.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -204,7 +205,7 @@ class _SearchResultState extends State<SearchResult> {
                           ),
                         ),
                       ),
-                      bottomchild: Container(
+                      bottomChild: Container(
                         margin: EdgeInsets.only(
                           top: 10,
                           bottom: 10,
@@ -214,9 +215,9 @@ class _SearchResultState extends State<SearchResult> {
                         child: AButton.normal(
                           width: MediaQuery.of(context).size.width,
                           child: Text('更多'),
-                          bgColor: rgba(229, 229, 229, 1.0),
-                          color: hex('#000'),
-                          borderColor: rgba(229, 229, 229, 1.0),
+                          bgColor: Color.fromARGB(255, 229, 229, 229),
+                          color: Color(0x00000000),
+                          borderColor: Color.fromARGB(255, 229, 229, 229),
                           plain: true,
                           borderRadius: BorderRadius.circular(5),
                           onPressed: () {

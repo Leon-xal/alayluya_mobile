@@ -117,7 +117,7 @@ class ADialog {
       ),
       child: contentChild,
     );
-    _bottom = bottomChild;
+    _bottom = bottomChild!;
     //    _bottom = _initBottom(
     //        confirmButtonPress: confirmButtonPress,
     //        confirmButtonText: confirmButtonText == null ? Text('确认') : confirmButtonText,

@@ -1,7 +1,7 @@
-import '../../components/a_upgrade_app/index.dart';
+//import '../../components/a_upgrade_app/index.dart';
 import 'package:flutter/material.dart';
 //import 'package:connectivity_plus/connectivity.dart';
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity_plus/connectivity_plus.dart';
 import './not_network.dart';
 import './index_page.dart';
 import '../login/login_start.dart';
@@ -13,35 +13,37 @@ import 'package:notification_permissions/notification_permissions.dart';
 
 //import 'package:connectivity/connectivity.dart';
 
-
 class IntoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//        appBar: AppBar(title: Text('Awana'),automaticallyImplyLeading: false),
-        body:MyStatefulWidget()
+      //        appBar: AppBar(title: Text('Awana'),automaticallyImplyLeading: false),
+      body: MyStatefulWidget(),
     );
   }
-
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+  MyStatefulWidget({Key? key}) : super(key: key);
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerProviderStateMixin , WidgetsBindingObserver{
-  AnimationController _controller;//AnimationController是Animation的一个子类，它可以控制Animation，可以控制动画的时间，类型，过渡3曲线
-  Animation _animation;
+class _MyStatefulWidgetState extends State<MyStatefulWidget>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  AnimationController?
+  _controller; //AnimationController是Animation的一个子类，它可以控制Animation，可以控制动画的时间，类型，过渡3曲线
+  late Animation<double> _animation;
 
   void initState() {
-
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller!);
     //上面两行代码表示初始化一个Animation控制器， vsync垂直同步，动画执行时间3000毫秒,然后我们设置一个Animation动画，使用上面设置的控制器
 
     // _animation.addStatusListener((status) async {
@@ -60,82 +62,85 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
     //   }
     // });
 
-
-    Future.delayed(Duration.zero, () async{
-
+    Future.delayed(Duration.zero, () async {
       G.isHasNetwork(
-          onCallback:(hasNetwork) async {
-            // print('onCallback====>${hasNetwork}');
-            if(hasNetwork == true){
-              //监听动画运行状态，当状态为completed时，动画执行结束，跳转首页
-              _animation.addStatusListener((status) async {
-                if(status == AnimationStatus.completed){
-                  await Syncs.getInstance();
-                  // bool is_upgrade = await AUpgradeApp.getInstance();
-                  // // is_upgrade = true;
-                  // if(is_upgrade == true){
-                  //   AUpgradeApp.confirm(context);
-                  // }else{
-                    //这里最好提示下再让用户去授权
-                    await NotificationPermissions.getNotificationPermissionStatus().then((status) async {
+        onCallback: (hasNetwork) async {
+          // print('onCallback====>${hasNetwork}');
+          if (hasNetwork == true) {
+            //监听动画运行状态，当状态为completed时，动画执行结束，跳转首页
+            _animation?.addStatusListener((status) async {
+              if (status == AnimationStatus.completed) {
+                await Syncs.getInstance();
+                // bool is_upgrade = await AUpgradeApp.getInstance();
+                // // is_upgrade = true;
+                // if(is_upgrade == true){
+                //   AUpgradeApp.confirm(context);
+                // }else{
+                //这里最好提示下再让用户去授权
+                await NotificationPermissions.getNotificationPermissionStatus()
+                    .then((status) async {
                       // print('status1=======>${status}');
-                      if(status == PermissionStatus.denied || status == PermissionStatus.unknown){
-                        ADialog.confirm(context,
+                      if (status == PermissionStatus.denied ||
+                          status == PermissionStatus.unknown) {
+                        ADialog.confirm(
+                          context,
                           content: '請在系統設定開啟應用通知',
                           cancelButtonPress: () async {
                             await _goToLink();
                           },
                           confirmButtonPress: () {
                             NotificationPermissions.requestNotificationPermissions(
-                                iosSettings: const NotificationSettingsIos(
-                                    sound: true,
-                                    badge: true,
-                                    alert: true))
-                                .then((_) {
+                              iosSettings: const NotificationSettingsIos(
+                                sound: true,
+                                badge: true,
+                                alert: true,
+                              ),
+                            ).then((permissionStatus) {
                               // when finished, check the permission status
-                              print('status2=======>${_}');
+                              print('status2=======>${permissionStatus}');
                               // OneSignalWapper()..init();
                             });
                           },
                         );
-                      }else{
+                      } else {
                         await _goToLink();
                       }
                     });
-                  // }
-                }
-              });
-            }else{
-              // Navigator.pushNamedAndRemoveUntil(context, "/not_network", (route) => true);
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context){
-                return NotNetwork();
-              }),(route) => true);
-            }
+                // }
+              }
+            });
+          } else {
+            // Navigator.pushNamedAndRemoveUntil(context, "/not_network", (route) => true);
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) {
+                  return NotNetwork();
+                },
+              ),
+              (route) => true,
+            );
           }
+        },
       );
-
-
-
     });
 
-
-    _controller.forward(); // 播放动画
+    _controller?.forward(); // 播放动画
   }
 
   @override
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    _controller.dispose();//释放动画
+    _controller?.dispose(); //释放动画
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-      //在這裏，我又回來了
+        //在這裏，我又回來了
         print('应用程序可见并响应用户输入====>');
-        Future.delayed(Duration.zero, () async{
+        Future.delayed(Duration.zero, () async {
           await Syncs.getInstance();
           await _goToLink();
         });
@@ -160,74 +165,78 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with SingleTickerPr
     }
   }
 
-  Future<void> _goToLink(){
+  Future<void> _goToLink() async {
     OneSignalWapper()..init();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context){
-      if(G.isLogin == true){
-        return IndexPage();
-      }else{
-        return LoginStart();
-      }
-    }),(route) => route == null);
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) {
+          if (G.isLogin == true) {
+            return IndexPage();
+          } else {
+            return LoginStart();
+          }
+        },
+      ),
+      (route) => route == null,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(//透明度动画组件
+    return FadeTransition(
+      //透明度动画组件
       opacity: _animation, //动画
-//      child: ConstrainedBox(
-//        constraints: BoxConstraints.expand(),
-//        child: new Image.asset(
-//          "lib/assets/images/bg.jpg",
-//          fit: BoxFit.fill,
-//        ),
-//      ),
+      //      child: ConstrainedBox(
+      //        constraints: BoxConstraints.expand(),
+      //        child: new Image.asset(
+      //          "lib/assets/images/bg.jpg",
+      //          fit: BoxFit.fill,
+      //        ),
+      //      ),
       child: Stack(
-          children: <Widget>[
-            ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: new Image.asset(
-                "lib/assets/images/bg.jpg",
-                fit: BoxFit.fill,
-              ),
+        children: <Widget>[
+          ConstrainedBox(
+            constraints: BoxConstraints.expand(),
+            child: new Image.asset(
+              "lib/assets/images/bg.jpg",
+              fit: BoxFit.fill,
             ),
-            Positioned(
-              top: G.screenHeight() / 8.5,
+          ),
+          Positioned(
+            top: G.screenHeight() / 8.5,
+            child: Container(
+              width: G.screenWidth(),
               child: Container(
-                width: G.screenWidth(),
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(top:10,bottom:10.0,),
-                  child: new Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 50, right: 50),
-                          child: Image.asset('./lib/assets/images/logo-w.png',
-                            width: 250,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(top: 10, bottom: 10.0),
+                child: new Column(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 50, right: 50),
+                      child: Image.asset(
+                        './lib/assets/images/logo-w.png',
+                        width: 250,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
 
-                        Container(
-                          margin: EdgeInsets.only(top: 20, bottom: 30),
-                          padding: EdgeInsets.only(left: 50, right: 50),
-                          alignment: Alignment.center,
-                          // A Simple way to pray,support,and stay connected with your Christian community.
-                          child: Text('讓你分享勵志文章、見證影音、呼籲代禱及結連互助的社交平台。',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,),
-                            textAlign: TextAlign.center,
-                          ),
-
-                        ),
-                      ]
-                  ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      padding: EdgeInsets.only(left: 50, right: 50),
+                      alignment: Alignment.center,
+                      // A Simple way to pray,support,and stay connected with your Christian community.
+                      child: Text(
+                        '讓你分享勵志文章、見證影音、呼籲代禱及結連互助的社交平台。',
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
-
               ),
             ),
-          ],
+          ),
+        ],
       ),
     );
   }

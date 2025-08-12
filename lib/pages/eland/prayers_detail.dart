@@ -857,15 +857,19 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                       prayers?.content_app_link ?? '',
                                     );
                                     try {
-                                      Future<bool> canToWhatsApp = canLaunch(
-                                        "whatsapp://send?text=${share_url2}",
+                                      Future<bool> canToWhatsApp = canLaunchUrl(
+                                        Uri.parse(
+                                          "whatsapp://send?text=${share_url2}",
+                                        ),
                                       );
                                       canToWhatsApp.then((
                                         isCanToWhatsApp,
                                       ) async {
                                         if (isCanToWhatsApp == true) {
-                                          launch(
-                                            "whatsapp://send?text=${share_url2}",
+                                          launchUrl(
+                                            Uri.parse(
+                                              "whatsapp://send?text=${share_url2}",
+                                            ),
                                           );
                                         } else {
                                           await G.toast('請安裝WhatsApp');
@@ -893,13 +897,17 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                     prayers?.content_app_link ?? '',
                                   );
                                   try {
-                                    Future<bool> canToEmail = canLaunch(
-                                      "mailto:?subject=${share_text2}&body=${share_url2}",
+                                    Future<bool> canToEmail = canLaunchUrl(
+                                      Uri.parse(
+                                        "mailto:?subject=${share_text2}&body=${share_url2}",
+                                      ),
                                     );
                                     canToEmail.then((isCanToEmail) async {
                                       if (isCanToEmail == true) {
-                                        launch(
-                                          "mailto:?subject=${share_text2}&body=${share_url2}",
+                                        launchUrl(
+                                          Uri.parse(
+                                            "mailto:?subject=${share_text2}&body=${share_url2}",
+                                          ),
                                         );
                                       } else {
                                         await G.toast('請安裝第三方郵箱工具');
@@ -958,19 +966,24 @@ class _PrayersDetailState extends State<PrayersDetail> {
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: Html(
-                            useRichText: true,
+                            //useRichText: true,
                             data: '${description}',
-                            defaultTextStyle: new TextStyle(
+                            style: {
+                              "html": Style.fromTextStyle(
+                                new TextStyle(fontSize: custom_font_size),
+                              ),
+                            },
+                            /* defaultTextStyle: new TextStyle(
                               fontSize: custom_font_size,
-                            ),
-                            onLinkTap: (url) {
+                            ),*/
+                            /*onLinkTap: (url) {
                               // open url in a webview
                               print('url=====>${url}');
-                            },
-                            onImageTap: (src) {
+                            },*/
+                            /*onImageTap: (src) {
                               // Display the image in large form.
                               print('src=====>${src}');
-                            },
+                            },*/
                           ),
                         ),
                       ],

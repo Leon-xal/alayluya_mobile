@@ -12,7 +12,7 @@ class SettingPage extends StatefulWidget {
   //  getAppBar() => _settingPageState.createAppBar();
   //  _SettingPageState createState() => _SettingPageState();
 
-  SettingPage({Key key}) : super(key: key);
+  SettingPage({Key? key}) : super(key: key);
 
   @override
   createState() => _SettingPageState();
@@ -44,7 +44,7 @@ class _SettingPageState extends State<SettingPage> {
         default_actions: true,
       ),
       //      body: Text('setting'),
-      body: Container(color: hex('#fff'), child: Text('setting')),
+      body: Container(color: Color(0xffffffff), child: Text('setting')),
       bottomNavigationBar: CustomNavbar(
         onTap: (index) {
           G.pushNamed(G.toobarRouteNameList[index]);

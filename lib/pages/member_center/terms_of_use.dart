@@ -7,7 +7,7 @@ import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 
 class TermsOfUse extends StatefulWidget {
-  TermsOfUse({Key key}) : super(key: key);
+  TermsOfUse({Key? key}) : super(key: key);
   @override
   createState() => _TermsOfUseState();
 }
@@ -21,7 +21,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id!;
     //    print('aaaaa===>${userData}');
 
     content_html = """
@@ -59,7 +59,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hex('#ccc'),
+      backgroundColor: Color(0xffcccccc),
       appBar: customAppbar(
         context: context,
         title: '主內教會機構用戶條款 Terms and Conditions for Church/Organization Users',
@@ -72,7 +72,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
           bottom: 10.0,
         ),
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-        color: hex('#fff'),
+        color: Color(0xffffffff),
         width: G.screenWidth(),
         height: G.screenHeight(),
         child: SingleChildScrollView(
@@ -85,7 +85,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
                 alignment: Alignment.centerLeft,
                 decoration: BoxDecoration(
                   border: new Border(
-                    bottom: BorderSide(width: 1.0, color: hex('#cacbd1')),
+                    bottom: BorderSide(width: 1.0, color: Color(0xffcacbd1)),
                   ),
                 ),
                 padding: const EdgeInsets.only(bottom: 15.0),
@@ -114,14 +114,14 @@ class _TermsOfUseState extends State<TermsOfUse> {
                 //                    ),
                 child: Html(
                   data: content_html,
-                  onLinkTap: (url) {
+                  /*onLinkTap: (url) {
                     // open url in a webview
                     print('url=====>${url}');
                   },
                   onImageTap: (src) {
                     // Display the image in large form.
                     print('src=====>${src}');
-                  },
+                  },*/
                 ),
               ),
             ],

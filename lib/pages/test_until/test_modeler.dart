@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import '../../utils/global.dart';
 
 class TestModeler extends StatefulWidget {
-  final Map args;
-  TestModeler({Key key, this.args}) : super(key: key);
+  final Map? args;
+  TestModeler({Key? key, this.args}) : super(key: key);
   @override
   createState() => _TestModelerState();
 }
 
 class _TestModelerState extends State<TestModeler> {
-  static Map args;
+  //static Map? args;
   // InAppWebViewController webView;
   bool isloading = true;
 
@@ -29,7 +29,7 @@ class _TestModelerState extends State<TestModeler> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hex('#ccc'),
+      backgroundColor: Color(0xffcccccc),
       appBar: customAppbar(
         context: context,
         title: 'TestModeler',
@@ -49,7 +49,7 @@ class _TestModelerState extends State<TestModeler> {
               bottom: 10.0,
             ),
             padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             width: G.screenWidth(),
             height: G.screenHeight(),
 
@@ -112,9 +112,9 @@ class _TestModelerState extends State<TestModeler> {
                   child: new Opacity(
                     opacity: 1.0,
                     child: new CircularProgressIndicator(
-                      backgroundColor: rgba(28, 141, 160, 1),
+                      backgroundColor: Color.fromARGB(255, 28, 141, 160),
                       valueColor: new AlwaysStoppedAnimation<Color>(
-                        rgba(255, 255, 255, 1),
+                        Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ),

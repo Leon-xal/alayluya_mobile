@@ -12,17 +12,17 @@ import '../../utils/global.dart';
 import '../../utils/syncs.dart';
 import '../../main.dart';
 import 'dart:io';
-import 'package:launch_review/launch_review_latest.dart';
-import 'package:device_info/device_info.dart';
+//import 'package:launch_review_latest/launch_review_latest.dart';
+//import 'package:device_info_plus/device_info_plus.dart';
 
 class HomePage extends StatefulWidget {
-  static _HomePageState _homePageState;
+  static _HomePageState? _homePageState;
 
   HomePage() {
     _homePageState = _HomePageState();
   }
 
-  getAppBar() => _homePageState.createAppBar();
+  getAppBar() => _homePageState?.createAppBar();
 
   _HomePageState createState() => _HomePageState();
 }
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage>
 
   ///see AutomaticKeepAliveClientMixin
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   int userid = 0;
   bool is_upgrade = false;
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     // print('home======>');
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
 
     Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
@@ -74,7 +74,13 @@ class _HomePageState extends State<HomePage>
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
+    final route = ModalRoute.of(context);
+    if (route is PageRoute<dynamic>) {
+      MyApp.routeObserver.subscribe(this, route);
+    } else {
+      // Handle the case where route is null or not a PageRoute
+      print('Route is not a PageRoute'); // Or handle it more robustly
+    }
   }
 
   //###Leo
@@ -98,6 +104,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
     //    return Text('123');
+    super.build(context);
     return AElandDynamic(
       isshowcenterload: true,
       uid: userid,
@@ -123,12 +130,15 @@ class _HomePageState extends State<HomePage>
                     AButton.normal(
                       width: 70,
                       height: 25,
-                      borderColor: rgba(28, 141, 160, 1),
-                      bgColor: hex('#fff'),
+                      borderColor: Color.fromARGB(255, 28, 141, 160),
+                      bgColor: Color(0xffffffff),
                       plain: true,
                       child: Text(
                         '查看',
-                        style: TextStyle(color: hex('#333'), fontSize: 13),
+                        style: TextStyle(
+                          color: Color(0xff333333),
+                          fontSize: 13,
+                        ),
                       ),
                       borderRadius: BorderRadius.circular(40),
                       // icon: icon_favorite(size: 13,color: hex('#fff')),

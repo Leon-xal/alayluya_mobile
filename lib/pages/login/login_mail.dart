@@ -14,7 +14,7 @@ import '../Index/index_page.dart';
 import '../../components/onesignal_wapper/onesignal_wapper.dart';
 
 class LoginMail extends StatefulWidget {
-  LoginMail({Key key}) : super(key: key);
+  LoginMail({Key? key}) : super(key: key);
 
   _LoginMailState createState() => _LoginMailState();
 }
@@ -25,7 +25,7 @@ class _LoginMailState extends State<LoginMail> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController phonePassController = TextEditingController();
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   bool _login_i = false;
   bool userPhoneToLogin = true;
   int areaCodeIndex = 0;
@@ -102,7 +102,7 @@ class _LoginMailState extends State<LoginMail> {
                     '確認',
                     style: TextStyle(
                       fontSize: 20,
-                      color: rgba(28, 141, 160, 0.7),
+                      color: Color.fromARGB(176, 28, 141, 160),
                     ),
                   ),
                 ),
@@ -159,7 +159,7 @@ class _LoginMailState extends State<LoginMail> {
     }
 
     // 登录前移除user， 不然登录会提示token错误
-    prefs.remove('user');
+    prefs?.remove('user');
 
     try {
       if (_login_i == true) return;
@@ -253,7 +253,7 @@ class _LoginMailState extends State<LoginMail> {
           },
           child: Container(
             height: G.screenHeight() - 100,
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,7 +275,9 @@ class _LoginMailState extends State<LoginMail> {
                           margin: EdgeInsets.symmetric(vertical: 12),
                           child: Text(
                             userPhoneToLogin ? '電子郵箱登錄?' : '手機號碼登錄?',
-                            style: TextStyle(color: rgba(28, 141, 160, 1)),
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 28, 141, 160),
+                            ),
                           ),
                         ),
                       ),
@@ -292,7 +294,7 @@ class _LoginMailState extends State<LoginMail> {
                                 child: Container(
                                   width: 80,
                                   decoration: BoxDecoration(
-                                    color: rgba(204, 204, 204, 1),
+                                    color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                   alignment: Alignment.center,
                                   margin: EdgeInsets.only(top: 10, bottom: 0),
@@ -415,7 +417,7 @@ class _LoginMailState extends State<LoginMail> {
                           child: Text(
                             '忘記密碼',
                             style: TextStyle(
-                              color: rgba(85, 122, 157, 1),
+                              color: Color.fromARGB(255, 85, 122, 157),
                               fontSize: 12,
                             ),
                           ),
@@ -438,9 +440,9 @@ class _LoginMailState extends State<LoginMail> {
                           width: 250,
                           child: Text('登入'),
                           //                            rgba(169, 211, 218, 1)
-                          bgColor: rgba(28, 141, 160, 1),
-                          color: hex('#fff'),
-                          borderColor: rgba(28, 141, 160, 1),
+                          bgColor: Color.fromARGB(255, 28, 141, 160),
+                          color: Color(0xffffffff),
+                          borderColor: Color.fromARGB(255, 28, 141, 160),
                           plain: true,
                           borderRadius: BorderRadius.circular(40),
                           onPressed: () => login(),
@@ -458,7 +460,7 @@ class _LoginMailState extends State<LoginMail> {
                         child: Text(
                           '非會員請點擊這裡',
                           style: TextStyle(
-                            color: rgba(51, 51, 51, 1),
+                            color: Color.fromARGB(255, 51, 51, 51),
                             fontSize: 12,
                           ),
                         ),
@@ -468,9 +470,9 @@ class _LoginMailState extends State<LoginMail> {
                         child: AButton.normal(
                           width: 250,
                           child: new Text('註冊'),
-                          color: rgba(51, 51, 51, 1),
-                          bgColor: rgba(255, 255, 255, 1),
-                          borderColor: rgba(204, 204, 204, 1),
+                          color: Color.fromARGB(255, 51, 51, 51),
+                          bgColor: Color.fromARGB(255, 255, 255, 255),
+                          borderColor: Color.fromARGB(255, 204, 204, 204),
                           plain: true,
                           borderRadius: BorderRadius.circular(40),
                           onPressed: () => G.pushNamed('/register'),

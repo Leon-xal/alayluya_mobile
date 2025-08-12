@@ -6,7 +6,7 @@ import '../../utils/global.dart';
 import '../../model/user_model/data.dart';
 
 class EditProfilePage extends StatefulWidget {
-  EditProfilePage({Key key}) : super(key: key);
+  EditProfilePage({Key? key}) : super(key: key);
 
   _EditProfilePage createState() => _EditProfilePage();
 }
@@ -34,7 +34,7 @@ class _EditProfilePage extends State<EditProfilePage> {
         firstname['value'] = userData.FirstName;
         lastname['value'] = userData.LastName;
         nickname['value'] = userData.DisplayName;
-        uid = userData.id;
+        uid = userData.id!;
         //        print('firstname=====>${firstname}');
         //        print('lastname=====>${lastname}');
         //        print('nickname=====>${nickname}');
@@ -106,7 +106,7 @@ class _EditProfilePage extends State<EditProfilePage> {
           },
           child: Container(
             height: G.screenHeight() - 80,
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: Column(
               children: <Widget>[
@@ -240,9 +240,9 @@ class _EditProfilePage extends State<EditProfilePage> {
                   child: AButton.normal(
                     width: 300,
                     child: Text('確認'),
-                    bgColor: rgba(28, 141, 160, 0.7),
-                    color: hex('#fff'),
-                    borderColor: rgba(28, 141, 160, 0.7),
+                    bgColor: Color.fromARGB(176, 28, 141, 160),
+                    color: Color(0xffffffff),
+                    borderColor: Color.fromARGB(176, 28, 141, 160),
                     plain: true,
                     borderRadius: BorderRadius.circular(40),
                     onPressed: () => sureAction(),

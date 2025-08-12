@@ -9,8 +9,8 @@ import '../../utils/global.dart';
 import 'package:flutter/material.dart';
 
 class BindEmailOrPhone extends StatefulWidget {
-  final Map type;
-  const BindEmailOrPhone({Key key, this.type}) : super(key: key);
+  final Map? type;
+  const BindEmailOrPhone({Key? key, this.type}) : super(key: key);
   @override
   _BindEmailOrPhoneState createState() => _BindEmailOrPhoneState();
 }
@@ -22,8 +22,8 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
 
   var code = regionCode[0]['code'];
   bool canClick = true;
-  Timer timer;
-  int index;
+  Timer? timer;
+  int? index;
   int countDown = 60;
 
   void getCode() {
@@ -85,7 +85,7 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    code = regionCode[index]['code'];
+                    code = regionCode[index!]['code'];
                   });
                 },
                 child: Container(
@@ -100,7 +100,7 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
                     '確認',
                     style: TextStyle(
                       fontSize: 20,
-                      color: rgba(28, 141, 160, 0.7),
+                      color: Color.fromARGB(176, 28, 141, 160),
                     ),
                   ),
                 ),
@@ -161,7 +161,7 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
     return Scaffold(
       appBar: customAppbar(
         context: context,
-        title: '綁定${widget.type['type']}',
+        title: '綁定${widget.type?['type']}',
         textcenter: true,
       ),
       body: GestureDetector(
@@ -172,9 +172,9 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
         },
         child: Container(
           height: G.screenHeight() - 100,
-          color: hex('#fff'),
+          color: Color(0xffffffff),
           padding: EdgeInsets.only(left: 35, right: 35, top: 35),
-          child: widget.type['type'] == '郵箱'
+          child: widget.type?['type'] == '郵箱'
               ? Column(
                   children: [
                     input(email, '郵箱地址'),
@@ -183,9 +183,9 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
                       child: AButton.normal(
                         width: 250,
                         child: Text('綁定'),
-                        bgColor: rgba(28, 141, 160, 1),
-                        color: hex('#fff'),
-                        borderColor: rgba(28, 141, 160, 1),
+                        bgColor: Color.fromARGB(255, 28, 141, 160),
+                        color: Color(0xffffffff),
+                        borderColor: Color.fromARGB(255, 28, 141, 160),
                         plain: true,
                         borderRadius: BorderRadius.circular(40),
                         onPressed: () {},
@@ -205,7 +205,7 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
                             child: Container(
                               width: 80,
                               decoration: BoxDecoration(
-                                color: rgba(28, 141, 160, 1),
+                                color: Color.fromARGB(255, 28, 141, 160),
                               ),
                               alignment: Alignment.center,
                               margin: EdgeInsets.only(top: 10, bottom: 0),
@@ -252,7 +252,7 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
                               alignment: Alignment.center,
                               height: double.infinity,
                               color: canClick
-                                  ? rgba(28, 141, 160, 1)
+                                  ? Color.fromARGB(255, 28, 141, 160)
                                   : Colors.grey,
                               margin: EdgeInsets.only(top: 10, bottom: 0),
                               child: Text(
@@ -272,9 +272,9 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
                       child: AButton.normal(
                         width: 250,
                         child: Text('綁定'),
-                        bgColor: rgba(28, 141, 160, 1),
-                        color: hex('#fff'),
-                        borderColor: rgba(28, 141, 160, 1),
+                        bgColor: Color.fromARGB(255, 28, 141, 160),
+                        color: Color(0xffffffff),
+                        borderColor: Color.fromARGB(255, 28, 141, 160),
                         plain: true,
                         borderRadius: BorderRadius.circular(40),
                         onPressed: () {},
@@ -291,6 +291,6 @@ class _BindEmailOrPhoneState extends State<BindEmailOrPhone> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer.cancel();
+    timer?.cancel();
   }
 }

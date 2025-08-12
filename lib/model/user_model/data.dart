@@ -20,6 +20,7 @@ class UserDataModel {
   String? telv;
   String? emailv;
   String? statusStr;
+  String? token;
 
   UserDataModel({
     this.id,
@@ -38,6 +39,7 @@ class UserDataModel {
     this.telv,
     this.emailv,
     this.statusStr,
+    this.token,
   });
 
   //反序列化

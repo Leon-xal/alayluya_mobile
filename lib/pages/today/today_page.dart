@@ -8,13 +8,13 @@ import '../../model/article_cate_model/data.dart';
 import '../../components/a_swiper/index.dart';
 
 class TodayPage extends StatefulWidget {
-  static _TodayPageState _todayPageState;
+  static _TodayPageState? _todayPageState;
 
   TodayPage() {
     _todayPageState = _TodayPageState();
   }
 
-  getAppBar() => _todayPageState.createAppBar();
+  getAppBar() => _todayPageState?.createAppBar();
 
   _TodayPageState createState() => _TodayPageState();
 }
@@ -30,9 +30,9 @@ class _TodayPageState extends State<TodayPage>
 
   int userid = 0;
 
-  static TabController _tabController;
+  static TabController? _tabController;
 
-  static ArticleCateModel articleCate;
+  static ArticleCateModel? articleCate;
 
   static int curArticleCateId = 0;
 
@@ -41,23 +41,24 @@ class _TodayPageState extends State<TodayPage>
     super.initState();
     // print('today======>');
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id!;
     var res = Syncs.getCateList;
     Map result = res.data;
-    articleCate = ArticleCateModel.fromJson(result);
-    curArticleCateId = articleCate.list[0].cateid;
+    articleCate = ArticleCateModel.fromJson(result as Map<String, dynamic>);
+    curArticleCateId = articleCate!.list![0].cateid!;
     _tabController = TabController(
       vsync: this,
-      length: articleCate.list.length,
+      length: articleCate!.list!.length,
     );
     // print('aaa====>');
     // print(_tabController.length);
 
-    _tabController.addListener(() {
-      if (_tabController.index == _tabController.animation.value) {
+    _tabController?.addListener(() {
+      if (_tabController?.index == _tabController?.animation?.value) {
         if (mounted) {
           setState(() {
-            curArticleCateId = articleCate.list[_tabController.index].cateid;
+            curArticleCateId =
+                articleCate!.list![_tabController!.index].cateid!;
           });
         }
       }
@@ -130,12 +131,12 @@ class _TodayPageState extends State<TodayPage>
     return TabBarView(
       //        physics: new NeverScrollableScrollPhysics(),
       controller: _tabController,
-      children: articleCate.list.asMap().keys.map((f) {
-        var articleCateList = articleCate.list[f];
+      children: articleCate!.list!.asMap().keys.map((f) {
+        var articleCateList = articleCate!.list![f];
         List<String> items = [];
-        cateid = articleCateList.cateid;
-        for (int i = 0; i < articleCateList.catepic.length; i++) {
-          items.add(articleCateList.catepic[i].pic);
+        cateid = articleCateList.cateid ?? 0;
+        for (int i = 0; i < articleCateList.catepic!.length; i++) {
+          items.add(articleCateList.catepic![i].pic!);
         }
         //          return null;
         return AArticleList(
@@ -151,15 +152,25 @@ class _TodayPageState extends State<TodayPage>
                 // Text('asd'),
                 TabBar(
                   controller: _tabController,
-                  tabs: (articleCate.list.length > 0)
+                  /*tabs: (articleCate.list!.length > 0)
                       ? articleCate.list.asMap().keys.map((f) {
                           return Text(articleCate.list[f].catename);
                         }).toList()
-                      : Text('全部'),
-                  indicatorColor: rgba(28, 141, 160, 1),
+                      : Text('全部'),*/
+                  tabs:
+                      articleCate?.list != null && articleCate!.list!.isNotEmpty
+                      ? articleCate!.list!.map((item) {
+                          return Tab(
+                            text: item.catename,
+                          ); // Assuming 'catename' is a property of your list items
+                        }).toList()
+                      : [
+                          Tab(text: '全部'),
+                        ], // Handle the case where the list is empty or null
+                  indicatorColor: Color.fromARGB(255, 28, 141, 160),
                   //            indicatorSize: TabBarIndicatorSize.tab,
                   //          labelPadding: EdgeInsets.only(top: 20,bottom:20,left:20,right:20),
-                  labelPadding: (articleCate.list.length > 4)
+                  labelPadding: (articleCate!.list!.length > 4)
                       ? EdgeInsets.only(
                           top: 20,
                           bottom: 20,
@@ -174,23 +185,23 @@ class _TodayPageState extends State<TodayPage>
                     right: 20,
                   ),
                   //          indicator: new ShapeDecoration(shape: new Border.all(color: Colors.redAccent, width: 1.0)),
-                  labelColor: rgba(28, 141, 160, 1),
+                  labelColor: Color.fromARGB(255, 28, 141, 160),
                   //          indicatorWeight: 15.0,
                   labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: rgba(28, 141, 160, 1),
+                    color: Color.fromARGB(255, 28, 141, 160),
                   ),
                   unselectedLabelStyle: TextStyle(
                     fontSize: 15,
-                    color: hex('#333'),
+                    color: Color(0xff333333),
                   ),
-                  unselectedLabelColor: hex('#333'),
-                  isScrollable: (articleCate.list.length > 4) ? true : false,
+                  unselectedLabelColor: Color(0xff333333),
+                  isScrollable: (articleCate!.list!.length > 4) ? true : false,
                 ),
                 Container(height: 10),
                 ASwiper(
                   // items,
-                  articleCateList.catepic,
+                  articleCateList.catepic!,
                   height: 150,
                 ),
               ],
@@ -203,9 +214,12 @@ class _TodayPageState extends State<TodayPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(
+      context,
+    ); // Call super.build to ensure the mixin works correctly
     //    return Text('qwe');
     return Container(
-      color: hex('#fff'),
+      color: Color(0xffffffff),
       child: buildTabBarView(),
       //      child: Text('123'),
     );

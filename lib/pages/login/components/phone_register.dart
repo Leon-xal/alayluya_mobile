@@ -7,18 +7,18 @@ import '../../../utils/global.dart';
 import 'package:flutter/material.dart';
 
 class PhoneRegister extends StatefulWidget {
-  final Map phone;
-  final Map phoneCode;
-  final Map phoneFirstname;
-  final Map phoneLastname;
-  final Map phonePassword;
-  final Map phoneRepassword;
-  final Function callback;
-  final int code;
-  final Function returnSid;
+  final Map? phone;
+  final Map? phoneCode;
+  final Map? phoneFirstname;
+  final Map? phoneLastname;
+  final Map? phonePassword;
+  final Map? phoneRepassword;
+  final Function? callback;
+  final int? code;
+  final Function? returnSid;
 
   const PhoneRegister({
-    Key key,
+    Key? key,
     this.phone,
     this.phoneCode,
     this.phoneFirstname,
@@ -37,8 +37,8 @@ class PhoneRegister extends StatefulWidget {
 class _PhoneRegisterState extends State<PhoneRegister> {
   var code = regionCode[0]['code'];
   bool canClick = true;
-  Timer timer;
-  int seconds;
+  Timer? timer;
+  int? seconds;
   int countDown = 60;
 
   void getCode() async {
@@ -46,17 +46,17 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       await G.toast('請選擇號碼所在地');
       return;
     }
-    if (widget.phone['value'] == null || widget.phone['value'] == '') {
+    if (widget.phone?['value'] == null || widget.phone?['value'] == '') {
       await G.toast('請輸入手機號碼');
       return;
     }
-    if (widget.phone['value'].length < 6) {
+    if (widget.phone?['value'].length < 6) {
       await G.toast('手機號碼不正確');
       return;
     }
 
     final reg = RegExp(r'^-?[0-9]+');
-    if (reg.hasMatch(widget.phone['value']) == false) {
+    if (reg.hasMatch(widget.phone?['value']) == false) {
       await G.toast('手機號碼不正確');
       return;
     }
@@ -67,9 +67,9 @@ class _PhoneRegisterState extends State<PhoneRegister> {
     //ajax
     print('widget.code=====>${widget.code}');
     print('widget.phone1=====>${widget.phone}');
-    print('widget.phone2=====>${widget.phone['value']}');
+    print('widget.phone2=====>${widget.phone?['value']}');
     var res = await G.req.user.registermobileverify(
-      phone: '+${widget.code}${widget.phone['value']}',
+      phone: '+${widget.code}${widget.phone?['value']}',
     );
     // print('res2====>');
 
@@ -83,7 +83,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
       });
       return;
     } else {
-      widget.returnSid(data['data']['sid']);
+      widget.returnSid!(data['data']['sid']);
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (countDown > 0) {
           setState(() {
@@ -138,7 +138,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
               ),
               GestureDetector(
                 onTap: () {
-                  widget.callback(code);
+                  widget.callback!(code);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -152,7 +152,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
                     '確認',
                     style: TextStyle(
                       fontSize: 20,
-                      color: rgba(28, 141, 160, 0.7),
+                      color: Color.fromARGB(179, 228, 141, 160),
                     ),
                   ),
                 ),
@@ -223,7 +223,9 @@ class _PhoneRegisterState extends State<PhoneRegister> {
                   onTap: () => clickAreaCode(context),
                   child: Container(
                     width: 80,
-                    decoration: BoxDecoration(color: rgba(204, 204, 204, 1)),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 204, 204, 204),
+                    ),
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 10, bottom: 0),
                     child: Row(
@@ -244,7 +246,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
                   ),
                 ),
                 Container(width: 10),
-                Expanded(child: input(widget.phone, '手機號碼', hasBorder: false)),
+                Expanded(child: input(widget.phone!, '手機號碼', hasBorder: false)),
               ],
             ),
           ),
@@ -255,7 +257,7 @@ class _PhoneRegisterState extends State<PhoneRegister> {
             child: Row(
               children: [
                 Expanded(
-                  child: input(widget.phoneCode, '驗證碼', hasBorder: false),
+                  child: input(widget.phoneCode!, '驗證碼', hasBorder: false),
                 ),
                 GestureDetector(
                   onTap: () => getCode(),
@@ -263,7 +265,9 @@ class _PhoneRegisterState extends State<PhoneRegister> {
                     width: 120,
                     alignment: Alignment.center,
                     height: double.infinity,
-                    color: canClick ? rgba(28, 141, 160, 0.7) : Colors.grey,
+                    color: canClick
+                        ? Color.fromARGB(179, 28, 141, 160)
+                        : Colors.grey,
                     margin: EdgeInsets.only(top: 10, bottom: 0),
                     child: Text(
                       canClick ? '發送' : '${countDown}s',
@@ -275,13 +279,13 @@ class _PhoneRegisterState extends State<PhoneRegister> {
             ),
           ),
           SizedBox(height: 10),
-          input(widget.phoneFirstname, '姓'),
+          input(widget.phoneFirstname!, '姓'),
           SizedBox(height: 10),
-          input(widget.phoneLastname, '名'),
+          input(widget.phoneLastname!, '名'),
           SizedBox(height: 10),
-          input(widget.phonePassword, '密碼', obscureText: true),
+          input(widget.phonePassword!, '密碼', obscureText: true),
           SizedBox(height: 10),
-          input(widget.phoneRepassword, '再次輸入新密碼', obscureText: true),
+          input(widget.phoneRepassword!, '再次輸入新密碼', obscureText: true),
         ],
       ),
     );
@@ -291,6 +295,6 @@ class _PhoneRegisterState extends State<PhoneRegister> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer.cancel();
+    timer?.cancel();
   }
 }

@@ -3,7 +3,7 @@ import '../../utils/global.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class TestFacebookLogin extends StatefulWidget {
-  TestFacebookLogin({Key key}) : super(key: key);
+  TestFacebookLogin({Key? key}) : super(key: key);
 
   @override
   createState() => _TestFacebookLoginState();

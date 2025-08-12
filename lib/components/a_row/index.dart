@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 
 class ARow extends StatelessWidget {
-  final double height;
-  final Widget leftChild;
-  final Widget centerChild;
-  final Widget rightChild;
-  final EdgeInsets padding;
+  final double? height;
+  final Widget? leftChild;
+  final Widget? centerChild;
+  final Widget? rightChild;
+  final EdgeInsets? padding;
   final EdgeInsets? margin;
-  final Border border;
-  final Color color;
+  final Border? border;
+  final Color? color;
   final VoidCallback? onPressed;
 
   /// ARow 行
@@ -28,10 +28,10 @@ class ARow extends StatelessWidget {
 
   const ARow({
     Key? key,
-    required this.height,
-    required this.leftChild,
-    required this.centerChild,
-    required this.rightChild,
+    this.height,
+    this.leftChild,
+    this.centerChild,
+    this.rightChild,
     this.padding = const EdgeInsets.all(0),
     this.margin,
     this.border = const Border(
@@ -68,13 +68,13 @@ class ARow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             // left
-            leftChild == null ? Container() : leftChild,
+            leftChild == null ? Container() : leftChild!,
 
             // center
-            Expanded(child: centerChild == null ? Container() : centerChild),
+            Expanded(child: centerChild == null ? Container() : centerChild!),
 
             // right
-            rightChild == null ? Container() : rightChild,
+            rightChild == null ? Container() : rightChild!,
           ],
         ),
       ),

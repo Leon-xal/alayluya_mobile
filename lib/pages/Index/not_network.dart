@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 // import './into_app.dart';
 
 class NotNetwork extends StatefulWidget {
-  NotNetwork({Key key}) : super(key: key);
+  NotNetwork({Key? key}) : super(key: key);
 
   @override
   createState() => _NotNetworkState();
@@ -57,21 +57,21 @@ class _NotNetworkState extends State<NotNetwork> {
           child: Text(
             'Alayluya',
             style: TextStyle(
-              color: rgba(56, 56, 56, 1),
+              color: Color.fromARGB(255, 56, 56, 56),
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
           padding: EdgeInsets.only(left: 0),
         ),
-        backgroundColor: hex('#fff'),
+        backgroundColor: Color(0xffffffff),
         elevation: 0,
         leading: InkWell(
           onTap: () {
             // Navigator.pop(context);
             Navigator.pushNamedAndRemoveUntil(context, "/", (route) => true);
           },
-          child: icon_left(color: rgba(0, 0, 0, 1), size: 25),
+          child: icon_left(color: Color.fromARGB(255, 0, 0, 0), size: 25),
         ),
         automaticallyImplyLeading: context == null ? false : true,
 
@@ -113,7 +113,7 @@ class _NotNetworkState extends State<NotNetwork> {
                       child: icon_wifi_off(
                         size: 100,
                         // color: hex('#333')
-                        color: rgba(0, 0, 0, 0.52),
+                        color: Color.fromARGB(133, 0, 0, 0),
                         // color: rgba(28, 141, 160, 1),
                       ),
                     ),

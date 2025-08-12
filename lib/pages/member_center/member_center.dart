@@ -15,13 +15,13 @@ import '../../utils/global.dart';
 //import '../pages/login_start.dart';
 
 class MemberCenter extends StatefulWidget {
-  static _MemberCenterState _memberCenterState;
+  static _MemberCenterState? _memberCenterState;
 
   MemberCenter() {
     _memberCenterState = _MemberCenterState();
   }
 
-  getAppBar() => _memberCenterState.createAppBar();
+  getAppBar() => _memberCenterState?.createAppBar();
 
   _MemberCenterState createState() => _MemberCenterState();
 }
@@ -34,7 +34,7 @@ class _MemberCenterState extends State<MemberCenter>
 
   ///see AutomaticKeepAliveClientMixin
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   @override
   void initState() {
@@ -61,8 +61,8 @@ class _MemberCenterState extends State<MemberCenter>
         print(
           'logout====>,${Provider.of<FacebookProvider>(context, listen: false).isFacebookLogin}',
         );
-        prefs.remove('user');
-        prefs.remove('domain');
+        prefs?.remove('user');
+        prefs?.remove('domain');
         G.isLogin = false;
         await Provider.of<FacebookProvider>(
           context,
@@ -98,7 +98,7 @@ class _MemberCenterState extends State<MemberCenter>
                   fit: BoxFit.cover,
                 ),
               )
-            : (userData.avatar.contains('img/default_profile.png'))
+            : (userData.avatar!.contains('img/default_profile.png'))
             ? Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class _MemberCenterState extends State<MemberCenter>
                 width: 55,
                 height: 55,
                 child: AcachedNetworkImage(
-                  userData.avatar,
+                  userData.avatar!,
                   fit: BoxFit.cover,
                   // height: 55,
                   // width: 55,
@@ -120,7 +120,7 @@ class _MemberCenterState extends State<MemberCenter>
             : ClipRRect(
                 borderRadius: new BorderRadius.circular(30),
                 child: AcachedNetworkImage(
-                  userData.avatar,
+                  userData.avatar!,
                   fit: BoxFit.fill,
                   height: 55,
                   width: 55,
@@ -136,8 +136,11 @@ class _MemberCenterState extends State<MemberCenter>
       centerChild: Container(
         margin: EdgeInsets.only(left: 10),
         child: Text(
-          userData.DisplayName == null ? '' : userData.DisplayName,
-          style: TextStyle(color: rgba(255, 255, 255, 1), fontSize: 18),
+          userData.DisplayName == null ? '' : userData.DisplayName!,
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 18,
+          ),
         ),
       ),
       //      rightChild: icon_right(size: 25, color: rgba(255,255,255,1)),
@@ -146,7 +149,10 @@ class _MemberCenterState extends State<MemberCenter>
   }
 
   AppBar createAppBar() {
-    return null;
+    return AppBar(
+      title: const Text('Default AppBar'), // Or any other suitable title
+      // Add other AppBar properties as needed
+    );
   }
 
   @override
@@ -155,14 +161,14 @@ class _MemberCenterState extends State<MemberCenter>
     //     G.user.data.email = 'AlfredLee90@foxmailaassasddasdasd.com';
     return SingleChildScrollView(
       child: Container(
-        color: hex('#fff'),
+        color: Color(0xffffffff),
         child: Column(
           children: <Widget>[
             // 头部
             Container(
               alignment: Alignment.centerLeft,
               height: 180,
-              color: rgba(28, 141, 160, 1),
+              color: Color.fromARGB(255, 28, 141, 160),
               padding: EdgeInsets.only(left: 20, right: 20, top: 44),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,7 +185,7 @@ class _MemberCenterState extends State<MemberCenter>
             ),
 
             Container(
-              color: hex('#fff'),
+              color: Color(0xffffffff),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: <Widget>[
@@ -192,7 +198,7 @@ class _MemberCenterState extends State<MemberCenter>
                       leftChild: Container(
                         width: 30,
                         alignment: Alignment.centerLeft,
-                        child: icon_email(color: hex('#333'), size: 16),
+                        child: icon_email(color: Color(0xff333333), size: 16),
                       ),
                       centerChild: Container(
                         // width: 120,
@@ -225,7 +231,7 @@ class _MemberCenterState extends State<MemberCenter>
                       leftChild: Container(
                         width: 30,
                         alignment: Alignment.centerLeft,
-                        child: icon_phone(color: hex('#333'), size: 16),
+                        child: icon_phone(color: Color(0xff333333), size: 16),
                       ),
                       centerChild: Container(
                         // width: 120,
@@ -254,10 +260,10 @@ class _MemberCenterState extends State<MemberCenter>
                     leftChild: Container(
                       width: 30,
                       alignment: Alignment.centerLeft,
-                      child: icon_profile(color: hex('#333'), size: 16),
+                      child: icon_profile(color: Color(0xff333333), size: 16),
                     ),
                     centerChild: Text('個人資料'),
-                    rightChild: icon_right(color: hex('#333'), size: 20),
+                    rightChild: icon_right(color: Color(0xff333333), size: 20),
                     onPressed: () {
                       G.pushNamed('/edit_profile');
                       //                    G.toast(G.user.data.nickname);
@@ -270,10 +276,10 @@ class _MemberCenterState extends State<MemberCenter>
                     leftChild: Container(
                       width: 30,
                       alignment: Alignment.centerLeft,
-                      child: icon_favorite(color: hex('#333'), size: 16),
+                      child: icon_favorite(color: Color(0xff333333), size: 16),
                     ),
                     centerChild: Text('點讚文章'),
-                    rightChild: icon_right(color: hex('#333'), size: 20),
+                    rightChild: icon_right(color: Color(0xff333333), size: 20),
                     onPressed: () {
                       G.pushNamed('/article_like');
                     },
@@ -284,10 +290,10 @@ class _MemberCenterState extends State<MemberCenter>
                     leftChild: Container(
                       width: 30,
                       alignment: Alignment.centerLeft,
-                      child: icon_puls(color: hex('#333'), size: 16),
+                      child: icon_puls(color: Color(0xff333333), size: 16),
                     ),
                     centerChild: Text('關注列表'),
-                    rightChild: icon_right(color: hex('#333'), size: 20),
+                    rightChild: icon_right(color: Color(0xff333333), size: 20),
                     onPressed: () {
                       G.pushNamed('/my_eland_list');
                     },
@@ -298,10 +304,10 @@ class _MemberCenterState extends State<MemberCenter>
                     leftChild: Container(
                       width: 30,
                       alignment: Alignment.centerLeft,
-                      child: icon_feedback(color: hex('#333'), size: 16),
+                      child: icon_feedback(color: Color(0xff333333), size: 16),
                     ),
                     centerChild: Text('用戶條款'),
-                    rightChild: icon_right(color: hex('#333'), size: 20),
+                    rightChild: icon_right(color: Color(0xff333333), size: 20),
                     onPressed: () {
                       //                  G.toast('功能開發中');
                       //                    AWebview.open(context, url: 'http://baidu.com',title: '百度');
@@ -317,7 +323,7 @@ class _MemberCenterState extends State<MemberCenter>
             ),
 
             Container(
-              color: hex('#fff'),
+              color: Color(0xffffffff),
               //            padding: EdgeInsets.symmetric(horizontal: 15),
               child: ARow(
                 height: 50,
@@ -327,11 +333,11 @@ class _MemberCenterState extends State<MemberCenter>
                   width: 30,
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: icon_logout(color: hex('#333'), size: 20),
+                    child: icon_logout(color: Color(0xff333333), size: 20),
                   ),
                 ),
                 centerChild: Text('退出登錄'),
-                rightChild: icon_right(color: hex('#333'), size: 20),
+                rightChild: icon_right(color: Color(0xff333333), size: 20),
                 border: G.borderBottom(show: false),
                 onPressed: () {
                   //              G.toast('功能開發中');
@@ -342,15 +348,15 @@ class _MemberCenterState extends State<MemberCenter>
 
             (G.isDev == true)
                 ? Container(
-                    color: hex('#fff'),
+                    color: Color(0xffffffff),
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: hex('#fff'),
+                        color: Color(0xffffffff),
                         border: Border(
                           top: BorderSide(
                             width: 1,
-                            color: rgba(242, 242, 242, 1),
+                            color: Color.fromARGB(255, 242, 242, 242),
                           ),
                         ),
                       ),
@@ -363,13 +369,13 @@ class _MemberCenterState extends State<MemberCenter>
                               width: 30,
                               alignment: Alignment.centerLeft,
                               child: icon_friendcircle(
-                                color: hex('#333'),
+                                color: Color(0xff333333),
                                 size: 20,
                               ),
                             ),
                             centerChild: Text('TestWebview'),
                             rightChild: icon_right(
-                              color: hex('#333'),
+                              color: Color(0xff333333),
                               size: 20,
                             ),
                             onPressed: () {
@@ -417,13 +423,13 @@ class _MemberCenterState extends State<MemberCenter>
                               width: 30,
                               alignment: Alignment.centerLeft,
                               child: icon_friendcircle(
-                                color: hex('#333'),
+                                color: Color(0xff333333),
                                 size: 20,
                               ),
                             ),
                             centerChild: Text('Domain：${G.baseurl}'),
                             rightChild: icon_right(
-                              color: hex('#333'),
+                              color: Color(0xff333333),
                               size: 20,
                             ),
                             onPressed: () {

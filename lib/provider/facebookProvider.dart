@@ -8,16 +8,16 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class FacebookProvider extends ChangeNotifier {
-  SharedPreferences _prefs;
+  SharedPreferences? _prefs;
 
   // static final FacebookLogin facebookSignIn = new FacebookLogin();
   // FacebookLogin facebookSignIn = null;
 
   bool _isFacebookLogin = false;
-  String _message;
+  String? _message;
 
   bool get isFacebookLogin => _isFacebookLogin;
-  String get message => _message;
+  String? get message => _message;
 
   FacebookProvider() {
     // print('FacebookProvider======>init/${facebookSignIn}');
@@ -28,8 +28,8 @@ class FacebookProvider extends ChangeNotifier {
     Future.delayed(Duration.zero, () async {
       _prefs = await SharedPreferences.getInstance();
       _isFacebookLogin =
-          (_prefs.getBool('isFacebookLogin') == false ||
-              _prefs.getBool('isFacebookLogin') == null)
+          (_prefs?.getBool('isFacebookLogin') == false ||
+              _prefs?.getBool('isFacebookLogin') == null)
           ? false
           : true;
       // print('FacebookProvider======>init3/${_isFacebookLogin}');
@@ -44,7 +44,7 @@ class FacebookProvider extends ChangeNotifier {
       Map<String, dynamic> profile = await FacebookAuth.instance.getUserData(
         fields: "name,first_name,last_name,email",
       );
-      final AccessToken accessToken = result.accessToken;
+      final AccessToken accessToken = result.accessToken!;
       Map<String, dynamic> accessTokenJson = accessToken.toJson();
       // print('AccessToken=========>${accessTokenJson['token']}');
       // print('name=========>${profile['name']}');
@@ -83,7 +83,7 @@ class FacebookProvider extends ChangeNotifier {
           await getUserDetail(data['data']['id']);
           _isFacebookLogin = true;
           _message = '登錄成功';
-          _prefs.setBool('isFacebookLogin', true);
+          _prefs?.setBool('isFacebookLogin', true);
           notifyListeners();
           return true;
         }
@@ -207,7 +207,7 @@ class FacebookProvider extends ChangeNotifier {
   }
 
   Future<bool> logoutByFacebook() async {
-    _prefs.remove('isFacebookLogin');
+    _prefs?.remove('isFacebookLogin');
     _isFacebookLogin = false;
     _message = 'Logout';
     // await facebookSignIn.logOut();

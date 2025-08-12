@@ -7,7 +7,7 @@ import '../../components/a_button/index.dart';
 import '../../utils/global.dart';
 
 class SetDomain extends StatefulWidget {
-  SetDomain({Key key}) : super(key: key);
+  SetDomain({Key? key}) : super(key: key);
 
   @override
   _SetDomainState createState() => _SetDomainState();
@@ -24,7 +24,7 @@ class _SetDomainState extends State<SetDomain> {
 
   TextEditingController serveraddressController = TextEditingController();
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _SetDomainState extends State<SetDomain> {
 
       prefs = await SharedPreferences.getInstance();
       setState(() {
-        domain = prefs.getString('domain');
+        domain = prefs?.getString('domain') ?? '';
         if (domain == '') {
           domain = '';
         }
@@ -103,7 +103,7 @@ class _SetDomainState extends State<SetDomain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hex('#fff'),
+      backgroundColor: Color(0xffffffff),
       appBar: customAppbar(context: context, title: '設置域名'),
       // body: Text('asd'),
       body: SingleChildScrollView(
@@ -128,7 +128,7 @@ class _SetDomainState extends State<SetDomain> {
                         child: Text(
                           'Server address',
                           style: TextStyle(
-                            color: rgba(28, 141, 160, 1),
+                            color: Color.fromARGB(255, 28, 141, 160),
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -149,7 +149,7 @@ class _SetDomainState extends State<SetDomain> {
                                 ? TextField(
                                     controller: serveraddressController,
                                     keyboardType: TextInputType.url,
-                                    cursorColor: hex('#014d7b'),
+                                    cursorColor: Color(0xff014d7b),
                                     decoration: InputDecoration(
                                       suffixIcon: GestureDetector(
                                         onTap: () {
@@ -162,23 +162,28 @@ class _SetDomainState extends State<SetDomain> {
                                         },
                                         child: Icon(
                                           Icons.cancel,
-                                          color: rgba(28, 141, 160, 1),
+                                          color: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
                                         ),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: hex('#014d7b'),
+                                          color: Color(0xff014d7b),
                                         ),
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: hex('#ccc'),
+                                          color: Color(0xffcccccc),
                                         ),
                                       ),
                                       hintText: "http://",
                                       hintStyle: TextStyle(
                                         fontSize: 15.0,
-                                        color: hex('#ccc'),
+                                        color: Color(0xffcccccc),
                                       ), //设置提示文字样式
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -195,7 +200,12 @@ class _SetDomainState extends State<SetDomain> {
                                     // itemHeight:10,
                                     icon: Icon(Icons.arrow_right),
                                     iconSize: 40,
-                                    iconEnabledColor: rgba(28, 141, 160, 1),
+                                    iconEnabledColor: Color.fromARGB(
+                                      255,
+                                      28,
+                                      141,
+                                      160,
+                                    ),
                                     hint: Text('請選擇地址'),
                                     items: [
                                       DropdownMenuItem(
@@ -249,7 +259,7 @@ class _SetDomainState extends State<SetDomain> {
                                         });
                                       } else {
                                         setState(() {
-                                          domain = value;
+                                          domain = value!;
                                         });
                                       }
                                     },
@@ -263,9 +273,9 @@ class _SetDomainState extends State<SetDomain> {
                           width: G.screenWidth(),
                           child: Text('SUBMIT'),
                           //                            rgba(169, 211, 218, 1)
-                          bgColor: rgba(28, 141, 160, 1),
-                          color: hex('#fff'),
-                          borderColor: rgba(28, 141, 160, 1),
+                          bgColor: Color.fromARGB(255, 28, 141, 160),
+                          color: Color(0xffffffff),
+                          borderColor: Color.fromARGB(255, 28, 141, 160),
                           plain: true,
                           borderRadius: BorderRadius.circular(5),
                           onPressed: () => _submit(),

@@ -11,33 +11,33 @@ import '../../utils/global.dart';
 class ForgotPassword extends StatefulWidget {
   final Map args;
 
-  ForgotPassword({Key key, this.args}) : super(key: key);
+  ForgotPassword({Key? key, required this.args}) : super(key: key);
 
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  static Map args;
+  static Map? args;
 
   static Map phone = {"value": null, "verify": true};
   static Map phonePassword = {"value": null, "verify": true};
   static Map phoneCode = {"value": null, "verify": true};
 
-  bool userPhoneToLogin = null;
+  bool? userPhoneToLogin;
   var areaCode = regionCode[0]['code'];
-  String sid = null;
+  String? sid;
 
   bool _submit_i = false;
 
   static Map email = {"value": null, "verify": true};
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   @override
   void initState() {
     super.initState();
     args = widget.args;
-    userPhoneToLogin = args['userPhoneToLogin'];
+    userPhoneToLogin = args?['userPhoneToLogin'];
     if (userPhoneToLogin == true) {
       print('userPhoneToLogin1====>${userPhoneToLogin}');
     } else {
@@ -128,7 +128,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         phone: '+${areaCode}${phone['value']}',
         phoneCode: phoneCode['value'],
         password: phonePassword['value'],
-        sid: sid,
+        sid: sid!,
       );
       print('aaa=====${res}');
       var data = res.data;
@@ -171,7 +171,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           },
           child: Container(
             height: G.screenHeight() - 100,
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: Container(
               child: Column(
@@ -230,9 +230,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       width: 250,
                       child: Text('提交'),
                       //                            rgba(169, 211, 218, 1)
-                      bgColor: rgba(28, 141, 160, 1),
-                      color: hex('#fff'),
-                      borderColor: rgba(28, 141, 160, 1),
+                      bgColor: Color.fromARGB(255, 28, 141, 160),
+                      color: Color(0xffffffff),
+                      borderColor: Color.fromARGB(255, 28, 141, 160),
                       plain: true,
                       borderRadius: BorderRadius.circular(40),
                       onPressed: () => (userPhoneToLogin == true)
