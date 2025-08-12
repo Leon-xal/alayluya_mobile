@@ -83,8 +83,8 @@ class ADialog {
     this.context, {
     //    this.title,
     //    @required this.content,
-    required Widget contentChild,
-    required Widget bottomChild,
+    Widget? contentChild,
+    Widget? bottomChild,
     //    Function confirmButtonPress,
     //    Text confirmButtonText,
   }) {

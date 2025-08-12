@@ -7,14 +7,14 @@ import '../../utils/global.dart';
 
 class MyElandList extends StatefulWidget {
   final Map args;
-  MyElandList({Key key, this.args}) : super(key: key);
+  MyElandList({Key? key, required this.args}) : super(key: key);
   @override
   _MyElandListState createState() => _MyElandListState();
 }
 
 class _MyElandListState extends State<MyElandList>
     with TickerProviderStateMixin {
-  static Map args;
+  static Map? args;
   String header_title = '我關注的ELand';
   String search_key = '';
   int userid = 0;
@@ -28,9 +28,9 @@ class _MyElandListState extends State<MyElandList>
   @override
   void initState() {
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     args = widget.args;
-    search_key = args['search_key'];
+    search_key = args?['search_key'];
     print('search_key===>${args}');
     try {
       Future.delayed(Duration.zero, () async {});
@@ -47,12 +47,12 @@ class _MyElandListState extends State<MyElandList>
 
   Widget buildTabBarView() {
     int cateid = 0;
-    userid = G.user.data.id;
+    userid = G.user.data.id ?? 0;
     // print('userid====>${userid}');
     return AElandList(
       uid: userid,
-      search_by_name: search_key,
-      cateid: cateid,
+      searchByName: search_key,
+      cateId: cateid,
       type: 'follow',
     );
 
@@ -83,7 +83,7 @@ class _MyElandListState extends State<MyElandList>
 
       //      body: AElandList(uid:userid,search_by_name:search_key),
       body: Container(
-        color: hex('#fff'),
+        color: Color(0xffffffff),
         child: buildTabBarView(),
         //      child: Text('123'),
       ),

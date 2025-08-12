@@ -25,33 +25,35 @@ import '../../utils/global.dart';
 class ElandInfo extends StatefulWidget {
   final Map args;
 
-  ElandInfo({Key key, this.args}) : super(key: key);
+  ElandInfo({Key? key, required this.args}) : super(key: key);
 
   @override
   createState() => _ElandInfoState();
 }
 
 class _ElandInfoState extends State<ElandInfo> {
-  static Map args;
-  String eland_header_title = '';
+  static Map? args;
+  String? eland_header_title;
   int eland_id = 0;
   int userid = 0;
-  ElandDetailModel eland_info;
+  ElandDetailModel? eland_info;
   double headerHeight = 200;
-  ElandDetailData eland;
+  ElandDetailData? eland;
   ScrollController scrollController = ScrollController();
 
-  double _lat;
-  double _lng;
+  //double? _lat;
+  //double? _lng;
+  String? _lat;
+  String? _lng;
 
   @override
   void initState() {
     super.initState();
     args = widget.args;
-    eland_id = args['id'];
+    eland_id = args?['id'];
     Future.delayed(Duration.zero, () {
       UserDataModel userData = G.user.data;
-      userid = userData.id;
+      userid = userData.id ?? 0;
       _loadElandData(elandid: eland_id, uid: userid);
     });
   }
@@ -67,18 +69,27 @@ class _ElandInfoState extends State<ElandInfo> {
       if (res.data != null) {
         Map result = res.data;
         print('result=====>${result}');
-        setState(() {
-          eland_info = ElandDetailModel.fromJson(result);
-          eland_header_title = eland_info.data.name;
-          eland = eland_info.data;
-          _lat = double.parse(eland.map.lat);
-          _lng = double.parse(eland.map.lng);
-
-          //            _lat = -33.852;
-          //            _lng = 151.211;
-
-          print('location===>${_lat}/${_lng}');
-        });
+        if (res.data != null) {
+          if (res.data is Map<String, dynamic>) {
+            Map<String, dynamic> result = res.data;
+            // ... your existing code ...
+            setState(() {
+              eland_info = ElandDetailModel.fromJson(result);
+              eland_header_title = eland_info?.data?.name;
+              eland = eland_info?.data;
+              //_lat = double.parse(eland.map.lat);
+              //_lng = double.parse(eland.map.lng);
+              _lat = eland?.map?.lat;
+              _lng = eland?.map?.lng;
+              //            _lat = -33.852;
+              //            _lng = 151.211;
+              print('location===>${_lat}/${_lng}');
+            });
+          } else {
+            // Handle the case where res.data is not a Map<String, dynamic>
+            print('Error: res.data is not a Map<String, dynamic>');
+          }
+        }
       }
     } catch (e) {
       print('dataElandInfoCatch===>${e}');
@@ -86,11 +97,12 @@ class _ElandInfoState extends State<ElandInfo> {
   }
 
   _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: false,
-        forceWebView: false,
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(
+        Uri.parse(url),
+        /*forceSafariVC: false,
+        forceWebView: false,*/
+        mode: LaunchMode.externalApplication,
         //        headers: <String, String>{'my_header_key': 'my_header_value'},
       );
     } else {
@@ -99,7 +111,7 @@ class _ElandInfoState extends State<ElandInfo> {
   }
 
   _clickFollow(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id ?? 0;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -108,11 +120,11 @@ class _ElandInfoState extends State<ElandInfo> {
         if (result['code'] == 200) {
           setState(() {
             if (item.ifollow == true && item.follow > 0) {
-              eland.follow = item.follow - 1;
-              eland.ifollow = false;
+              eland?.follow = item.follow - 1;
+              eland?.ifollow = false;
             } else {
-              eland.follow = item.follow + 1;
-              eland.ifollow = true;
+              eland?.follow = item.follow + 1;
+              eland?.ifollow = true;
             }
           });
         }
@@ -129,9 +141,9 @@ class _ElandInfoState extends State<ElandInfo> {
         child: new Opacity(
           opacity: 1.0,
           child: new CircularProgressIndicator(
-            backgroundColor: rgba(28, 141, 160, 1),
+            backgroundColor: Color.fromARGB(255, 28, 141, 160),
             valueColor: new AlwaysStoppedAnimation<Color>(
-              rgba(255, 255, 255, 1),
+              Color.fromARGB(255, 255, 255, 255),
             ),
           ),
         ),
@@ -141,6 +153,7 @@ class _ElandInfoState extends State<ElandInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final brochureList = eland?.brochure;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: customAppbar(context: context, title: eland_header_title),
@@ -162,7 +175,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           //                  (eland.name == '')?Text(''):Text(eland.name),
                           Container(
                             child: AcachedNetworkImage(
-                              eland.cover,
+                              eland?.cover ?? '',
                               fit: BoxFit.cover,
                               height: headerHeight,
                               width: MediaQuery.of(context).size.width,
@@ -175,7 +188,7 @@ class _ElandInfoState extends State<ElandInfo> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 AcachedNetworkImage(
-                                  eland.avatar,
+                                  eland?.avatar ?? '',
                                   height: 70,
                                   width: 70,
                                   borderRadius: BorderRadius.circular(5.0),
@@ -199,7 +212,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -213,7 +226,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                   height: 40,
                                   margin: const EdgeInsets.only(right: 10.0),
                                   child: AcachedNetworkImage(
-                                    eland.type_pic,
+                                    eland?.type_pic ?? '',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -224,7 +237,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       new Text(
-                                        eland.name,
+                                        eland?.name ?? '',
                                         style: new TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -232,7 +245,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                         ),
                                       ),
                                       new Text(
-                                        eland.type,
+                                        eland?.type ?? '',
                                         style: new TextStyle(
                                           color: Colors.black54,
                                         ),
@@ -245,7 +258,7 @@ class _ElandInfoState extends State<ElandInfo> {
                             new Column(
                               children: <Widget>[
                                 new Text(
-                                  eland.follow.toString(),
+                                  eland?.follow?.toString() ?? '0',
                                   style: new TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -262,18 +275,28 @@ class _ElandInfoState extends State<ElandInfo> {
                                 Container(
                                   margin: const EdgeInsets.only(top: 5.0),
                                   child:
-                                      (eland.ifollow == true &&
-                                          eland.follow > 0)
+                                      ((eland?.ifollow ?? '0') == true &&
+                                          (eland?.follow ?? 0) > 0)
                                       ? AButton.icon(
                                           width: 70,
                                           height: 25,
-                                          borderColor: rgba(28, 141, 160, 1),
-                                          bgColor: rgba(28, 141, 160, 1),
+                                          borderColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
+                                          bgColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
                                           plain: true,
                                           textChild: Text(
                                             '已關注',
                                             style: TextStyle(
-                                              color: hex('#fff'),
+                                              color: Color(0xffffffff),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -282,7 +305,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                           ),
                                           icon: icon_check(
                                             size: 13,
-                                            color: hex('#fff'),
+                                            color: Color(0xffffffff),
                                           ),
                                           onPressed: () {
                                             _clickFollow(eland);
@@ -292,9 +315,10 @@ class _ElandInfoState extends State<ElandInfo> {
                                                   listen: false,
                                                 ).pushLike;
                                             Map map = {
-                                              "isLike": !eland.ifollow,
+                                              "isLike":
+                                                  !(eland?.ifollow ?? false),
                                               'id': initMap['id'],
-                                              'num': eland.follow,
+                                              'num': (eland?.follow ?? 0),
                                             };
                                             Provider.of<DoLikeMethod>(
                                               context,
@@ -305,13 +329,18 @@ class _ElandInfoState extends State<ElandInfo> {
                                       : AButton.icon(
                                           width: 70,
                                           height: 25,
-                                          borderColor: rgba(28, 141, 160, 1),
-                                          bgColor: hex('#fff'),
+                                          borderColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
+                                          bgColor: Color(0xffffffff),
                                           plain: true,
                                           textChild: Text(
                                             '關注',
                                             style: TextStyle(
-                                              color: hex('#333'),
+                                              color: Color(0xff333333),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -320,7 +349,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                           ),
                                           icon: icon_puls(
                                             size: 13,
-                                            color: hex('#333'),
+                                            color: Color(0xff333333),
                                           ),
                                           onPressed: () {
                                             Map initMap =
@@ -329,9 +358,10 @@ class _ElandInfoState extends State<ElandInfo> {
                                                   listen: false,
                                                 ).pushLike;
                                             Map map = {
-                                              "isLike": !eland.ifollow,
+                                              "isLike":
+                                                  !(eland?.ifollow ?? false),
                                               'id': initMap['id'],
-                                              'num': eland.follow,
+                                              'num': eland?.follow ?? 0,
                                             };
                                             Provider.of<DoLikeMethod>(
                                               context,
@@ -353,7 +383,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -392,7 +422,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                     ),
                                     onTap: () async {
                                       print(
-                                        'eland.MobileAppViewUrl=======>${eland.MobileAppViewUrl}',
+                                        'eland.MobileAppViewUrl=======>${eland?.MobileAppViewUrl}',
                                       );
                                       // final result = await SocialSharePlugin.shareToFeedFacebookLink(
                                       //   quote: eland.desc,
@@ -414,8 +444,8 @@ class _ElandInfoState extends State<ElandInfo> {
                                       // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
                                       var response = FlutterShareMe()
                                           .shareToFacebook(
-                                            url: '${eland.MobileAppViewUrl}',
-                                            msg: '${eland.desc}',
+                                            url: '${eland?.MobileAppViewUrl}',
+                                            msg: '${eland?.desc}',
                                           );
                                       print(
                                         'shareToFacebook======>${response}',
@@ -444,8 +474,8 @@ class _ElandInfoState extends State<ElandInfo> {
                                       // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
                                       var response = FlutterShareMe()
                                           .shareToTwitter(
-                                            url: eland.MobileAppViewUrl,
-                                            msg: eland.desc,
+                                            url: '${eland?.MobileAppViewUrl}',
+                                            msg: '${eland?.desc}',
                                           );
                                       print('shareToTwitter======>${response}');
                                     },
@@ -457,30 +487,34 @@ class _ElandInfoState extends State<ElandInfo> {
                                       height: 50,
                                     ),
                                     onTap: () async {
+                                      String? response;
+                                      final url = eland?.MobileAppViewUrl;
                                       if (Platform.isAndroid) {
-                                        String response = await FlutterShareMe()
-                                            .shareToWhatsApp(
-                                              msg: eland.MobileAppViewUrl,
-                                            );
+                                        response = await FlutterShareMe()
+                                            .shareToWhatsApp(msg: url ?? '');
                                         if (response == 'false' ||
                                             response == false) {
                                           await G.toast('請安裝WhatsApp');
                                         }
                                       } else {
                                         String share_url2 = Uri.encodeComponent(
-                                          eland.MobileAppViewUrl,
+                                          url ?? '',
                                         );
                                         try {
                                           Future<bool>
-                                          canToWhatsApp = canLaunch(
-                                            "whatsapp://send?text=${share_url2}",
+                                          canToWhatsApp = canLaunchUrl(
+                                            Uri.parse(
+                                              "whatsapp://send?text=${share_url2}",
+                                            ),
                                           );
                                           canToWhatsApp.then((
                                             isCanToWhatsApp,
                                           ) async {
                                             if (isCanToWhatsApp == true) {
-                                              launch(
-                                                "whatsapp://send?text=${share_url2}",
+                                              launchUrl(
+                                                Uri.parse(
+                                                  "whatsapp://send?text=${share_url2}",
+                                                ),
                                               );
                                             } else {
                                               await G.toast('請安裝WhatsApp');
@@ -501,20 +535,26 @@ class _ElandInfoState extends State<ElandInfo> {
                                       height: 50,
                                     ),
                                     onTap: () {
+                                      final desc = eland?.desc ?? '';
+                                      final url = eland?.MobileAppViewUrl ?? '';
                                       String share_text2 = Uri.encodeComponent(
-                                        eland.desc,
+                                        desc,
                                       );
                                       String share_url2 = Uri.encodeComponent(
-                                        eland.MobileAppViewUrl,
+                                        url,
                                       );
                                       try {
-                                        Future<bool> canToEmail = canLaunch(
-                                          "mailto:?subject=${share_text2}&body=${share_url2}",
+                                        Future<bool> canToEmail = canLaunchUrl(
+                                          Uri.parse(
+                                            "mailto:?subject=${share_text2}&body=${share_url2}",
+                                          ),
                                         );
                                         canToEmail.then((isCanToEmail) async {
                                           if (isCanToEmail == true) {
-                                            launch(
-                                              "mailto:?subject=${share_text2}&body=${share_url2}",
+                                            launchUrl(
+                                              Uri.parse(
+                                                "mailto:?subject=${share_text2}&body=${share_url2}",
+                                              ),
                                             );
                                           } else {
                                             await G.toast('請安裝第三方郵箱工具');
@@ -535,11 +575,11 @@ class _ElandInfoState extends State<ElandInfo> {
                                     ),
                                     onTap: () async {
                                       print(
-                                        'content_app_link====>${eland.MobileAppViewUrl}',
+                                        'content_app_link====>${eland?.MobileAppViewUrl}',
                                       );
                                       Clipboard.setData(
                                         ClipboardData(
-                                          text: eland.MobileAppViewUrl,
+                                          text: eland?.MobileAppViewUrl ?? '',
                                         ),
                                       );
                                       await G.toast('已復制連結');
@@ -558,7 +598,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -580,7 +620,7 @@ class _ElandInfoState extends State<ElandInfo> {
                               ),
                             ),
                             new Text(
-                              eland.desc,
+                              eland?.desc ?? '',
                               style: new TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
@@ -597,7 +637,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -623,12 +663,12 @@ class _ElandInfoState extends State<ElandInfo> {
                               //                      padding: const EdgeInsets.only(left: 0.0,right:0.0,bottom:10.0),
                               child: InkWell(
                                 onTap: () {
-                                  _launchURL(eland.album_url);
+                                  _launchURL(eland?.album_url ?? '');
                                 },
                                 child: new Text(
-                                  eland.album_url,
+                                  eland?.album_url ?? '',
                                   style: new TextStyle(
-                                    color: rgba(28, 141, 160, 1),
+                                    color: Color.fromARGB(255, 28, 141, 160),
                                     fontWeight: FontWeight.normal,
                                     fontSize: 16.0,
                                   ),
@@ -688,7 +728,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -715,87 +755,95 @@ class _ElandInfoState extends State<ElandInfo> {
                                 scrollDirection: Axis.horizontal,
                                 child: new Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: eland.brochure.map((item) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (item.type == 1) {
-                                          //pdf
-                                          APdfview.show(
-                                            context,
-                                            url: item.source,
-                                          );
-                                          print('pdf====>${item.source}');
-                                        } else if (item.type == 2) {
-                                          //mp3
-                                          AAudioView.show(
-                                            context,
-                                            url: item.source,
-                                          );
-                                          print('mp3====>${item.source}');
-                                        }
-                                      },
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                            3.33,
-                                        margin: const EdgeInsets.only(
-                                          top: 6.0,
-                                          bottom: 6.0,
-                                          right: 10.0,
-                                        ),
-                                        child: Column(
-                                          children: <Widget>[
-                                            AspectRatio(
-                                              aspectRatio: 4.0 / 3.0,
-                                              child: (item.img == '')
-                                                  ? Image.asset(
-                                                      'lib/assets/images/logo.jpg',
-                                                      width: 55,
-                                                      height: 55,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : new Container(
-                                                      foregroundDecoration: new BoxDecoration(
-                                                        image: new DecorationImage(
-                                                          image:
-                                                              new NetworkImage(
-                                                                item.img,
-                                                              ),
-                                                          centerSlice:
-                                                              new Rect.fromLTRB(
-                                                                270.0,
-                                                                180.0,
-                                                                1360.0,
-                                                                730.0,
-                                                              ),
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius.all(
-                                                              const Radius.circular(
-                                                                6.0,
-                                                              ),
-                                                            ),
-                                                      ),
-                                                    ),
-                                            ),
-                                            Container(
+
+                                  children: brochureList != null
+                                      ? brochureList.map((item) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (item.type == 1) {
+                                                //pdf
+                                                APdfview.show(
+                                                  context,
+                                                  url: item.source ?? '',
+                                                );
+                                                print('pdf====>${item.source}');
+                                              } else if (item.type == 2) {
+                                                //mp3
+                                                AAudioView.show(
+                                                  context,
+                                                  url: item.source ?? '',
+                                                );
+                                                print('mp3====>${item.source}');
+                                              }
+                                            },
+                                            child: Container(
+                                              width:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width /
+                                                  3.33,
                                               margin: const EdgeInsets.only(
-                                                top: 5.0,
-                                                bottom: 10.0,
-                                                left: 4.0,
-                                                right: 4.0,
+                                                top: 6.0,
+                                                bottom: 6.0,
+                                                right: 10.0,
                                               ),
-                                              child: Text(
-                                                item.desc,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  AspectRatio(
+                                                    aspectRatio: 4.0 / 3.0,
+                                                    child: (item.img == '')
+                                                        ? Image.asset(
+                                                            'lib/assets/images/logo.jpg',
+                                                            width: 55,
+                                                            height: 55,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : new Container(
+                                                            foregroundDecoration: new BoxDecoration(
+                                                              image: new DecorationImage(
+                                                                image:
+                                                                    new NetworkImage(
+                                                                      item.img ??
+                                                                          '',
+                                                                    ),
+                                                                centerSlice:
+                                                                    new Rect.fromLTRB(
+                                                                      270.0,
+                                                                      180.0,
+                                                                      1360.0,
+                                                                      730.0,
+                                                                    ),
+                                                              ),
+                                                              borderRadius:
+                                                                  const BorderRadius.all(
+                                                                    const Radius.circular(
+                                                                      6.0,
+                                                                    ),
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                          top: 5.0,
+                                                          bottom: 10.0,
+                                                          left: 4.0,
+                                                          right: 4.0,
+                                                        ),
+                                                    child: Text(
+                                                      item.desc ?? '',
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
+                                          );
+                                        }).toList()
+                                      : [],
                                 ),
                               ),
                             ),
@@ -809,7 +857,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -841,7 +889,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                 ),
                                 children: <TextSpan>[
                                   new TextSpan(text: "地址："),
-                                  new TextSpan(text: eland.address),
+                                  new TextSpan(text: eland?.address),
                                 ],
                               ),
                             ),
@@ -855,7 +903,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                 ),
                                 children: <TextSpan>[
                                   new TextSpan(text: "電話："),
-                                  new TextSpan(text: eland.phone),
+                                  new TextSpan(text: eland?.phone),
                                 ],
                               ),
                             ),
@@ -869,7 +917,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                 ),
                                 children: <TextSpan>[
                                   new TextSpan(text: "傳真："),
-                                  new TextSpan(text: eland.fax),
+                                  new TextSpan(text: eland?.fax),
                                 ],
                               ),
                             ),
@@ -883,7 +931,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                 ),
                                 children: <TextSpan>[
                                   new TextSpan(text: "電郵："),
-                                  new TextSpan(text: eland.email),
+                                  new TextSpan(text: eland?.email),
                                 ],
                               ),
                             ),
@@ -897,12 +945,17 @@ class _ElandInfoState extends State<ElandInfo> {
                                 ),
                                 children: <TextSpan>[
                                   new TextSpan(text: "網站："),
-                                  (eland.link1 == '')
+                                  (eland?.link1 == '')
                                       ? new TextSpan()
                                       : new TextSpan(
-                                          text: eland.link1,
+                                          text: eland?.link1,
                                           style: new TextStyle(
-                                            color: rgba(57, 139, 161, 1),
+                                            color: Color.fromARGB(
+                                              255,
+                                              57,
+                                              139,
+                                              161,
+                                            ),
                                             decoration:
                                                 TextDecoration.underline,
                                           ),
@@ -911,17 +964,22 @@ class _ElandInfoState extends State<ElandInfo> {
                                               //                                print('clicklink');
                                               AWebview.open(
                                                 context,
-                                                url: eland.link1,
-                                                title: eland.link1,
+                                                url: eland?.link1 ?? '',
+                                                title: eland?.link1 ?? '',
                                               );
                                             },
                                         ),
-                                  (eland.link2 == '')
+                                  (eland?.link2 == '')
                                       ? new TextSpan()
                                       : new TextSpan(
-                                          text: "\n" + eland.link2,
+                                          text: "\n" + (eland?.link2 ?? ''),
                                           style: new TextStyle(
-                                            color: rgba(57, 139, 161, 1),
+                                            color: Color.fromARGB(
+                                              255,
+                                              57,
+                                              139,
+                                              161,
+                                            ),
                                             decoration:
                                                 TextDecoration.underline,
                                           ),
@@ -930,17 +988,22 @@ class _ElandInfoState extends State<ElandInfo> {
                                               //                                print('clicklink');
                                               AWebview.open(
                                                 context,
-                                                url: eland.link2,
-                                                title: eland.link2,
+                                                url: eland?.link2 ?? '',
+                                                title: eland?.link2 ?? '',
                                               );
                                             },
                                         ),
-                                  (eland.link3 == '')
+                                  (eland?.link3 == '')
                                       ? new TextSpan()
                                       : new TextSpan(
-                                          text: "\n" + eland.link3,
+                                          text: "\n" + (eland?.link3 ?? ''),
                                           style: new TextStyle(
-                                            color: rgba(57, 139, 161, 1),
+                                            color: Color.fromARGB(
+                                              255,
+                                              57,
+                                              139,
+                                              161,
+                                            ),
                                             decoration:
                                                 TextDecoration.underline,
                                           ),
@@ -949,8 +1012,8 @@ class _ElandInfoState extends State<ElandInfo> {
                                               //                                print('clicklink');
                                               AWebview.open(
                                                 context,
-                                                url: eland.link3,
-                                                title: eland.link3,
+                                                url: eland?.link3 ?? '',
+                                                title: eland?.link3 ?? '',
                                               );
                                             },
                                         ),
@@ -972,7 +1035,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -1013,9 +1076,9 @@ class _ElandInfoState extends State<ElandInfo> {
                             child: AButton.normal(
                               width: MediaQuery.of(context).size.width,
                               child: Text('更多'),
-                              bgColor: rgba(229, 229, 229, 1.0),
-                              color: hex('#000'),
-                              borderColor: rgba(229, 229, 229, 1.0),
+                              bgColor: Color.fromARGB(255, 229, 229, 229),
+                              color: Color(0xff000000),
+                              borderColor: Color.fromARGB(255, 229, 229, 229),
                               plain: true,
                               borderRadius: BorderRadius.circular(5),
                               onPressed: () {
@@ -1035,7 +1098,7 @@ class _ElandInfoState extends State<ElandInfo> {
                           border: new Border(
                             bottom: BorderSide(
                               width: 10.0,
-                              color: hex('#cacbd1'),
+                              color: Color(0xffcacbd1),
                             ),
                           ),
                         ),
@@ -1075,9 +1138,9 @@ class _ElandInfoState extends State<ElandInfo> {
                             child: AButton.normal(
                               width: MediaQuery.of(context).size.width,
                               child: Text('更多'),
-                              bgColor: rgba(229, 229, 229, 1.0),
-                              color: hex('#000'),
-                              borderColor: rgba(229, 229, 229, 1.0),
+                              bgColor: Color.fromARGB(255, 229, 229, 229),
+                              color: Color(0xff000000),
+                              borderColor: Color.fromARGB(255, 229, 229, 229),
                               plain: true,
                               borderRadius: BorderRadius.circular(5),
                               onPressed: () {

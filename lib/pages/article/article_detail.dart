@@ -513,7 +513,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   color: Color(0xffffffff),
                   width: G.screenWidth(),
                   height: G.screenHeight(),
-                  child: InAppWebView(
+                  /*child: InAppWebView(
                     initialUrl:
                         article?.MobileAppViewUrl + "/?user_id=${userid}",
                     //              initialUrl: 'https://juejin.im/post/6844904048148086791',
@@ -840,6 +840,337 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             });
                           }
                         },
+                  ),*/
+                  child: InAppWebView(
+                    initialOptions: InAppWebViewGroupOptions(
+                      // initialOptions: InAppWebViewWidgetOptions(
+                      crossPlatform: InAppWebViewOptions(
+                        //debuggingEnabled: false,
+                        javaScriptEnabled: true,
+                        //                  useShouldOverrideUrlLoading: true,
+                        //                  useOnLoadResource: true,
+                        cacheEnabled: true,
+                        disableVerticalScroll: false,
+                        disableHorizontalScroll: false,
+                        verticalScrollBarEnabled: false,
+                        horizontalScrollBarEnabled: false,
+                      ),
+                      ios: IOSInAppWebViewOptions(isPagingEnabled: false),
+                      android: AndroidInAppWebViewOptions(),
+                    ),
+
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      webView = controller;
+                      print(
+                        'onWebViewCreated=====>${article?.MobileAppViewUrl} + "/?user_id=${userid}"}',
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewGetReadyCallback",
+                        callback: (arguments) async {
+                          print(
+                            "InAppWebViewGetReadyCallback====>${arguments}",
+                          );
+                          webView?.evaluateJavascript(
+                            source:
+                                """
+                        var _dom = document.getElementById('article-content');
+                        reFontSize(_dom,""" +
+                                custom_font_size.toString() +
+                                """);
+                      """,
+                          );
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewFacebookCallback",
+                        callback: (arguments) async {
+                          print(
+                            "InAppWebViewFacebookCallback====>${arguments}",
+                          );
+                          // final result = await SocialSharePlugin.shareToFeedFacebookLink(
+                          //   quote: share_text,
+                          //   url: share_url,
+                          //   onSuccess: (_) {
+                          //     print('FACEBOOK SUCCESS======>${_}');
+                          //     return;
+                          //   },
+                          //   onCancel: () {
+                          //     print('FACEBOOK CANCELLED======>');
+                          //     return;
+                          //   },
+                          //   onError: (error) {
+                          //     print('FACEBOOK ERROR======>${error}');
+                          //     return;
+                          //   },
+                          // );
+                          // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
+                          print('shareToFacebook======>${share_url}');
+                          List<String> share_url_arr = share_url.split('/');
+                          String share_url2 = '';
+                          if (share_url_arr.length > 0) {
+                            for (int i = 0; i < share_url_arr.length; i++) {
+                              if (i == share_url_arr.length - 1) {
+                                share_url2 += Uri.encodeComponent(
+                                  share_url_arr[share_url_arr.length - 1],
+                                );
+                              } else {
+                                share_url2 += share_url_arr[i] + '/';
+                              }
+                            }
+                          }
+                          print('share_url2====>${share_url2}');
+                          // print('share_url_arr====>${share_url_arr[share_url_arr.length-1]}');
+
+                          // String share_url2 = Uri.encodeComponent(share_url);
+                          // print('shareToFacebook2======>${share_url2}');
+                          var response = FlutterShareMe().shareToFacebook(
+                            url: '${share_url2}',
+                            msg: '${share_text}',
+                          );
+                          print('shareToFacebook2======>${response}');
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewTwitterFuncCallback",
+                        callback: (arguments) async {
+                          //                      print('InAppWebViewTwitterFuncCallback=========>${arguments}');
+                          //                       final result = await SocialSharePlugin.shareToTwitterLink(
+                          //                           text: share_text,
+                          //                           url: share_url,
+                          //                           onSuccess: (_) {
+                          //                             print('TWITTER SUCCESS=====>${_}');
+                          //                             return;
+                          //                           },
+                          //                           onCancel: () {
+                          //                             print('TWITTER CANCELLED=====>');
+                          //                             return;
+                          //                           }
+                          //                       );
+
+                          //                       SocialShare.shareTwitter("This is Social Share plugin");
+                          // response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+                          // response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+                          // FlutterShareMe().shareTwitter("This is Social Share plugin");
+
+                          print('shareToTwitter======>${share_url}');
+                          var response = FlutterShareMe().shareToTwitter(
+                            url: share_url!,
+                            msg: share_text!,
+                          );
+                          print('shareToTwitter======>${response}');
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewWhatsAppFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewWhatsAppFuncCallback=========>${arguments}',
+                          );
+
+                          if (Platform.isAndroid) {
+                            //                        print('ANDROID自动登陆开发中====>');
+                            String response =
+                                await FlutterShareMe().shareToWhatsApp(
+                                  msg: share_url,
+                                ) ??
+                                '';
+
+                            if (response == 'false' || response == false) {
+                              await G.toast('請安裝WhatsApp');
+                            }
+                          } else {
+                            //                        print('IOS自动登陆开发中====>');
+                            String share_url2 = Uri.encodeComponent(share_url);
+                            try {
+                              //                          "whatsapp://send?text=${share_url2}"
+                              Future<bool> canToWhatsApp = canLaunchUrl(
+                                Uri.parse("whatsapp://send?text=${share_url2}"),
+                              );
+                              canToWhatsApp.then((isCanToWhatsApp) async {
+                                if (isCanToWhatsApp == true) {
+                                  launchUrl(
+                                    Uri.parse(
+                                      "whatsapp://send?text=${share_url2}",
+                                    ),
+                                  );
+                                } else {
+                                  await G.toast('請安裝WhatsApp');
+                                }
+                              });
+                            } catch (e) {
+                              print('eeeeeeeeee2======================>${e}');
+                            }
+                          }
+                          //                      print("InAppWebViewWhatsAppFuncCallbackResult====>${response}");
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewEmailFuncCallback",
+                        callback: (arguments) async {
+                          //                      print('InAppWebViewEmailFuncCallback=========>${arguments}');
+                          String share_text2 = Uri.encodeComponent(share_text!);
+                          String share_url2 = Uri.encodeComponent(share_url);
+                          try {
+                            Future<bool> canToEmail = canLaunchUrl(
+                              Uri.parse(
+                                "mailto:?subject=${share_text2}&body=${share_url2}",
+                              ),
+                            );
+                            canToEmail.then((isCanToEmail) async {
+                              if (isCanToEmail == true) {
+                                launchUrl(
+                                  Uri.parse(
+                                    "mailto:?subject=${share_text2}&body=${share_url2}",
+                                  ),
+                                );
+                              } else {
+                                await G.toast('請安裝第三方郵箱工具');
+                              }
+                            });
+                          } catch (e) {
+                            print('eeeeeeeeee2======================>${e}');
+                          }
+                          //                      launch("mailto:451027779@qq.com");
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewCopyFuncCallback",
+                        callback: (arguments) async {
+                          //                      print('InAppWebViewCopyFuncCallback=========>${arguments}');
+                          Clipboard.setData(ClipboardData(text: share_url));
+                          await G.toast('已復制連結');
+                          //                      print("InAppWebViewCopyFuncCallbackResult====>${result}");
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName:
+                            "InAppWebViewHotArticleClickFuncFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewHotArticleClickFuncFuncCallback=========>${arguments}',
+                          );
+                          // print(arguments[0] is String);
+                          G.pushNamed(
+                            '/article_detail',
+                            arguments: {'id': int.parse(arguments[0])},
+                          );
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewMoreArticleFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewMoreArticleFuncCallback=========>${arguments}',
+                          );
+                          G.pushNamed(
+                            '/article_list',
+                            arguments: {'ishot': true},
+                          );
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewFollowElandFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewFollowElandFuncCallback=========>${arguments}',
+                          );
+                          _clickElandFollow(article);
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName: "InAppWebViewGoElandPageFuncCallback",
+                        callback: (arguments) async {
+                          //                      print('InAppWebViewGoElandPageFuncCallback=========>${arguments},${article.eland_id}');
+                          G.pushNamed(
+                            '/eland_info',
+                            arguments: {'id': article?.eland_id},
+                          );
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName:
+                            "InAppWebViewOpenImageByContentFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewOpenImageByContentFuncCallback=========>${arguments}',
+                          );
+                          // print('arguments====>${arguments}');
+                          if (arguments.length > 0 && arguments[0] != null) {
+                            APhotoview.show(context, url: arguments[0]);
+                          }
+                        },
+                      );
+
+                      webView?.addJavaScriptHandler(
+                        handlerName:
+                            "InAppWebViewOpenHrefByContentFuncCallback",
+                        callback: (arguments) async {
+                          print(
+                            'InAppWebViewOpenHrefByContentFuncCallback=========>${arguments}',
+                          );
+                          // print('arguments====>${arguments}');
+                          if (arguments.length > 0 && arguments[0] != null) {
+                            String hrefVal = arguments[0];
+                            String extVal = hrefVal.substring(
+                              hrefVal.lastIndexOf(".") + 1,
+                              hrefVal.length,
+                            );
+                            if (extVal == 'pdf') {
+                              APdfview.show(context, url: hrefVal);
+                            } else {
+                              List hrefValArr = hrefVal.split("/");
+                              String pos = hrefValArr[hrefValArr.length - 2];
+                              String val = hrefValArr[hrefValArr.length - 1];
+                              print('pos====>${pos}');
+                              print('val====>${val}');
+                              if (pos == 'article') {
+                                G.pushNamed(
+                                  '/article_detail',
+                                  arguments: {'id': int.parse(val)},
+                                );
+                              } else {
+                                if (await canLaunchUrl(Uri.parse(hrefVal))) {
+                                  await launchUrl(Uri.parse(hrefVal));
+                                } else {
+                                  AWebview.open(
+                                    context,
+                                    url: hrefVal,
+                                    title: hrefVal,
+                                  );
+                                }
+                              }
+                            }
+                          }
+                        },
+                      );
+                    },
+                    onLoadStop: (controller, url) async {
+                      print('onLoadStop=====>');
+                      setState(() {
+                        isloading = false;
+                      });
+                    },
+                    onProgressChanged:
+                        (InAppWebViewController controller, int progress) {
+                          //                print('progress====>${progress/100}');
+                          if ((progress / 100) > 0.90) {
+                            //                  print('progress2====>${progress}');
+                            setState(() {
+                              isloading = false;
+                            });
+                          }
+                        },
                   ),
                 ),
                 (isloading == false)
@@ -914,7 +1245,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           ),
                           new Row(
                             children: <Widget>[
-                              (article?.ilike == true && article?.like > 0)
+                              (article?.ilike == true &&
+                                      (article?.like ?? 0) > 0)
                                   ? AButton.icon(
                                       width: 70,
                                       height: 25,
@@ -922,7 +1254,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       bgColor: Colors.pink,
                                       plain: true,
                                       textChild: Text(
-                                        article.like.toString(),
+                                        article!.like.toString(),
                                         style: TextStyle(
                                           color: Color(0xfffffff),
                                           fontSize: 13,
@@ -943,7 +1275,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                         Map map = {
                                           "isLike": false,
                                           'id': initMap['id'],
-                                          'num': article?.like - 1,
+                                          'num': (article?.like ?? 0) - 1,
                                         };
                                         Provider.of<DoLikeMethod>(
                                           context,
@@ -958,7 +1290,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       bgColor: Color(0xfffffff),
                                       plain: true,
                                       textChild: Text(
-                                        article.like.toString(),
+                                        article!.like.toString(),
                                         style: TextStyle(
                                           color: Colors.pink,
                                           fontSize: 13,
@@ -978,7 +1310,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                         Map map = {
                                           "isLike": true,
                                           'id': initMap['id'],
-                                          'num': article.like + 1,
+                                          'num': (article?.like ?? 0) + 1,
                                         };
                                         Provider.of<DoLikeMethod>(
                                           context,
@@ -991,33 +1323,43 @@ class _ArticleDetailState extends State<ArticleDetail> {
                               AButton.icon(
                                 width: 70,
                                 height: 25,
-                                borderColor: rgba(28, 141, 160, 1),
-                                bgColor: hex('#fff'),
+                                borderColor: Color.fromARGB(255, 28, 141, 160),
+                                bgColor: Color(0xffffffff),
                                 plain: true,
-                                textChild: (article.comment_num == null)
+                                textChild: (article!.comment_num == null)
                                     ? Text(
                                         '0',
                                         style: TextStyle(
-                                          color: rgba(28, 141, 160, 1),
+                                          color: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
                                           fontSize: 13,
                                         ),
                                       )
                                     : Text(
-                                        article.comment_num.toString(),
+                                        article!.comment_num.toString(),
                                         style: TextStyle(
-                                          color: rgba(28, 141, 160, 1),
+                                          color: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
                                           fontSize: 13,
                                         ),
                                       ),
                                 borderRadius: BorderRadius.circular(40),
                                 icon: icon_comment(
                                   size: 13,
-                                  color: rgba(28, 141, 160, 1),
+                                  color: Color.fromARGB(255, 28, 141, 160),
                                 ),
                                 onPressed: () {
                                   G.pushNamed(
                                     '/comment_page',
-                                    arguments: {'id': article.id},
+                                    arguments: {'id': article!.id},
                                   );
                                 },
                               ),

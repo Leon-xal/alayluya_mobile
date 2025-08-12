@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 //import 'package:flutter_skeleton/flutter_skeleton.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../components/a_button/index.dart';
-import '../../model/user_model/data.dart';
+//import '../../components/a_button/index.dart';
+//import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 import '../../model/comment_list_model/data.dart';
 
@@ -23,7 +23,7 @@ class _CommentPageState extends State<CommentPage> {
   late int articleId; // More descriptive name
   late int userId;
   int pageId = 1;
-  final List<CommentItem> comments = []; // Typed list
+  final List<dynamic> comments = []; // Typed list
   final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -33,7 +33,7 @@ class _CommentPageState extends State<CommentPage> {
   void initState() {
     super.initState();
     final userData = G.user.data;
-    userId = userData.id;
+    userId = userData.id ?? 0; // Ensure userId is initialized
     articleId = widget.args['id'];
     _loadData(articleId: articleId, limit: 25, pageId: pageId, userId: userId);
   }
@@ -78,9 +78,9 @@ class _CommentPageState extends State<CommentPage> {
 
     try {
       final res = await G.req.article.comment(
-        articleId: articleId,
-        userId: userId,
-        pageId: pageId,
+        articleid: articleId,
+        userid: userId,
+        pageid: pageId,
         limit: limit,
       );
       final result = res.data;
@@ -102,13 +102,13 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
-  Future<void> _clickDoLike(CommentItem item) async {
+  Future<void> _clickDoLike(item) async {
     try {
-      final res = await G.req.article.doLikeComment(
-        articleId: articleId,
-        userId: userId,
-        commentId: item.commentId,
-        toUserId: item.userId,
+      final res = await G.req.article.do_like_comment(
+        articleid: articleId,
+        userid: userId,
+        comment_id: item.commentId,
+        to_userid: item.userId,
       );
       final result = res.data;
       if (result['code'] == 200) {
@@ -125,7 +125,7 @@ class _CommentPageState extends State<CommentPage> {
     }
   }
 
-  Widget _buildCommentItem(CommentItem item, int index) {
+  Widget _buildCommentItem(item, int index) {
     return Stack(
       children: [
         Container(
@@ -150,7 +150,7 @@ class _CommentPageState extends State<CommentPage> {
                       height: 45,
                       margin: const EdgeInsets.only(left: 10.0, right: 15.0),
                       child: CircleAvatar(
-                        backgroundColor: rgba(28, 141, 160, 1),
+                        backgroundColor: Color.fromARGB(255, 28, 141, 160),
                         backgroundImage: NetworkImage(item.avatar),
                         radius: 11.0,
                       ),
@@ -207,7 +207,7 @@ class _CommentPageState extends State<CommentPage> {
                                   '${item.likeNum} 點贊',
                                   style: TextStyle(
                                     color: item.ilike
-                                        ? rgba(28, 141, 160, 1)
+                                        ? Color.fromARGB(255, 28, 141, 160)
                                         : Colors.black54,
                                     fontSize: 13.0,
                                   ),
@@ -332,7 +332,7 @@ class _CommentPageState extends State<CommentPage> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2.0,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              rgba(28, 141, 160, 1),
+                              Color.fromARGB(255, 28, 141, 160),
                             ),
                           ),
                         ),
@@ -379,7 +379,7 @@ class _CommentPageState extends State<CommentPage> {
                         controller: _textController,
                         focusNode: _focusNode,
                         maxLines: null,
-                        cursorColor: hex('#014d7b'),
+                        cursorColor: Color(0xff014d7b),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(5.0),
@@ -400,9 +400,9 @@ class _CommentPageState extends State<CommentPage> {
                       }
                       final commentStr = _textController.text.trim();
                       try {
-                        final res = await G.req.article.addComment(
-                          articleId: articleId,
-                          userId: userId,
+                        final res = await G.req.article.add_comment(
+                          articleid: articleId,
+                          userid: userId,
                           textStr: commentStr,
                         );
                         final data = res.data;
@@ -420,7 +420,7 @@ class _CommentPageState extends State<CommentPage> {
                         );
                       }
                     },
-                    child: icon_send(size: 35, color: hex('#333')),
+                    child: icon_send(size: 35, color: Color(0xff333333)),
                   ),
                 ],
               ),

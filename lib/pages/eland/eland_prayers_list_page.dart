@@ -6,22 +6,22 @@ import '../../utils/global.dart';
 
 class ElandPrayersListPage extends StatefulWidget {
   final Map args;
-  ElandPrayersListPage({Key key, this.args}) : super(key: key);
+  ElandPrayersListPage({Key? key, required this.args}) : super(key: key);
   @override
   createState() => _ElandPrayersListPageState();
 }
 
 class _ElandPrayersListPageState extends State<ElandPrayersListPage> {
-  static Map args;
+  static Map? args;
   int userid = 0;
   int _eland_id = 0;
   @override
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     args = widget.args;
-    _eland_id = args['eland_id'];
+    _eland_id = args?['eland_id'];
     //      print('_eland_id===>${_eland_id}');
     //    Future.delayed(Duration.zero, () async {
     //      print('ssss===>${userid}');

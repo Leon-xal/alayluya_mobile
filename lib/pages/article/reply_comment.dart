@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 //import 'package:flutter_skeleton/flutter_skeleton.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../components/a_button/index.dart';
-import '../../model/user_model/data.dart';
+//import '../../components/a_button/index.dart';
+//import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 import '../../model/reply_list_model/data.dart';
 
@@ -25,7 +25,7 @@ class _ReplyCommentState extends State<ReplyComment> {
   late int userId;
   late int toUserId;
   int pageId = 1;
-  final List<ReplyItem> replies = []; // Typed list
+  final List<dynamic> replies = []; // Typed list
   final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -35,7 +35,7 @@ class _ReplyCommentState extends State<ReplyComment> {
   void initState() {
     super.initState();
     final userData = G.user.data;
-    userId = userData.id;
+    userId = userData.id ?? 0; // Ensure userId is not null
     articleId = widget.args['articleid'];
     commentId = widget.args['commentid'];
     toUserId = widget.args['to_userid'];
@@ -90,11 +90,11 @@ class _ReplyCommentState extends State<ReplyComment> {
     setState(() => isLoading = true); // Indicate loading
 
     try {
-      final res = await G.req.article.replyCommentList(
-        articleId: articleId,
-        commentId: commentId,
-        userId: userId,
-        pageId: pageId,
+      final res = await G.req.article.reply_comment_list(
+        articleid: articleId,
+        comment_id: commentId,
+        userid: userId,
+        pageid: pageId,
         limit: limit,
       );
       final result = res.data;
@@ -115,7 +115,7 @@ class _ReplyCommentState extends State<ReplyComment> {
     }
   }
 
-  Widget _buildReplyItem(ReplyItem item) {
+  Widget _buildReplyItem(item) {
     return Container(
       alignment: Alignment.topLeft,
       margin: const EdgeInsets.only(top: 10.0, bottom: 0.0),
@@ -138,7 +138,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                   height: 45,
                   margin: const EdgeInsets.only(left: 10.0, right: 15.0),
                   child: CircleAvatar(
-                    backgroundColor: rgba(28, 141, 160, 1),
+                    backgroundColor: Color.fromARGB(255, 28, 141, 160),
                     backgroundImage: NetworkImage(item.avatar),
                     radius: 11.0,
                   ),
@@ -269,7 +269,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2.0,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              rgba(28, 141, 160, 1),
+                              Color.fromARGB(255, 28, 141, 160),
                             ),
                           ),
                         ),
@@ -316,7 +316,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                         controller: _textController,
                         focusNode: _focusNode,
                         maxLines: null,
-                        cursorColor: hex('#014d7b'),
+                        cursorColor: Color(0xff014d7b),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(5.0),
@@ -337,11 +337,11 @@ class _ReplyCommentState extends State<ReplyComment> {
                       }
                       final replyStr = _textController.text.trim();
                       try {
-                        final res = await G.req.article.replyComment(
-                          articleId: articleId,
-                          userId: userId,
-                          commentId: commentId,
-                          toUserId: toUserId,
+                        final res = await G.req.article.reply_comment(
+                          articleid: articleId,
+                          userid: userId,
+                          comment_id: commentId,
+                          to_userid: toUserId,
                           textStr: replyStr,
                         );
                         final data = res.data;
@@ -359,7 +359,7 @@ class _ReplyCommentState extends State<ReplyComment> {
                         );
                       }
                     },
-                    child: icon_send(size: 35, color: hex('#333')),
+                    child: icon_send(size: 35, color: Color(0xff333333)),
                   ),
                 ],
               ),

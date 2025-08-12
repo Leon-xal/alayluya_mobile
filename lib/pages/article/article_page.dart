@@ -4,13 +4,13 @@ import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 
 class ArticlePage extends StatefulWidget {
-  static _ArticlePageState _articlePageState;
+  static _ArticlePageState? _articlePageState;
 
   ArticlePage() {
     _articlePageState = _ArticlePageState();
   }
 
-  getAppBar() => _articlePageState.createAppBar();
+  getAppBar() => _articlePageState?.createAppBar();
 
   _ArticlePageState createState() => _ArticlePageState();
 }
@@ -32,7 +32,7 @@ class _ArticlePageState extends State<ArticlePage>
     super.initState();
     // print('article======>');
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
   }
 
   @override
@@ -47,8 +47,7 @@ class _ArticlePageState extends State<ArticlePage>
   @override
   Widget build(BuildContext context) {
     //    return Text('qwe');
-
-    dynamic arg = ModalRoute.of(context).settings.arguments;
+    dynamic arg = ModalRoute.of(context)?.settings.arguments;
     if (arg != null) {
       _search_key = arg["search_key"];
     }

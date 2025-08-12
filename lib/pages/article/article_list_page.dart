@@ -6,13 +6,13 @@ import '../../utils/global.dart';
 
 class ArticleListPage extends StatefulWidget {
   final Map args;
-  ArticleListPage({Key key, this.args}) : super(key: key);
+  ArticleListPage({Key? key, required this.args}) : super(key: key);
   @override
   createState() => _ArticleListPageState();
 }
 
 class _ArticleListPageState extends State<ArticleListPage> {
-  static Map args;
+  static Map? args;
   int userid = 0;
   int _eland_id = 0;
   bool _ishot = false;
@@ -20,10 +20,10 @@ class _ArticleListPageState extends State<ArticleListPage> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     args = widget.args;
-    _eland_id = args['eland_id'];
-    _ishot = args['ishot'];
+    _eland_id = args?['eland_id'];
+    _ishot = args?['ishot'];
     print('_ishot===>${_ishot}');
     //    Future.delayed(Duration.zero, () async {
     //      print('ssss===>${userid}');

@@ -22,25 +22,25 @@ import '../../utils/global.dart';
 
 class PrayersDetail extends StatefulWidget {
   final Map args;
-  PrayersDetail({Key key, this.args}) : super(key: key);
+  PrayersDetail({Key? key, required this.args}) : super(key: key);
   @override
   createState() => _PrayersDetailState();
 }
 
 class _PrayersDetailState extends State<PrayersDetail> {
-  static Map args;
+  static Map? args;
   int id = 0;
   int userid = 0;
   String header_title = '';
-  PrayersDetailModel prayers_info;
-  PrayersDetailData prayers;
+  PrayersDetailModel? prayers_info;
+  PrayersDetailData? prayers;
   ScrollController scrollController = ScrollController();
   //  List<dynamic> prayerByUserList = [];
   List<PrayerByUserDatum> prayerByUserList = [];
   //  String test;
 
   double custom_font_size = 16.0;
-  SharedPreferences _prefs;
+  SharedPreferences? _prefs;
   bool _submit_i = false;
   String description = '';
 
@@ -48,16 +48,17 @@ class _PrayersDetailState extends State<PrayersDetail> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     args = widget.args;
-    id = args['id'];
+    id = args?['id'];
     Future.delayed(Duration.zero, () async {
       _prefs = await SharedPreferences.getInstance();
-      String _custom_font_size_str = _prefs.getString('_custom_font_size');
+      String _custom_font_size_str =
+          _prefs?.getString('_custom_font_size') ?? '';
       if (_custom_font_size_str.isNotEmpty) {
         custom_font_size = double.parse(_custom_font_size_str);
       } else {
-        _prefs.setString('_custom_font_size', custom_font_size.toString());
+        _prefs?.setString('_custom_font_size', custom_font_size.toString());
       }
 
       _loadData(id: id, uid: userid);
@@ -74,7 +75,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
   }
 
   _clickPrayer(item) {
-    int uid = G.user.data.id;
+    int uid = G.user.data.id ?? 0;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -87,12 +88,20 @@ class _PrayersDetailState extends State<PrayersDetail> {
         _submit_i = false;
         if (result['code'] == 200) {
           setState(() {
-            if (item.iprayer == true && item.prayer > 0) {
-              prayers.prayer = item.prayer - 1;
-              prayers.iprayer = false;
+            if (prayers != null) {
+              //Null check
+              if (item.iprayer == true && item.prayer > 0) {
+                prayers?.prayer = item.prayer - 1;
+                prayers?.iprayer = false;
+              } else {
+                prayers?.prayer = item.prayer + 1;
+                prayers?.iprayer = true;
+              }
             } else {
-              prayers.prayer = item.prayer + 1;
-              prayers.iprayer = true;
+              // Handle the case where prayers is null.  For example:
+              print('Error: prayers is null');
+              // Or perhaps initialize prayers here:
+              // prayers = Prayers(); // Assuming Prayers is a class
             }
           });
         }
@@ -108,21 +117,24 @@ class _PrayersDetailState extends State<PrayersDetail> {
 
       if (res.data != null) {
         Map result = res.data;
-        setState(() {
-          prayers_info = PrayersDetailModel.fromJson(result);
-          header_title = prayers_info.data.author;
 
-          prayers = prayers_info.data;
-          description = prayers.content;
+        setState(() {
+          prayers_info = PrayersDetailModel.fromJson(
+            result as Map<String, dynamic>,
+          );
+          header_title = prayers_info?.data?.author ?? '';
+
+          prayers = prayers_info?.data;
+          description = prayers?.content ?? '';
           // print('description1====>${description}');
           description = description.replaceAll('\n', '<br />');
           // var document = parse(description);
           // description = document.body.text;
           // print('description2====>${description}');
           Map map = {
-            "isLike": prayers.iprayer,
-            'id': prayers.id,
-            'num': prayers.prayer,
+            "isLike": prayers?.iprayer,
+            'id': prayers?.id,
+            'num': prayers?.prayer,
           };
           Provider.of<DoLikeMethod>(context, listen: false).getPopIsLike(map);
         });
@@ -132,15 +144,18 @@ class _PrayersDetailState extends State<PrayersDetail> {
     }
   }
 
-  _loadFollowUserData({int id = 0, int uid = 0, Function() onCallback}) async {
+  _loadFollowUserData({int id = 0, int uid = 0, Function()? onCallback}) async {
     try {
       var res = await G.req.eland.prayer_by_user(id: id, userid: uid);
       if (res.data != null) {
         Map result = res.data;
-        PrayerByUserModel prayer_by_user = PrayerByUserModel.fromJson(result);
+
+        PrayerByUserModel prayer_by_user = PrayerByUserModel.fromJson(
+          result as Map<String, dynamic>,
+        );
         setState(() {
-          prayerByUserList = prayer_by_user.list;
-          onCallback();
+          prayerByUserList = prayer_by_user.list ?? [];
+          onCallback!();
         });
       }
     } catch (e) {
@@ -183,7 +198,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                     border: new Border(
                                       bottom: BorderSide(
                                         width: 1.0,
-                                        color: hex('#cacbd1'),
+                                        color: Color(0xffcacbd1),
                                       ),
                                     ),
                                   ),
@@ -195,9 +210,15 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   height: 45,
                                   margin: const EdgeInsets.only(right: 15.0),
                                   child: new CircleAvatar(
-                                    backgroundColor: rgba(28, 141, 160, 1),
+                                    backgroundColor: Color.fromARGB(
+                                      255,
+                                      28,
+                                      141,
+                                      160,
+                                    ),
                                     backgroundImage: new NetworkImage(
-                                      prayerByUserList[f].f_avatar,
+                                      prayerByUserList[f].f_avatar ??
+                                          'https://www.alandaily.com/assets/images/avatar.png',
                                     ),
                                     radius: 11.0,
                                   ),
@@ -206,9 +227,9 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   //                                        width: G.screenWidth() * 0.35,
                                   width: G.screenWidth() * 0.5,
                                   child: new Text(
-                                    (prayerByUserList[f].f_uname == '')
+                                    prayerByUserList[f].f_uname == ''
                                         ? '匿名'
-                                        : prayerByUserList[f].f_uname,
+                                        : prayerByUserList[f].f_uname ?? '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: new TextStyle(
@@ -247,6 +268,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
         }
       },
     );
+    return Container();
   }
 
   //  _clickFollow(i){
@@ -274,10 +296,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
         child: new Opacity(
           opacity: 1.0,
           child: new CircularProgressIndicator(
-            backgroundColor: rgba(28, 141, 160, 1),
+            backgroundColor: Color.fromARGB(255, 28, 141, 160),
             //            value: 0.3,
             valueColor: new AlwaysStoppedAnimation<Color>(
-              rgba(255, 255, 255, 1),
+              Color.fromARGB(255, 255, 255, 255),
             ),
           ),
           //          child: Text('loading'),
@@ -309,10 +331,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
                             child: InkWell(
                               child: icon_close(
                                 size: 30,
-                                color: rgba(28, 141, 160, 1),
+                                color: Color.fromARGB(255, 28, 141, 160),
                               ),
                               onTap: () {
-                                _prefs.setString(
+                                _prefs?.setString(
                                   '_custom_font_size',
                                   custom_font_size.toString(),
                                 );
@@ -355,7 +377,9 @@ class _PrayersDetailState extends State<PrayersDetail> {
                     new Container(
                       decoration: BoxDecoration(
                         border: Border(
-                          top: BorderSide(color: rgba(242, 242, 242, 1)),
+                          top: BorderSide(
+                            color: Color.fromARGB(255, 242, 242, 242),
+                          ),
                         ),
                       ),
                       child: Row(
@@ -367,13 +391,13 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 decoration: BoxDecoration(
                                   border: Border(
                                     right: BorderSide(
-                                      color: rgba(242, 242, 242, 1),
+                                      color: Color.fromARGB(255, 242, 242, 242),
                                     ),
                                   ),
                                 ),
                                 child: AButton.normal(
                                   child: Text('加大'),
-                                  color: rgba(28, 141, 160, 1),
+                                  color: Color.fromARGB(255, 28, 141, 160),
                                   onPressed: () {
                                     setDialogState(() {
                                       custom_font_size = custom_font_size + 1;
@@ -391,7 +415,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                             child: Expanded(
                               child: AButton.normal(
                                 child: Text('縮小'),
-                                color: rgba(28, 141, 160, 1),
+                                color: Color.fromARGB(255, 28, 141, 160),
                                 onPressed: () {
                                   setDialogState(() {
                                     custom_font_size = custom_font_size - 1;
@@ -414,12 +438,13 @@ class _PrayersDetailState extends State<PrayersDetail> {
         );
       },
     );
+    return Container();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hex('#ccc'),
+      backgroundColor: Color(0xffcccccc),
       //      appBar: customAppbar(context: context,title: header_title),
       appBar: customAppbar(
         context: context,
@@ -438,7 +463,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
             decoration: BoxDecoration(
               //                  color: hex('#fff'),
               border: new Border(
-                left: BorderSide(width: 1.0, color: rgba(229, 229, 229, 1)),
+                left: BorderSide(
+                  width: 1.0,
+                  color: Color.fromARGB(255, 229, 229, 229),
+                ),
               ),
             ),
             //                child: InkWell(
@@ -448,12 +476,15 @@ class _PrayersDetailState extends State<PrayersDetail> {
             //                    }
             //                ),
             child: new PopupMenuButton<String>(
-              icon: icon_more_vert(color: rgba(0, 0, 0, 1), size: 20),
+              icon: icon_more_vert(
+                color: Color.fromARGB(255, 0, 0, 0),
+                size: 20,
+              ),
               //这是点击弹出菜单的操作，点击对应菜单后，改变屏幕中间文本状态，将点击的菜单值赋予屏幕中间文本
               onSelected: (String value) {
                 if (value == 'copylink') {
                   Clipboard.setData(
-                    ClipboardData(text: prayers.content_app_link),
+                    ClipboardData(text: (prayers?.content_app_link ?? '')),
                   );
                   G.toast('已復制連結');
                 } else if (value == 'refontsize') {
@@ -470,7 +501,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
                       : new Row(
                           //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            icon_content_copy(size: 20, color: hex('#333')),
+                            icon_content_copy(
+                              size: 20,
+                              color: Color(0xff333333),
+                            ),
                             SizedBox(width: 10),
                             new Text('復制邀請連結'),
                             //                          new Icon(Icons.add_circle)
@@ -484,7 +518,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
                       : new Row(
                           //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            icon_text_rotate_up(size: 20, color: hex('#333')),
+                            icon_text_rotate_up(
+                              size: 20,
+                              color: Color(0xff333333),
+                            ),
                             SizedBox(width: 10),
                             new Text('調整字體大小'),
                             //                          new Icon(Icons.add_circle)
@@ -514,7 +551,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                     right: 20.0,
                     top: 20.0,
                   ),
-                  color: hex('#fff'),
+                  color: Color(0xffffffff),
                   width: G.screenWidth(),
                   height: G.screenHeight(),
                   child: SingleChildScrollView(
@@ -529,7 +566,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                             border: new Border(
                               bottom: BorderSide(
                                 width: 1.0,
-                                color: hex('#cacbd1'),
+                                color: Color(0xffcacbd1),
                               ),
                             ),
                           ),
@@ -550,14 +587,15 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                           right: 15.0,
                                         ),
                                         child: new CircleAvatar(
-                                          backgroundColor: rgba(
+                                          backgroundColor: Color.fromARGB(
+                                            255,
                                             28,
                                             141,
                                             160,
-                                            1,
                                           ),
                                           backgroundImage: new NetworkImage(
-                                            prayers.avatar,
+                                            prayers?.avatar ??
+                                                'https://www.alandaily.com/assets/images/avatar.png',
                                           ),
                                           radius: 11.0,
                                         ),
@@ -569,7 +607,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             new Text(
-                                              prayers.author,
+                                              prayers?.author ?? '',
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: new TextStyle(
@@ -579,7 +617,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                               ),
                                             ),
                                             new Text(
-                                              prayers.time,
+                                              prayers?.time ?? '',
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: new TextStyle(
@@ -599,18 +637,28 @@ class _PrayersDetailState extends State<PrayersDetail> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  (prayers.iprayer == true &&
-                                          prayers.prayer > 0)
+                                  (prayers?.iprayer == true &&
+                                          (prayers?.prayer ?? 0) > 0)
                                       ? AButton.icon(
                                           width: 70,
                                           height: 25,
-                                          borderColor: rgba(28, 141, 160, 1),
-                                          bgColor: rgba(28, 141, 160, 1),
+                                          borderColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
+                                          bgColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
                                           plain: true,
                                           textChild: Text(
-                                            prayers.prayer.toString(),
+                                            prayers!.prayer.toString(),
                                             style: TextStyle(
-                                              color: hex('#fff'),
+                                              color: Color(0xffffffff),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -619,15 +667,15 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                           ),
                                           icon: icon_prayer(
                                             size: 13,
-                                            color: hex('#fff'),
+                                            color: Color(0xffffffff),
                                           ),
                                           onPressed: () {
                                             _clickPrayer(prayers);
                                             //###Leo
                                             Map map = {
                                               "isLike": false,
-                                              'id': prayers.id,
-                                              'num': prayers.prayer - 1,
+                                              'id': prayers?.id,
+                                              'num': (prayers?.prayer ?? 0) - 1,
                                             };
                                             Provider.of<DoLikeMethod>(
                                               context,
@@ -638,15 +686,20 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                       : AButton.icon(
                                           width: 70,
                                           height: 25,
-                                          borderColor: rgba(28, 141, 160, 1),
-                                          bgColor: hex('#fff'),
+                                          borderColor: Color.fromARGB(
+                                            255,
+                                            28,
+                                            141,
+                                            160,
+                                          ),
+                                          bgColor: Color(0xffffffff),
                                           plain: true,
                                           textChild: Text(
-                                            (prayers.prayer == null)
+                                            (prayers?.prayer == null)
                                                 ? '0'
-                                                : prayers.prayer.toString(),
+                                                : prayers!.prayer.toString(),
                                             style: TextStyle(
-                                              color: hex('#333'),
+                                              color: Color(0xff333333),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -655,15 +708,15 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                           ),
                                           icon: icon_prayer(
                                             size: 13,
-                                            color: hex('#333'),
+                                            color: Color(0xff333333),
                                           ),
                                           onPressed: () {
                                             _clickPrayer(prayers);
                                             //###Leo
                                             Map map = {
                                               "isLike": true,
-                                              'id': prayers.id,
-                                              'num': prayers.prayer + 1,
+                                              'id': prayers?.id,
+                                              'num': (prayers?.prayer ?? 0) + 1,
                                             };
                                             Provider.of<DoLikeMethod>(
                                               context,
@@ -676,13 +729,18 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                     child: AButton.normal(
                                       width: 70,
                                       height: 25,
-                                      borderColor: rgba(28, 141, 160, 1),
-                                      bgColor: hex('#fff'),
+                                      borderColor: Color.fromARGB(
+                                        255,
+                                        28,
+                                        141,
+                                        160,
+                                      ),
+                                      bgColor: Color(0xfffffff),
                                       plain: true,
                                       child: Text(
                                         '代禱者',
                                         style: TextStyle(
-                                          color: hex('#333'),
+                                          color: Color(0xff333333),
                                           fontSize: 13,
                                         ),
                                       ),
@@ -705,7 +763,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                             border: new Border(
                               bottom: BorderSide(
                                 width: 1.0,
-                                color: hex('#cacbd1'),
+                                color: Color(0xffcacbd1),
                               ),
                             ),
                           ),
@@ -722,7 +780,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 ),
                                 onTap: () async {
                                   print(
-                                    'prayers.content_app_link======>${prayers.content_app_link}',
+                                    'prayers.content_app_link======>${prayers?.content_app_link}',
                                   );
                                   // final result = await SocialSharePlugin.shareToFeedFacebookLink(
                                   //   quote: prayers.content,
@@ -743,8 +801,8 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
                                   var response = FlutterShareMe()
                                       .shareToFacebook(
-                                        url: '${prayers.content_app_link}',
-                                        msg: '${prayers.content}',
+                                        url: '${prayers?.content_app_link}',
+                                        msg: '${prayers?.content}',
                                       );
                                   print('shareToFacebook======>${response}');
                                 },
@@ -771,8 +829,8 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
                                   var response = FlutterShareMe()
                                       .shareToTwitter(
-                                        url: prayers.content_app_link,
-                                        msg: prayers.content,
+                                        url: (prayers?.content_app_link ?? ''),
+                                        msg: (prayers?.content ?? ''),
                                       );
                                   print('shareToTwitter======>${response}');
                                 },
@@ -785,9 +843,9 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 ),
                                 onTap: () async {
                                   if (Platform.isAndroid) {
-                                    String response = await FlutterShareMe()
+                                    String? response = await FlutterShareMe()
                                         .shareToWhatsApp(
-                                          msg: prayers.content_app_link,
+                                          msg: prayers?.content_app_link ?? '',
                                         );
                                     print('res======>${response}');
                                     if (response == 'false' ||
@@ -796,7 +854,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                     }
                                   } else {
                                     String share_url2 = Uri.encodeComponent(
-                                      prayers.content_app_link,
+                                      prayers?.content_app_link ?? '',
                                     );
                                     try {
                                       Future<bool> canToWhatsApp = canLaunch(
@@ -829,10 +887,10 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 ),
                                 onTap: () {
                                   String share_text2 = Uri.encodeComponent(
-                                    prayers.content,
+                                    prayers?.content ?? '',
                                   );
                                   String share_url2 = Uri.encodeComponent(
-                                    prayers.content_app_link,
+                                    prayers?.content_app_link ?? '',
                                   );
                                   try {
                                     Future<bool> canToEmail = canLaunch(
@@ -862,11 +920,11 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 ),
                                 onTap: () async {
                                   print(
-                                    'content_app_link====>${prayers.content_app_link}',
+                                    'content_app_link====>${prayers?.content_app_link}',
                                   );
                                   Clipboard.setData(
                                     ClipboardData(
-                                      text: prayers.content_app_link,
+                                      text: prayers?.content_app_link ?? '',
                                     ),
                                   );
                                   await G.toast('已復制連結');
@@ -876,7 +934,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
                           ),
                         ),
 
-                        (prayers.cover == '')
+                        (prayers?.cover == '')
                             ? Container()
                             : Container(
                                 padding: EdgeInsets.only(bottom: 15.0),
@@ -884,11 +942,11 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   onTap: () {
                                     APhotoview.show(
                                       context,
-                                      url: prayers.cover,
+                                      url: prayers?.cover ?? '',
                                     );
                                   },
                                   child: AcachedNetworkImage(
-                                    prayers.cover,
+                                    prayers?.cover ?? '',
                                     fit: BoxFit.cover,
                                     //                            height: headerHeight,
                                     width: MediaQuery.of(context).size.width,

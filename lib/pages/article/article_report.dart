@@ -10,13 +10,13 @@ import '../../model/user_model/data.dart';
 
 class ArticleReport extends StatefulWidget {
   final Map args;
-  ArticleReport({Key key, this.args}) : super(key: key);
+  ArticleReport({Key? key, required this.args}) : super(key: key);
 
   _ArticleReportState createState() => _ArticleReportState();
 }
 
 class _ArticleReportState extends State<ArticleReport> {
-  static Map args;
+  static Map? args;
 
   var code = regionCode[0]['code'];
   int userid = 0;
@@ -35,11 +35,11 @@ class _ArticleReportState extends State<ArticleReport> {
   void initState() {
     super.initState();
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     args = widget.args;
-    articleid = args['articleid'];
+    articleid = args?['articleid'];
     // articleid = 12345678;
-    article_title = args['article_title'];
+    article_title = args?['article_title'];
     print('userid=====>${userid}');
     print('articleid=====>${articleid}');
   }
@@ -175,7 +175,7 @@ class _ArticleReportState extends State<ArticleReport> {
                     '確認',
                     style: TextStyle(
                       fontSize: 20,
-                      color: rgba(28, 141, 160, 0.7),
+                      color: Color.fromARGB(178, 28, 141, 160),
                     ),
                   ),
                 ),
@@ -220,7 +220,7 @@ class _ArticleReportState extends State<ArticleReport> {
           },
           child: Container(
             height: G.screenHeight() - 100,
-            color: hex('#fff'),
+            color: Color(0xffffffff),
             padding: EdgeInsets.only(left: 35, right: 35, top: 35),
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,14 +240,14 @@ class _ArticleReportState extends State<ArticleReport> {
                               new TextSpan(
                                 text: "文章：",
                                 style: new TextStyle(
-                                  color: rgba(51, 51, 51, 1),
+                                  color: Color.fromARGB(255, 51, 51, 51),
                                   height: 2,
                                 ),
                               ),
                               new TextSpan(
                                 text: "${article_title}",
                                 style: new TextStyle(
-                                  color: rgba(28, 141, 160, 1),
+                                  color: Color.fromARGB(255, 28, 141, 160),
                                   height: 2,
                                 ),
                               ),
@@ -264,19 +264,19 @@ class _ArticleReportState extends State<ArticleReport> {
                         decoration: BoxDecoration(
                           border: Border(
                             top: BorderSide(
-                              color: rgba(204, 204, 204, 1),
+                              color: Color.fromARGB(255, 204, 204, 204),
                               width: 1,
                             ),
                             bottom: BorderSide(
-                              color: rgba(204, 204, 204, 1),
+                              color: Color.fromARGB(255, 204, 204, 204),
                               width: 1,
                             ),
                             left: BorderSide(
-                              color: rgba(204, 204, 204, 1),
+                              color: Color.fromARGB(255, 204, 204, 204),
                               width: 1,
                             ),
                             right: BorderSide(
-                              color: rgba(204, 204, 204, 1),
+                              color: Color.fromARGB(255, 204, 204, 204),
                               width: 1,
                             ),
                           ),
@@ -323,7 +323,7 @@ class _ArticleReportState extends State<ArticleReport> {
                               child: Container(
                                 width: 80,
                                 decoration: BoxDecoration(
-                                  color: rgba(204, 204, 204, 1),
+                                  color: Color.fromARGB(255, 204, 204, 204),
                                 ),
                                 alignment: Alignment.center,
                                 margin: EdgeInsets.only(top: 10, bottom: 0),
@@ -406,9 +406,9 @@ class _ArticleReportState extends State<ArticleReport> {
                           width: 250,
                           child: Text('提交'),
                           //                            rgba(169, 211, 218, 1)
-                          bgColor: rgba(28, 141, 160, 1),
-                          color: hex('#fff'),
-                          borderColor: rgba(28, 141, 160, 1),
+                          bgColor: Color.fromARGB(255, 28, 141, 160),
+                          color: Color(0xffffffff),
+                          borderColor: Color.fromARGB(255, 28, 141, 160),
                           plain: true,
                           borderRadius: BorderRadius.circular(40),
                           onPressed: () => _submit(),

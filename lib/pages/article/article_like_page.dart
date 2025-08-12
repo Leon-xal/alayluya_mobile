@@ -5,7 +5,7 @@ import '../../model/user_model/data.dart';
 import '../../utils/global.dart';
 
 class ArticleLikePage extends StatefulWidget {
-  ArticleLikePage({Key key}) : super(key: key);
+  ArticleLikePage({Key? key}) : super(key: key);
   @override
   createState() => _ArticleLikePageState();
 }
@@ -18,7 +18,7 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
     super.initState();
 
     UserDataModel userData = G.user.data;
-    userid = userData.id;
+    userid = userData.id ?? 0;
     //    Future.delayed(Duration.zero, () async {
     //      print('ssss===>${userid}');
     //    });
@@ -35,7 +35,7 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
       backgroundColor: Colors.white,
       appBar: customAppbar(context: context, title: '點贊文章'),
 
-      body: (userid > 0)
+      body: (userid != null && userid > 0)
           ? AArticleLikeList(
               isShowDesc: true,
               isShowPrayerBtn: false,

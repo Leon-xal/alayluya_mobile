@@ -13,7 +13,7 @@ import '../../utils/global.dart';
 /// ```
 AppBar customAppbar({
   BuildContext? context,
-  String title = '',
+  String? title,
   bool textcenter = false,
   bool borderBottom = true,
   bool default_actions = false,
@@ -102,6 +102,9 @@ AppBar customAppbar({
       ),
     );
   } else {
+    if (title == null || title.isEmpty) {
+      title = 'Alayluya';
+    }
     return AppBar(
       //brightness: Brightness.light,
       centerTitle: textcenter,
