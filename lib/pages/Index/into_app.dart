@@ -8,8 +8,9 @@ import '../login/login_start.dart';
 import '../../utils/global.dart';
 import '../../utils/syncs.dart';
 import '../../components/onesignal_wapper/onesignal_wapper.dart';
-import '../../components/a_dialog/index.dart';
-import 'package:notification_permissions/notification_permissions.dart';
+//import '../../components/a_dialog/index.dart';
+//import 'package:notification_permissions/notification_permissions.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // Import flutter_local_notifications
 
 //import 'package:connectivity/connectivity.dart';
 
@@ -31,6 +32,9 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin(); // Initialize FlutterLocalNotificationsPlugin
+
   AnimationController?
   _controller; //AnimationController是Animation的一个子类，它可以控制Animation，可以控制动画的时间，类型，过渡3曲线
   late Animation<double> _animation;
@@ -77,7 +81,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
                 //   AUpgradeApp.confirm(context);
                 // }else{
                 //这里最好提示下再让用户去授权
-                await NotificationPermissions.getNotificationPermissionStatus()
+                await _initializeNotifications(); // Call the new initialization function
+                await _goToLink();
+                /*await NotificationPermissions.gettatus()
                     .then((status) async {
                       // print('status1=======>${status}');
                       if (status == PermissionStatus.denied ||
@@ -105,7 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
                       } else {
                         await _goToLink();
                       }
-                    });
+                    });*/
                 // }
               }
             });
@@ -163,6 +169,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
         break;
       default:
     }
+  }
+
+  Future<void> _initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings(
+          '@mipmap/ic_launcher',
+        ); // Replace with your app icon
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   Future<void> _goToLink() async {

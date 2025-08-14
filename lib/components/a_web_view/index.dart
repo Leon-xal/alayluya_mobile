@@ -1,37 +1,20 @@
 import 'dart:async';
-//import 'package:color_dart/HexColor.dart';
-//import 'package:color_dart/RgbaColor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-//import '../../components/custom_navbar/index.dart';
-import '../../utils/global.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter/cupertino.dart';
+//import '../../utils/global.dart'; // Assuming this is your global utils file
 
 class AWebview {
   final BuildContext context;
-
-  /// 图片URL
   final String url;
   final String title;
+
   AWebview.open(this.context, {required this.url, this.title = ""}) {
-    //    print('sss===>${title}');
-    String mytitle = '';
-    if (title == '') {
-      mytitle = url;
-    } else {
-      mytitle = title;
-    }
-
-    Widget webview = new AWebViewPage(url, mytitle);
-    final route = new CupertinoPageRoute(
-      builder: (BuildContext context) => webview,
-      settings: new RouteSettings(
-        name: webview.toStringShort(),
-        //        isInitialRoute: false,
-      ),
+    String mytitle = title.isEmpty ? url : title;
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => AWebViewPage(url, mytitle)),
     );
-
-    G.getCurrentState().push(route);
   }
 }
 
@@ -42,87 +25,63 @@ class AWebViewPage extends StatefulWidget {
   AWebViewPage(this.url, this.title);
 
   @override
-  State<StatefulWidget> createState() => new AWebViewState();
+  State<AWebViewPage> createState() => AWebViewState();
 }
 
 class AWebViewState extends State<AWebViewPage> {
-  final Completer<WebViewController> _controller =
-      new Completer<WebViewController>();
+  final Completer<InAppWebViewController> _controller =
+      Completer<InAppWebViewController>(); // Changed to InAppWebViewController
+  bool isLoading = true;
 
-  bool isloading = true;
-
-  JavascriptChannel Function(BuildContext) _toasterJavascriptChannel =
-      (BuildContext context) {
-        return new JavascriptChannel(
-          name: 'Toaster',
-          onMessageReceived: (JavascriptMessage message) {
-            print('message=====>${message.message}');
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(new SnackBar(content: Text(message.message)));
-          },
-        );
-      };
-
-  Widget body() {
-    return new Builder(
-      builder: (BuildContext context) {
-        print('widget.url======>${widget.url}');
-        return Stack(
-          children: [
-            new WebView(
-              initialUrl: widget.url,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              javascriptChannels: <JavascriptChannel>[
-                _toasterJavascriptChannel(context),
-              ].toSet(),
-              navigationDelegate: (NavigationRequest request) {
-                if (request.url.startsWith(
-                  'https://github.com/fluttercandies/wechat_flutter',
-                )) {
-                  print('blocking=====> navigation to $request}');
-                  return NavigationDecision.prevent;
-                }
-                print('allowing=====> navigation to $request');
-                return NavigationDecision.navigate;
-              },
-              onPageFinished: (String url) {
-                print('Page=====> finished loading: $url');
-                setState(() {
-                  isloading = false;
-                });
-              },
-            ),
-            (isloading == false)
-                ? Container()
-                : Positioned(
-                    top: G.screenHeight() / 2 - 100,
-                    left: G.screenWidth() / 2 - 20,
-                    child: new Opacity(
-                      opacity: 1.0,
-                      child: new CircularProgressIndicator(
-                        backgroundColor: Color.fromARGB(255, 28, 141, 160),
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                          Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-          ],
-        );
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: customAppbar(context: context, title: '${widget.title}'),
-      body: body(),
+      appBar: AppBar(title: Text(widget.title)),
+      body: Stack(
+        children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+            onWebViewCreated: (InAppWebViewController controller) {
+              _controller.complete(controller);
+            },
+            onProgressChanged: (controller, progress) {
+              setState(() {
+                isLoading = progress < 100;
+              });
+            },
+            onLoadStop: (controller, url) {
+              setState(() {
+                isLoading = false;
+              });
+            },
+            /*onLoadError: (controller, url, code, message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error loading page: $message')),
+              );
+              setState(() => isLoading = false);
+            },*/
+            onReceivedError: (controller, request, error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error loading page: ${error.description}'),
+                ),
+              );
+              setState(() => isLoading = false);
+            },
+            // JavaScript handling (replace with your actual JavaScript interaction)
+            onConsoleMessage: (controller, consoleMessage) {
+              print("consoleMessage: ${consoleMessage.message}");
+              // Handle console messages from the webpage here
+            },
+          ),
+          if (isLoading) Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
 }
