@@ -84,7 +84,7 @@ dependencies:
   google_api_availability: ^5.0.1
   #notification_permissions: ^0.6.1
   flutter_facebook_auth: ^7.1.2
-  flutter_local_notifications: ^14.0.0
+  flutter_local_notifications: ^19.0.0
 
 dev_dependencies:
   flutter_test:
