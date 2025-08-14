@@ -35,7 +35,7 @@ class _ReplyCommentState extends State<ReplyComment> {
   void initState() {
     super.initState();
     final userData = G.user.data;
-    userId = userData.id ?? 0; // Ensure userId is not null
+    userId = userData!.id ?? 0; // Ensure userId is not null
     articleId = widget.args['articleid'];
     commentId = widget.args['commentid'];
     toUserId = widget.args['to_userid'];

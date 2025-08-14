@@ -30,6 +30,6 @@ class User {
     _prefs = await SharedPreferences.getInstance();
     //    print('userJson=====>${userJson}');
     //    print('userJsonEncode=====>${json.encode(userJson)}');
-    _prefs.setString('user', json.encode(userJson));
+    _prefs!.setString('user', json.encode(userJson));
   }
 }

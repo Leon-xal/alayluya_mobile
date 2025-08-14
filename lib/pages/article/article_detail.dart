@@ -48,7 +48,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id!;
     args = widget.args;
     id = args?['id'];
@@ -117,7 +117,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   _clickElandFollow(item) {
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int itemid = item.eland_id;
     //    print('aaa===>${uid}/${itemid}');
     try {
@@ -157,7 +157,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
   }
 
   _clickDoLike(item) {
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -184,8 +184,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
     }
   }
 
-  _clickDoReport(item) {
-    int uid = G.user.data.id!;
+  /*_clickDoReport(item) {
+    int uid = G.user.data!.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {
@@ -198,7 +198,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
     } catch (e) {
       print('articledoReport===>${e}');
     }
-  }
+  }*/
 
   Widget _buildProgressIndicator() {
     return new Padding(
@@ -409,8 +409,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
               //这是点击弹出菜单的操作，点击对应菜单后，改变屏幕中间文本状态，将点击的菜单值赋予屏幕中间文本
               onSelected: (String value) {
                 if (value == 'copylink') {
-                  if (share_url != null && share_url!.isEmpty) {
-                    Clipboard.setData(ClipboardData(text: share_url!));
+                  if (share_url.isEmpty) {
+                    Clipboard.setData(ClipboardData(text: share_url));
                     G.toast('已復制連結');
                   } else {
                     G.toast('沒有可復制的連結');
@@ -957,7 +957,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
                           print('shareToTwitter======>${share_url}');
                           var response = FlutterShareMe().shareToTwitter(
-                            url: share_url!,
+                            url: share_url,
                             msg: share_text!,
                           );
                           print('shareToTwitter======>${response}');

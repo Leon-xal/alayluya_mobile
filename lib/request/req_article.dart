@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import '../utils/global.dart';
 
 /// 用户管理相关
@@ -129,8 +129,8 @@ class ReqArticle {
 
   /// 獲取評論
   Future<Response> comment({
-    @required int articleid,
-    @required int userid,
+    int? articleid,
+    int? userid,
     int pageid = 1,
     int limit = 20,
   }) {
@@ -146,11 +146,7 @@ class ReqArticle {
   }
 
   /// 提交評論
-  Future<Response> add_comment({
-    @required int articleid,
-    @required int userid,
-    @required String textStr,
-  }) {
+  Future<Response> add_comment({int? articleid, int? userid, String? textStr}) {
     return _dio.post(
       G.prdapi + '/add-comment',
       queryParameters: {
@@ -163,10 +159,10 @@ class ReqArticle {
 
   /// 點贊評論
   Future<Response> do_like_comment({
-    @required int articleid,
-    @required int userid,
-    @required int comment_id,
-    @required int to_userid,
+    int? articleid,
+    int? userid,
+    int? comment_id,
+    int? to_userid,
   }) {
     return _dio.post(
       G.prdapi + '/do-like-comment',
@@ -181,11 +177,11 @@ class ReqArticle {
 
   /// 回復評論
   Future<Response> reply_comment({
-    @required int articleid,
-    @required int userid,
-    @required int comment_id,
-    @required int to_userid,
-    @required String textStr,
+    int? articleid,
+    int? userid,
+    int? comment_id,
+    int? to_userid,
+    String? textStr,
   }) {
     return _dio.post(
       G.prdapi + '/reply-comment',
@@ -201,9 +197,9 @@ class ReqArticle {
 
   /// 獲取回復評論列表
   Future<Response> reply_comment_list({
-    @required int articleid,
-    @required int userid,
-    @required int comment_id,
+    int? articleid,
+    int? userid,
+    int? comment_id,
     int pageid = 1,
     int limit = 20,
   }) {

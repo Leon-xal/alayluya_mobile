@@ -238,7 +238,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
   }
 
   _clickCollect(item) {
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {

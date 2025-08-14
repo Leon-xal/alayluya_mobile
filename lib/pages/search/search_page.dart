@@ -31,8 +31,8 @@ class _SearchPageState extends State<SearchPage> {
 
   _doSearch(String str) async {
     try {
-      UserDataModel userData = G.user.data;
-      userid = userData.id!;
+      UserDataModel? userData = G.user.data;
+      userid = userData!.id ?? 0;
       //      print('_doSearch====>${userid}');
       var res = await G.req.search.dosearch(search_key: str, uid: userid);
       //      Map result = res.data;
@@ -44,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
 
   _loadListData() async {
     try {
-      UserDataModel userData = G.user.data;
+      UserDataModel userData = G.user.data!;
       userid = userData.id!;
       var res = await G.req.search.index(uid: userid);
       Map result = res.data;

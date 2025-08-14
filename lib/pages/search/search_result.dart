@@ -1,5 +1,5 @@
 //import 'package:color_dart/color_dart.dart';
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/a_article_list/index.dart';
 import '../../components/a_eland_list/index.dart';
@@ -25,7 +25,7 @@ class _SearchResultState extends State<SearchResult> {
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id!;
     //    dynamic arg = ModalRoute.of(context).settings.arguments;
     //    if (arg != null) {

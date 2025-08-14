@@ -52,7 +52,7 @@ class _ElandInfoState extends State<ElandInfo> {
     args = widget.args;
     eland_id = args?['id'];
     Future.delayed(Duration.zero, () {
-      UserDataModel userData = G.user.data;
+      UserDataModel userData = G.user.data!;
       userid = userData.id ?? 0;
       _loadElandData(elandid: eland_id, uid: userid);
     });
@@ -111,7 +111,7 @@ class _ElandInfoState extends State<ElandInfo> {
   }
 
   _clickFollow(item) {
-    int uid = G.user.data.id ?? 0;
+    int uid = G.user.data!.id ?? 0;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {

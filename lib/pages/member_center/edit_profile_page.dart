@@ -30,7 +30,7 @@ class _EditProfilePage extends State<EditProfilePage> {
       //      if(G.isLogin == true) G.pop();
 
       setState(() {
-        UserDataModel userData = G.user.data;
+        UserDataModel userData = G.user.data!;
         firstname['value'] = userData.FirstName;
         lastname['value'] = userData.LastName;
         nickname['value'] = userData.DisplayName;

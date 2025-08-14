@@ -17,7 +17,7 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
   void initState() {
     super.initState();
 
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     //    Future.delayed(Duration.zero, () async {
     //      print('ssss===>${userid}');
@@ -35,7 +35,7 @@ class _ArticleLikePageState extends State<ArticleLikePage> {
       backgroundColor: Colors.white,
       appBar: customAppbar(context: context, title: '點贊文章'),
 
-      body: (userid != null && userid > 0)
+      body: (userid > 0)
           ? AArticleLikeList(
               isShowDesc: true,
               isShowPrayerBtn: false,

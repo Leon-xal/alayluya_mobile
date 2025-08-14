@@ -40,8 +40,8 @@ class _TodayPageState extends State<TodayPage>
   void initState() {
     super.initState();
     // print('today======>');
-    UserDataModel userData = G.user.data;
-    userid = userData.id!;
+    UserDataModel? userData = G.user.data;
+    userid = userData!.id ?? 0;
     var res = Syncs.getCateList;
     Map result = res.data;
     articleCate = ArticleCateModel.fromJson(result as Map<String, dynamic>);

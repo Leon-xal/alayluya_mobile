@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     // print('home======>');
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
 
     Future.delayed(Duration.zero, () async {

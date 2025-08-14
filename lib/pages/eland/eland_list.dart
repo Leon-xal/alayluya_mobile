@@ -27,7 +27,7 @@ class _ElandListState extends State<ElandList> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     args = widget.args;
     search_key = args?['search_key'];
@@ -104,9 +104,7 @@ class _ElandListState extends State<ElandList> with TickerProviderStateMixin {
   }
   */
   Widget buildTabBarView() {
-    if (elandCate != null &&
-        elandCate.list != null &&
-        elandCate.list!.isNotEmpty) {
+    if (elandCate.list != null && elandCate.list!.isNotEmpty) {
       return TabBarView(
         controller: _tabController,
         children: elandCate.list!.map((elandCateList) {

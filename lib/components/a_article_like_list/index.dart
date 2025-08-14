@@ -244,7 +244,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware {
   _clickPrayer(item) {
     //    print('sss===>${item.eland_name}');
 
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int itemid = item.id;
     //    print('aaa===>${uid}/${itemid}/${item.key}');
     try {
@@ -271,7 +271,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware {
   _clickDoLike(item) {
     //    print('sss===>${item.eland_name}');
 
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int articleid = item.id;
     //    print('aaa===>${uid}/${itemid}/${item.key}');
     try {

@@ -47,7 +47,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     args = widget.args;
     id = args?['id'];
@@ -75,7 +75,7 @@ class _PrayersDetailState extends State<PrayersDetail> {
   }
 
   _clickPrayer(item) {
-    int uid = G.user.data.id ?? 0;
+    int uid = G.user.data!.id ?? 0;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {

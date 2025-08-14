@@ -49,77 +49,86 @@ class Router {
     // 从非toolbar页面（子页面）跳转到toolbar页面（主页）实现：
     // pushName到对应的路由，因为Toolbar是单例模式，所以只会创建一个
     // pushName之后，在ToolBar，initState中获取当前的路由，实现切换页面
-    '/': (BuildContext context, {Object args}) => IntoApp(),
-    '/not_network': (BuildContext context, {Object args}) => NotNetwork(),
-    '/index': (BuildContext context, {Object args}) =>
+    '/': (BuildContext context, {Object? args}) => IntoApp(),
+    '/not_network': (BuildContext context, {Object? args}) => NotNetwork(),
+    '/index': (BuildContext context, {Object? args}) =>
         IndexPage(arguments: args),
-    '/home': (BuildContext context, {Object args}) =>
+    '/home': (BuildContext context, {Object? args}) =>
         IndexPage(arguments: args),
-    '/today': (BuildContext context, {Object args}) =>
+    '/today': (BuildContext context, {Object? args}) =>
         IndexPage(arguments: args),
-    '/article': (BuildContext context, {Object args}) =>
+    '/article': (BuildContext context, {Object? args}) =>
         IndexPage(arguments: args),
-    '/membercenter': (BuildContext context, {Object args}) =>
+    '/membercenter': (BuildContext context, {Object? args}) =>
         IndexPage(arguments: args),
-    '/eland_prayers': (BuildContext context, {Object args}) =>
-        ElandPrayersListPage(args: args),
-    '/article_like': (BuildContext context, {Object args}) => ArticleLikePage(),
-    '/article_list': (BuildContext context, {Object args}) =>
-        ArticleListPage(args: args),
-    '/article_report': (BuildContext context, {Object args}) =>
-        ArticleReport(args: args),
-    '/my_eland_list': (BuildContext context, {Object args}) =>
-        MyElandList(args: args),
-    '/eland_list': (BuildContext context, {Object args}) =>
-        ElandList(args: args),
-    '/eland_info': (BuildContext context, {Object args}) =>
-        ElandInfo(args: args),
-    '/login_start': (BuildContext context, {Object args}) => LoginStart(),
-    '/login_mail': (BuildContext context, {Object args}) => LoginMail(),
-    '/register': (BuildContext context, {Object args}) => RegisterPage(),
-    '/edit_profile': (BuildContext context, {Object args}) => EditProfilePage(),
-    '/bind_info': (BuildContext context, {Object args}) =>
-        BindEmailOrPhone(type: args),
+    '/eland_prayers': (BuildContext context, {Object? args}) =>
+        ElandPrayersListPage(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/article_like': (BuildContext context, {Object? args}) =>
+        ArticleLikePage(),
+    '/article_list': (BuildContext context, {Object? args}) =>
+        ArticleListPage(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/article_report': (BuildContext context, {Object? args}) =>
+        ArticleReport(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/my_eland_list': (BuildContext context, {Object? args}) =>
+        MyElandList(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/eland_list': (BuildContext context, {Object? args}) =>
+        ElandList(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/eland_info': (BuildContext context, {Object? args}) =>
+        ElandInfo(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/login_start': (BuildContext context, {Object? args}) => LoginStart(),
+    '/login_mail': (BuildContext context, {Object? args}) => LoginMail(),
+    '/register': (BuildContext context, {Object? args}) => RegisterPage(),
+    '/edit_profile': (BuildContext context, {Object? args}) =>
+        EditProfilePage(),
+    '/bind_info': (BuildContext context, {Object? args}) => BindEmailOrPhone(
+      type: args is Map<dynamic, dynamic> ? args['type'] : null,
+    ),
 
-    '/forgot_password': (BuildContext context, {Object args}) =>
-        ForgotPassword(args: args),
-    '/setting': (BuildContext context, {Object args}) => SettingPage(),
-    '/search': (BuildContext context, {Object args}) => SearchPage(),
-    '/search_result': (BuildContext context, {Object args}) =>
-        SearchResult(args: args),
-    '/article_detail': (BuildContext context, {Object args}) =>
-        ArticleDetail(args: args),
-    '/terms_of_use': (BuildContext context, {Object args}) => TermsOfUse(),
-    '/prayers_detail': (BuildContext context, {Object args}) =>
-        PrayersDetail(args: args),
-    '/comment_page': (BuildContext context, {Object args}) =>
-        CommentPage(args: args),
-    '/reply_comment': (BuildContext context, {Object args}) =>
-        ReplyComment(args: args),
-    '/setdomain': (BuildContext context, {Object args}) => SetDomain(),
+    '/forgot_password': (BuildContext context, {Object? args}) =>
+        ForgotPassword(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/setting': (BuildContext context, {Object? args}) => SettingPage(),
+    '/search': (BuildContext context, {Object? args}) => SearchPage(),
+    '/search_result': (BuildContext context, {Object? args}) =>
+        SearchResult(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/article_detail': (BuildContext context, {Object? args}) =>
+        ArticleDetail(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/terms_of_use': (BuildContext context, {Object? args}) => TermsOfUse(),
+    '/prayers_detail': (BuildContext context, {Object? args}) =>
+        PrayersDetail(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/comment_page': (BuildContext context, {Object? args}) =>
+        CommentPage(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/reply_comment': (BuildContext context, {Object? args}) =>
+        ReplyComment(args: args is Map<dynamic, dynamic> ? args : {}),
+    '/setdomain': (BuildContext context, {Object? args}) => SetDomain(),
 
-    '/testpage1': (BuildContext context, {Object args}) => TestPage1(),
-    '/testpage2': (BuildContext context, {Object args}) => TestPage2(),
-    '/test_facebook_login': (BuildContext context, {Object args}) =>
+    '/testpage1': (BuildContext context, {Object? args}) => TestPage1(),
+    '/testpage2': (BuildContext context, {Object? args}) => TestPage2(),
+    '/test_facebook_login': (BuildContext context, {Object? args}) =>
         TestFacebookLogin(),
     // '/test_onesignal': (BuildContext context, { Object args }) => TestOnesignal(),
     //    '/menu': (BuildContext context, { Object args }) => Toolbar(arguments: args,),
-    '/test_modeler': (BuildContext context, {Object args}) =>
-        TestModeler(args: args),
+    '/test_modeler': (BuildContext context, {Object? args}) =>
+        TestModeler(args: args is Map<dynamic, dynamic> ? args : {}),
   };
 
-  static Router _singleton;
+  static final Router _singleton = Router._internal();
+  Router._internal();
+
+  factory Router() {
+    return _singleton; //No need for null check
+  }
+  /*static Router? _singleton;
 
   Router._internal();
 
   factory Router() {
     return _singleton;
-  }
+  }*/
 
   /// 监听route
   Route getRoutes(RouteSettings settings) {
-    String routeName = settings.name;
-    final Function builder = Router._routes[routeName];
+    String routeName = settings.name!;
+    final Function builder = Router._routes[routeName]!;
 
     //    print("getRoutes====>${routeName}<<<<<<<==========================");
 

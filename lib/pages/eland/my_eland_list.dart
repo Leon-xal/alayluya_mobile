@@ -27,7 +27,7 @@ class _MyElandListState extends State<MyElandList>
 
   @override
   void initState() {
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     args = widget.args;
     search_key = args?['search_key'];
@@ -47,7 +47,7 @@ class _MyElandListState extends State<MyElandList>
 
   Widget buildTabBarView() {
     int cateid = 0;
-    userid = G.user.data.id ?? 0;
+    userid = G.user.data!.id ?? 0;
     // print('userid====>${userid}');
     return AElandList(
       uid: userid,

@@ -33,7 +33,7 @@ Dio initDio() {
         }
         return handler.next(response);
       },
-      onError: (DioError e, ErrorInterceptorHandler handler) async {
+      onError: (DioException e, ErrorInterceptorHandler handler) async {
         if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout) {
           await G.toast('Request timed out');

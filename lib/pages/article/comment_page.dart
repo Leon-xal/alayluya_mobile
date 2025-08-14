@@ -33,7 +33,7 @@ class _CommentPageState extends State<CommentPage> {
   void initState() {
     super.initState();
     final userData = G.user.data;
-    userId = userData.id ?? 0; // Ensure userId is initialized
+    userId = userData!.id ?? 0; // Ensure userId is initialized
     articleId = widget.args['id'];
     _loadData(articleId: articleId, limit: 25, pageId: pageId, userId: userId);
   }

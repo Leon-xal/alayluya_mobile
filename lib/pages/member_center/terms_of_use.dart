@@ -20,7 +20,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id!;
     //    print('aaaaa===>${userData}');
 

@@ -72,8 +72,8 @@ class G {
     msg: text,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.CENTER,
-    timeInSecForIos: 1,
-    backgroundColor: rgba(40, 40, 40, 0.8),
+    timeInSecForIosWeb: 1,
+    backgroundColor: Color.fromARGB(204, 40, 40, 40),
     textColor: Colors.white,
     fontSize: 14.0,
   );
@@ -114,10 +114,10 @@ class G {
   static final APullToRefresh pullToRefresh = APullToRefresh();
 
   // 获取当前的state
-  static NavigatorState getCurrentState() => navigatorKey.currentState;
+  static NavigatorState getCurrentState() => navigatorKey.currentState!;
 
   /// 获取当前的context
-  static BuildContext getCurrentContext() => navigatorKey.currentContext;
+  static BuildContext getCurrentContext() => navigatorKey.currentContext!;
 
   /// 获取屏幕上下边距
   /// 用于兼容全面屏，刘海屏
@@ -132,7 +132,7 @@ class G {
       MediaQuery.of(getCurrentContext()).size.height;
 
   /// 跳转页面使用 G.pushNamed
-  static void pushNamed(String routeName, {Object arguments}) {
+  static void pushNamed(String routeName, {Object? arguments}) {
     // 如果跳转到toolbar页面  不能返回
 
     if (toobarRouteNameList.indexOf(routeName) > -1) {
@@ -152,12 +152,12 @@ class G {
   /// @param {Color} color
   /// @param {bool} show  是否显示頂部border
   /// ```
-  static Border borderTop({Color color, bool show = true}) {
+  static Border borderTop({Color? color, bool show = true}) {
     return Border(
       top: BorderSide(
         color: (!show)
-            ? (show ? rgba(204, 204, 204, 1) : Colors.transparent)
-            : color,
+            ? (show ? Color.fromARGB(255, 204, 204, 204) : Colors.transparent)
+            : color ?? Colors.grey, // Provide a default color
         width: 1,
       ),
     );
@@ -168,12 +168,12 @@ class G {
   /// @param {Color} color
   /// @param {bool} show  是否显示底部border
   /// ```
-  static Border borderBottom({Color color, bool show = true}) {
+  static Border borderBottom({Color? color, bool show = true}) {
     return Border(
       bottom: BorderSide(
         color: (!show)
-            ? (show ? rgba(204, 204, 204, 1) : Colors.transparent)
-            : color,
+            ? (show ? Color.fromARGB(255, 204, 204, 204) : Colors.transparent)
+            : color ?? Colors.grey, // Provide a default color
         width: 1,
       ),
     );
@@ -182,8 +182,8 @@ class G {
   //
   /// 获取时间戳
   /// 不传值 代表获取当前时间戳
-  static int getTime([DateTime time]) {
-    return (time.millisecondsSinceEpoch / 1000).round();
+  static int getTime([DateTime? time]) {
+    return (time!.millisecondsSinceEpoch / 1000).round();
   }
 
   static bool is_http(String str) {
@@ -197,25 +197,25 @@ class G {
   /// user信息
   static final User user = User();
 
-  static void isHasNetwork({Function onCallback}) async {
-    bool hasNetwork = null;
+  static void isHasNetwork({Function? onCallback}) async {
+    bool hasNetwork;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       print('I am connected to a mobile network====>.');
       hasNetwork = true;
-      onCallback(hasNetwork);
+      onCallback!(hasNetwork);
     } else if (connectivityResult == ConnectivityResult.wifi) {
       print('I am connected to a wifi network====>.');
       hasNetwork = true;
-      onCallback(hasNetwork);
+      onCallback!(hasNetwork);
     } else {
       print('no network====>');
       hasNetwork = false;
-      onCallback(hasNetwork);
+      onCallback!(hasNetwork);
     }
   }
 
-  static void setDomain(String doMainStr, {Function onCallback}) async {
+  static void setDomain(String doMainStr, {Function? onCallback}) async {
     SharedPreferences prefs;
     bool ishttp = false;
     String domainStr = '';
@@ -223,15 +223,15 @@ class G {
     prefs.setString('domain', doMainStr);
 
     Future.delayed(Duration.zero, () async {
-      domainStr = prefs.getString('domain');
+      domainStr = prefs.getString('domain') ?? 'http://testapi2.alayluya.com';
       ishttp = G.is_http(domainStr);
-      print('domain2====>${domainStr}，${ishttp}');
+      print('domain2====>${domainStr} ${ishttp}');
       if (ishttp == true) {
         G.baseurl = domainStr;
         G.prdapi = domainStr + '/api';
-        onCallback(true);
+        onCallback!(true);
       } else {
-        onCallback(false);
+        onCallback!(false);
       }
     });
   }

@@ -81,7 +81,7 @@ class _MemberCenterState extends State<MemberCenter>
   // }
 
   ARow buildUser() {
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     return ARow(
       height: 55,
       color: Colors.transparent,
@@ -159,6 +159,9 @@ class _MemberCenterState extends State<MemberCenter>
   Widget build(BuildContext context) {
     //    return Text('member');
     //     G.user.data.email = 'AlfredLee90@foxmailaassasddasdasd.com';
+    super.build(
+      context,
+    ); // Call super.build to ensure the mixin works correctly
     return SingleChildScrollView(
       child: Container(
         color: Color(0xffffffff),
@@ -191,7 +194,7 @@ class _MemberCenterState extends State<MemberCenter>
                 children: <Widget>[
                   ///判斷是否綁定email
                   // Text('${G.user.data.emailv}'),
-                  if (G.user.data.email != '' && G.user.data.emailv == '1')
+                  if (G.user.data!.email != '' && G.user.data!.emailv == '1')
                     ARow(
                       height: 50,
                       padding: EdgeInsets.all(0),
@@ -203,7 +206,7 @@ class _MemberCenterState extends State<MemberCenter>
                       centerChild: Container(
                         // width: 120,
                         child: Text(
-                          G.user.data.email != null ? '電子郵箱' : '綁定郵箱',
+                          G.user.data!.email != null ? '電子郵箱' : '綁定郵箱',
                         ),
                       ),
                       rightChild: Expanded(
@@ -213,7 +216,7 @@ class _MemberCenterState extends State<MemberCenter>
                           // width:G.screenWidth()-180,
                           // height:50,
                           padding: EdgeInsets.only(right: 15),
-                          child: Text('${G.user.data.email}', maxLines: 2),
+                          child: Text('${G.user.data!.email}', maxLines: 2),
                         ),
                       ),
 
@@ -224,7 +227,7 @@ class _MemberCenterState extends State<MemberCenter>
                     ),
 
                   ///判斷是否綁定手機
-                  if (G.user.data.mobile != '' && G.user.data.telv == '1')
+                  if (G.user.data!.mobile != '' && G.user.data!.telv == '1')
                     ARow(
                       height: 50,
                       padding: EdgeInsets.all(0),
@@ -236,7 +239,7 @@ class _MemberCenterState extends State<MemberCenter>
                       centerChild: Container(
                         // width: 120,
                         child: Text(
-                          G.user.data.mobile != null ? '手機號碼' : '綁定號碼',
+                          G.user.data!.mobile != null ? '手機號碼' : '綁定號碼',
                         ),
                       ),
                       rightChild: Expanded(
@@ -245,7 +248,7 @@ class _MemberCenterState extends State<MemberCenter>
                           alignment: Alignment.centerRight,
                           // width:G.screenWidth()-150,
                           padding: EdgeInsets.only(right: 15),
-                          child: Text('${G.user.data.mobile}', maxLines: 2),
+                          child: Text('${G.user.data!.mobile}', maxLines: 2),
                         ),
                       ),
 

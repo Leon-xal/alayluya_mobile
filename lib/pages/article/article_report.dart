@@ -34,7 +34,7 @@ class _ArticleReportState extends State<ArticleReport> {
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     args = widget.args;
     articleid = args?['articleid'];

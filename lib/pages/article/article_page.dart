@@ -31,7 +31,7 @@ class _ArticlePageState extends State<ArticlePage>
   void initState() {
     super.initState();
     // print('article======>');
-    UserDataModel userData = G.user.data;
+    UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
   }
 
@@ -46,6 +46,9 @@ class _ArticlePageState extends State<ArticlePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(
+      context,
+    ); // Call super.build to ensure the mixin works correctly
     //    return Text('qwe');
     dynamic arg = ModalRoute.of(context)?.settings.arguments;
     if (arg != null) {

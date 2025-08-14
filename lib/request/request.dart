@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import './init_dio.dart';
+//import './init_dio.dart';
 import './req_user.dart';
 import './req_article.dart';
 import './req_article_cate.dart';
@@ -8,10 +8,10 @@ import './req_eland.dart';
 import './req_setting.dart';
 
 class Request {
-  Dio _dio;
+  final Dio _dio = Dio();
 
   Request() {
-    _dio = initDio();
+    //_dio = initDio();
   }
 
   ReqUser get user => ReqUser(_dio);
@@ -25,5 +25,4 @@ class Request {
   ReqEland get eland => ReqEland(_dio);
 
   ReqSetting get setting => ReqSetting(_dio);
-  
 }

@@ -90,7 +90,7 @@ class _AElandListState extends State<AElandList>
   }
 
   void _clickFollow(item) async {
-    final uid = G.user.data.id;
+    final uid = G.user.data!.id;
     final itemid = item.eland_id;
 
     try {

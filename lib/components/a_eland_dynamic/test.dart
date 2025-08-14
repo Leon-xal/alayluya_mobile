@@ -168,7 +168,7 @@ class _ElandDynamicTestState extends State<AElandDynamicTest>
   }
 
   _clickCollect(item) {
-    int uid = G.user.data.id!;
+    int uid = G.user.data!.id!;
     int itemid = item.id;
     try {
       Future.delayed(Duration.zero, () async {

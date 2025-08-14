@@ -68,7 +68,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           // print('onCallback====>${hasNetwork}');
           if (hasNetwork == true) {
             //监听动画运行状态，当状态为completed时，动画执行结束，跳转首页
-            _animation?.addStatusListener((status) async {
+            _animation.addStatusListener((status) async {
               if (status == AnimationStatus.completed) {
                 await Syncs.getInstance();
                 // bool is_upgrade = await AUpgradeApp.getInstance();
