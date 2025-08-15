@@ -186,9 +186,7 @@ class OneSignalWapper {
     OneSignal.consentRequired(_requireConsent);
     //OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
-    OneSignal.shared.setNotificationOpenedHandler((
-      OSNotificationOpenedResult result,
-    ) {
+    OneSignal.Notifications.addClickListener((OSNotificationClickEvent result) {
       // ... (Notification handling remains unchanged) ...
       print(
         "Opened notification=======>: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}",
@@ -218,15 +216,15 @@ class OneSignalWapper {
     });
 
     // ... (Other OneSignal handlers remain unchanged) ...
-    OneSignal.shared.setInAppMessageClickedHandler((
+    /*OneSignal.setInAppMessageClickedHandler((
       OSInAppMessageAction action,
     ) {
       print(
         "In App Message Clicked=======>: \n${action.jsonRepresentation().replaceAll("\\n", "\n")}",
       );
-    });
+    });*/
 
-    OneSignal.shared.setSubscriptionObserver((
+    /*OneSignal.Notifications.addClickListener((
       OSSubscriptionStateChanges changes,
     ) {
       print(
@@ -246,14 +244,17 @@ class OneSignalWapper {
       print(
         "EMAIL SUBSCRIPTION STATE CHANGED=======> ${changes.jsonRepresentation()}",
       );
-    });
+    });*/
 
-    await OneSignal.shared.setAppId(kOneSignalKey['appID']!);
+    //await OneSignal.shared.setAppId(kOneSignalKey['appID']!);
+    OneSignal.initialize(kOneSignalKey['appID']!);
 
-    bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
+    /*bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
     print('requiresConsent=====>${requiresConsent}');
-    if (requiresConsent == true) {
-      await OneSignal.shared.consentGranted(true);
+    if (requiresConsent == true) {*/
+    if (_requireConsent == true) {}
+      //await OneSignal.shared.consentGranted(true);
+      await OneSignal.consentGiven(true);
     }
 
     bool accepted = await OneSignal.shared
