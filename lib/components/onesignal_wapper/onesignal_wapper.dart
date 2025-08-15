@@ -181,8 +181,10 @@ class OneSignalWapper {
   }
 
   Future<void> _setupOneSignal() async {
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    OneSignal.consentRequired(_requireConsent);
+    //OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
     OneSignal.shared.setNotificationOpenedHandler((
       OSNotificationOpenedResult result,

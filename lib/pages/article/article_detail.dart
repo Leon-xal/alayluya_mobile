@@ -11,7 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:social_share_plugin/social_share_plugin.dart';
-import 'package:flutter_share_me/flutter_share_me.dart';
+// import 'package:flutter_share_me/flutter_share_me.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../model/user_model/data.dart';
 import '../../model/article_detail_model/data.dart';
 import '../../components/a_button/index.dart';
@@ -842,7 +843,19 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         },
                   ),*/
                   child: InAppWebView(
-                    initialOptions: InAppWebViewGroupOptions(
+                    initialSettings: InAppWebViewSettings(
+                      //useShouldOverrideUrlLoading: true,
+                      //useOnLoadResource: true,
+                      javaScriptEnabled: true,
+                      cacheEnabled: true,
+                      disableVerticalScroll: false,
+                      disableHorizontalScroll: false,
+                      verticalScrollBarEnabled: false,
+                      horizontalScrollBarEnabled: false,
+                      isPagingEnabled: false,
+                    ),
+
+                    /*initialOptions: InAppWebViewGroupOptions(
                       // initialOptions: InAppWebViewWidgetOptions(
                       crossPlatform: InAppWebViewOptions(
                         //debuggingEnabled: false,
@@ -854,11 +867,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         disableHorizontalScroll: false,
                         verticalScrollBarEnabled: false,
                         horizontalScrollBarEnabled: false,
-                      ),
-                      ios: IOSInAppWebViewOptions(isPagingEnabled: false),
-                      android: AndroidInAppWebViewOptions(),
-                    ),
-
+                      ),*/
+                    //ios: IOSInAppWebViewOptions(isPagingEnabled: false),
+                    //android: AndroidInAppWebViewOptions(),
                     onWebViewCreated: (InAppWebViewController controller) {
                       webView = controller;
                       print(
@@ -925,9 +936,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
                           // String share_url2 = Uri.encodeComponent(share_url);
                           // print('shareToFacebook2======>${share_url2}');
-                          var response = FlutterShareMe().shareToFacebook(
+                          /*var response = FlutterShareMe().shareToFacebook(
                             url: '${share_url2}',
                             msg: '${share_text}',
+                          );*/
+                          var response = await SharePlus.instance.share(
+                            ShareParams(
+                              uri: Uri.parse(share_url2),
+                              text: share_text,
+                            ),
                           );
                           print('shareToFacebook2======>${response}');
                         },
@@ -956,9 +973,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           // FlutterShareMe().shareTwitter("This is Social Share plugin");
 
                           print('shareToTwitter======>${share_url}');
-                          var response = FlutterShareMe().shareToTwitter(
+                          /* var response = FlutterShareMe().shareToTwitter(
                             url: share_url,
                             msg: share_text!,
+                          ); */
+                          var response = await SharePlus.instance.share(
+                            ShareParams(
+                              uri: Uri.parse(share_url),
+                              text: share_text,
+                            ),
                           );
                           print('shareToTwitter======>${response}');
                         },
@@ -973,11 +996,17 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
                           if (Platform.isAndroid) {
                             //                        print('ANDROID自动登陆开发中====>');
-                            String response =
+                            /*String response =
                                 await FlutterShareMe().shareToWhatsApp(
                                   msg: share_url,
                                 ) ??
-                                '';
+                                '';*/
+                            var response = await SharePlus.instance.share(
+                              ShareParams(
+                                uri: Uri.parse(share_url),
+                                //text: share_text,
+                              ),
+                            );
 
                             if (response == 'false' || response == false) {
                               await G.toast('請安裝WhatsApp');

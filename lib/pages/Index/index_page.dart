@@ -162,7 +162,7 @@ class _NavigationState extends State<IndexPage> {
     //    return Text('qwe');
     return Scaffold(
       // appBar: (currentIndex == 1)?null:page['appbar'],
-      appBar: page?['appbar'],
+      appBar: page!['appbar'],
       body: PageView(
         physics: NeverScrollableScrollPhysics(), //禁止滑动
         controller: this._pageController,

@@ -700,8 +700,8 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    Widget top_contents = widget.topchild;
-    Widget bottom_contents = widget.bottomchild;
+    //Widget top_contents = widget.topchild;
+    //Widget bottom_contents = widget.bottomchild;
 
     //    super.build(context);
     return SmartRefresher(

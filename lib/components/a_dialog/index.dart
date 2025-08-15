@@ -176,47 +176,43 @@ class ADialog {
         children: <Widget>[
           // 取消按钮
           Container(
-            child: cancelButtonText == null
-                ? null
-                : Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            color: Color.fromARGB(255, 242, 242, 242),
-                          ),
-                        ),
-                      ),
-                      child: AButton.normal(
-                        child: cancelButtonText,
-                        color: Color.fromARGB(255, 56, 56, 56),
-                        borderRadius: cancelBorderRadius,
-                        onPressed: () {
-                          if (cancelButtonPress != null) {
-                            cancelButtonPress();
-                          }
-                        },
-                      ),
+            child: Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      color: Color.fromARGB(255, 242, 242, 242),
                     ),
                   ),
+                ),
+                child: AButton.normal(
+                  child: cancelButtonText,
+                  color: Color.fromARGB(255, 56, 56, 56),
+                  borderRadius: cancelBorderRadius,
+                  onPressed: () {
+                    if (cancelButtonPress != null) {
+                      cancelButtonPress();
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
           // 确认按钮
           Container(
-            child: confirmButtonText == null
-                ? null
-                : Expanded(
-                    child: AButton.normal(
-                      child: confirmButtonText,
-                      borderRadius: confirmBorderRadius,
-                      color: Color.fromARGB(255, 141, 160, 1),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        if (confirmButtonPress != null) {
-                          confirmButtonPress();
-                        }
-                      },
-                    ),
-                  ),
+            child: Expanded(
+              child: AButton.normal(
+                child: confirmButtonText,
+                borderRadius: confirmBorderRadius,
+                color: Color.fromARGB(255, 141, 160, 1),
+                onPressed: () {
+                  Navigator.pop(context);
+                  if (confirmButtonPress != null) {
+                    confirmButtonPress();
+                  }
+                },
+              ),
+            ),
           ),
         ],
       ),

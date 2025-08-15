@@ -3,38 +3,34 @@ buildscript {
         google()
         mavenCentral()
         maven { url 'https://plugins.gradle.org/m2/' }
-
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.11.1' //Consider updating to latest stable version
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.14.0' 
-        //classpath 'com.huawei.agconnect:agcp:1.9.3.301' // Add this line to include the Huawei AGConnect plugin
     }
 }
 
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id "dev.flutter.flutter-gradle-plugin" // This MUST be before other plugins
     id "com.onesignal.androidsdk.onesignal-gradle-plugin" version "0.14.0"
-    //id "com.huawei.agconnect"
 }
 
 
 android {
-    //compileSdkVersion 33
-    compileSdkVersion 35
-    //ndkVersion flutter.ndkVersion
+    compileSdkVersion 36
     ndkVersion = "27.0.12077973"
     namespace = "com.loopin.nepalayluya"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '1.8'
     }
 
     sourceSets {
@@ -47,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "com.loopin.nepalayluya"
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 33
         versionCode 1 // Default value
         versionName "1.0" // Default value
@@ -78,7 +74,10 @@ flutter {
 }
 
 dependencies {
-    //implementation 'com.huawei.agconnect:agconnect-core:1.5.2.300'
+    //Remove these lines; Flutter plugin handles them
+    //implementation("io.flutter:flutter_embedding_android:{$flutterEmbeddingVersion}") 
+    //implementation("io.flutter:flutter_plugin_android_lifecycle:{$flutterPluginAndroidLifecycleVersion}") 
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

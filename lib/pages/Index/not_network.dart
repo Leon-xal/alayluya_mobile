@@ -73,7 +73,7 @@ class _NotNetworkState extends State<NotNetwork> {
           },
           child: icon_left(color: Color.fromARGB(255, 0, 0, 0), size: 25),
         ),
-        automaticallyImplyLeading: context == null ? false : true,
+        automaticallyImplyLeading: true,
 
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(0),

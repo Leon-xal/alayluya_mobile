@@ -63,7 +63,7 @@ void main() async {
   // }
 
   //    print('user===>${json.decode(user)}');
-  if (user != null && user.isNotEmpty) {
+  if (user!.isNotEmpty) {
     /// 初始化user
 
     G.user.init(json.decode(user));
@@ -74,7 +74,7 @@ void main() async {
 
   String? domain = prefs.getString('domain');
   //  prefs.setString('domain', null);
-  if (domain != null && domain.isNotEmpty) {
+  if (domain!.isNotEmpty) {
     G.isDev = true;
     G.baseurl = domain;
     // G.baseurl = 'http://testapi2.alayluya.com';

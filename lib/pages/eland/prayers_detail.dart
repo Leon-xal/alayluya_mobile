@@ -10,7 +10,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:social_share_plugin/social_share_plugin.dart';
-import 'package:flutter_share_me/flutter_share_me.dart';
+//import 'package:flutter_share_me/flutter_share_me.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../components/a_cached_network_image/index.dart';
 import '../../model/user_model/data.dart';
 import '../../model/prayers_detail_model/data.dart';
@@ -799,11 +800,19 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   //   },
                                   // );
                                   // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
-                                  var response = FlutterShareMe()
+                                  /* var response = FlutterShareMe()
                                       .shareToFacebook(
                                         url: '${prayers?.content_app_link}',
                                         msg: '${prayers?.content}',
-                                      );
+                                      ); */
+                                  var response = await SharePlus.instance.share(
+                                    ShareParams(
+                                      uri: Uri.parse(
+                                        prayers?.content_app_link ?? '',
+                                      ),
+                                      text: prayers?.content ?? '',
+                                    ),
+                                  );
                                   print('shareToFacebook======>${response}');
                                 },
                               ),
@@ -827,11 +836,19 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                   //     }
                                   // );
                                   // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
-                                  var response = FlutterShareMe()
+                                  /*var response = FlutterShareMe()
                                       .shareToTwitter(
                                         url: (prayers?.content_app_link ?? ''),
                                         msg: (prayers?.content ?? ''),
-                                      );
+                                      );*/
+                                  var response = await SharePlus.instance.share(
+                                    ShareParams(
+                                      uri: Uri.parse(
+                                        prayers?.content_app_link ?? '',
+                                      ),
+                                      text: prayers?.content ?? '',
+                                    ),
+                                  );
                                   print('shareToTwitter======>${response}');
                                 },
                               ),
@@ -843,9 +860,18 @@ class _PrayersDetailState extends State<PrayersDetail> {
                                 ),
                                 onTap: () async {
                                   if (Platform.isAndroid) {
-                                    String? response = await FlutterShareMe()
+                                    /*String? response = await FlutterShareMe()
                                         .shareToWhatsApp(
                                           msg: prayers?.content_app_link ?? '',
+                                        );*/
+                                    var response = await SharePlus.instance
+                                        .share(
+                                          ShareParams(
+                                            uri: Uri.parse(
+                                              prayers?.content_app_link ?? '',
+                                            ),
+                                            text: prayers?.content ?? '',
+                                          ),
                                         );
                                     print('res======>${response}');
                                     if (response == 'false' ||

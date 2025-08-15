@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_share_me/flutter_share_me.dart';
+//import 'package:flutter_share_me/flutter_share_me.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:social_share_plugin/social_share_plugin.dart';
@@ -442,10 +443,19 @@ class _ElandInfoState extends State<ElandInfo> {
                                       //   },
                                       // );
                                       // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
-                                      var response = FlutterShareMe()
+                                      /*var response = FlutterShareMe()
                                           .shareToFacebook(
                                             url: '${eland?.MobileAppViewUrl}',
                                             msg: '${eland?.desc}',
+                                          );*/
+                                      var response = await SharePlus.instance
+                                          .share(
+                                            ShareParams(
+                                              uri: Uri.parse(
+                                                eland?.MobileAppViewUrl ?? '',
+                                              ),
+                                              text: eland?.desc,
+                                            ),
                                           );
                                       print(
                                         'shareToFacebook======>${response}',
@@ -472,10 +482,19 @@ class _ElandInfoState extends State<ElandInfo> {
                                       //     }
                                       // );
                                       // print("InAppWebViewTwitterFuncCallbackResult====>${result}");
-                                      var response = FlutterShareMe()
+                                      /* var response = FlutterShareMe()
                                           .shareToTwitter(
                                             url: '${eland?.MobileAppViewUrl}',
                                             msg: '${eland?.desc}',
+                                          ); */
+                                      var response = await SharePlus.instance
+                                          .share(
+                                            ShareParams(
+                                              uri: Uri.parse(
+                                                eland?.MobileAppViewUrl ?? '',
+                                              ),
+                                              text: eland?.desc,
+                                            ),
                                           );
                                       print('shareToTwitter======>${response}');
                                     },
@@ -490,8 +509,14 @@ class _ElandInfoState extends State<ElandInfo> {
                                       String? response;
                                       final url = eland?.MobileAppViewUrl;
                                       if (Platform.isAndroid) {
-                                        response = await FlutterShareMe()
-                                            .shareToWhatsApp(msg: url ?? '');
+                                        /*response = await FlutterShareMe()
+                                            .shareToWhatsApp(msg: url ?? '');*/
+                                        var response = await SharePlus.instance
+                                            .share(
+                                              ShareParams(
+                                                uri: Uri.parse(url ?? ''),
+                                              ),
+                                            );
                                         if (response == 'false' ||
                                             response == false) {
                                           await G.toast('請安裝WhatsApp');
