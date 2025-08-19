@@ -252,16 +252,18 @@ class OneSignalWapper {
     /*bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
     print('requiresConsent=====>${requiresConsent}');
     if (requiresConsent == true) {*/
-    if (_requireConsent == true) {}
+    if (_requireConsent == true) {
       //await OneSignal.shared.consentGranted(true);
       await OneSignal.consentGiven(true);
     }
 
-    bool accepted = await OneSignal.shared
+    /*bool accepted = await OneSignal.shared
         .promptUserForPushNotificationPermission();
     print("Accepted permission=======>: ${accepted}");
+  }*/
+    bool accepted = await OneSignal.Notifications.requestPermission(true);
+    print("Accepted permission=======>: ${accepted}");
   }
-
   /*loginInit() async {
     NotificationPermissions.getNotificationPermissionStatus().then((
       status,
@@ -358,10 +360,12 @@ class OneSignalWapper {
       UserDataModel userData = G.user.data!;
       Future.delayed(Duration.zero, () async {
         print("External user id set1=======>: ${userData.id.toString()}");
-        OneSignal.shared.setExternalUserId(userData.id.toString()).then((
+        /*OneSignal.shared.setExternalUserId(userData.id.toString()).then((
           results,
-        ) {
-          print("External user id set2=======>: ${results}");
+        )*/
+        OneSignal.login(userData.id.toString()).then((results) {
+          // print("Successfully set external user id
+          //print("External user id set2=======>: ${results}");
         });
 
         // ... (Email and tag setting remains unchanged) ...
