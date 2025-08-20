@@ -44,7 +44,7 @@ class UserDataModel {
 
   //反序列化
   factory UserDataModel.fromJson(Map<String, dynamic> json) {
-    //    print('UserDataFromJson=====>${json}');
+    print('UserDataFromJson=====>${json}');
     return _$UserDataModelFromJson(json);
   }
 

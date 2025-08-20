@@ -77,11 +77,24 @@ class IndexPage extends StatefulWidget {
   IndexPage.singleton({required this.routeName, required this.arguments});
 
   factory IndexPage({Key? key, String? routeName, Object? arguments}) {
+    print("indexPage --->" + "routeName: $routeName, arguments: $arguments");
+    _singleton ??= IndexPage._internal(
+      key: key,
+      routeName: routeName ?? '/', // Provide a default route name
+      arguments: arguments ?? {},
+    );
     return _singleton!;
   }
 
+  IndexPage._internal({
+    Key? key,
+    required this.routeName,
+    required this.arguments,
+  }) : super(key: key);
+
   // 通过 routeName 获取对应页面的索引
   getPageIndex(routeName) {
+    print('routeName====>${routeName}');
     switch (routeName) {
       case '/home':
         return 0;
@@ -160,6 +173,15 @@ class _NavigationState extends State<IndexPage> {
     Map? page = widget.pages[currentIndex];
     //    List<Widget> _pages = [page[0]['widget'],page[1]['widget'],page[2]['widget'],page[3]['widget']];
     //    return Text('qwe');
+    print("currentIndex====>${currentIndex}");
+    print("this._pageController======>${this._pageController}");
+    //print("this._pages======>${this._pages}");
+    print('this._pages length: ${this._pages.length}');
+    for (int i = 0; i < this._pages.length; i++) {
+      print(
+        'this._pages[$i]: ${this._pages[i]}',
+      ); //Inspect each element.  A null will be printed as "null"
+    }
     return Scaffold(
       // appBar: (currentIndex == 1)?null:page['appbar'],
       appBar: page!['appbar'],

@@ -357,7 +357,7 @@ class OneSignalWapper {
         : systemInfo['is_open_onesignal_push'];
     print('is_open_onesignal_push2======>${is_open_onesignal_push}');
     if (kOneSignalKey['appID'] != '' && is_open_onesignal_push == true) {
-      UserDataModel userData = G.user.data!;
+      UserDataModel? userData = G.user.data!;
       Future.delayed(Duration.zero, () async {
         print("External user id set1=======>: ${userData.id.toString()}");
         /*OneSignal.shared.setExternalUserId(userData.id.toString()).then((

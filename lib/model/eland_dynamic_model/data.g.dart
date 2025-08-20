@@ -33,20 +33,20 @@ Map<String, dynamic> _$ElandDynamicModelToJson(ElandDynamicModel instance) =>
 
 ElandDynamicDatum _$ElandDynamicDatumFromJson(Map<String, dynamic> json) {
   return ElandDynamicDatum(
-    key: json['key'] as int,
-    id: json['id'] as int,
-    eland_id: json['eland_id'] as int,
-    eland_name: json['eland_name'] as String,
-    title: json['title'] as String,
-    content: json['content'] as String,
-    eland_pic: json['eland_pic'] as String,
-    time: json['time'] as String,
-    type: json['type'] as int,
-    type_name: json['type_name'] as String,
-    type_val: json['type_val'] as String,
-    collect: json['collect'] as int,
-    icollect: json['icollect'] as bool,
-    IsFeatured: json['IsFeatured'] as bool,
+    key: json['key'] as int?,
+    id: json['id'] as int?,
+    eland_id: json['eland_id'] as int?,
+    eland_name: json['eland_name'] as String?,
+    title: json['title'] as String?,
+    content: json['content'] as String?,
+    eland_pic: json['eland_pic'] as String?,
+    time: json['time'] as String?,
+    type: json['type'] as int?,
+    type_name: json['type_name'] as String?,
+    type_val: json['type_val'] as String?,
+    collect: json['collect'] as int?,
+    icollect: json['icollect'] as bool?,
+    IsFeatured: json['IsFeatured'] as bool?,
     tags:
         (json['tags'] as List?)
             ?.map<ElandDynamicTags>(

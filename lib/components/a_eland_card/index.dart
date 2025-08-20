@@ -16,9 +16,6 @@ class AElandCard extends StatefulWidget {
 
 class _ElandCardState extends State<AElandCard>
     with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
   ///see AutomaticKeepAliveClientMixin
 
   List<dynamic> elandItem = [];
@@ -55,6 +52,7 @@ class _ElandCardState extends State<AElandCard>
         pageid: pageid,
         limit: limit,
       );
+      print('dataElandCard res====>${res}');
       /*Map result = res.data;
       Map<String, dynamic> json = {'eland_name': 'last_plus_button123456'};
       result['list'].add(json);
@@ -68,6 +66,7 @@ class _ElandCardState extends State<AElandCard>
 
       if (res.data != null) {
         res.data.forEach((key, value) {
+          print('eland_list key: $key, value: $value');
           result[key.toString()] = value; // Convert keys to strings
         });
         if (result['list'] is List) {
@@ -313,7 +312,11 @@ class _ElandCardState extends State<AElandCard>
   Widget build(BuildContext context) {
     //    print('bbbb===>');
     //    return Text('aaaa====>');
-    //return eLandCard();
-    return super.build(context);
+    super.build(context);
+    return eLandCard();
+    //return
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

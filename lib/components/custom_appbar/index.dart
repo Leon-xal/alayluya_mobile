@@ -18,7 +18,7 @@ AppBar customAppbar({
   bool borderBottom = true,
   bool default_actions = false,
   bool is_search = false,
-  List? actions,
+  List<Widget>? actions,
   Theme? TabContainer,
   Function? onGoBackPressed = null,
 }) {
@@ -204,7 +204,7 @@ AppBar customAppbar({
                 ),
               ),
             ]
-          : actions as List<Widget>,
+          : actions ?? <Widget>[],
     );
   }
 }

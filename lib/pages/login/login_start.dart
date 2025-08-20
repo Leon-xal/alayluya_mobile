@@ -42,6 +42,7 @@ class _LoginStartState extends State<LoginStart> {
   void initState() {
     super.initState();
 
+    print('LoginStart initState====>');
     Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
       if (G.isLogin == true) G.pop();

@@ -63,20 +63,22 @@ void main() async {
   // }
 
   //    print('user===>${json.decode(user)}');
-  if (user!.isNotEmpty) {
+  if (user?.isNotEmpty ?? false) {
+    // This handles the case where user is null
     /// 初始化user
 
-    G.user.init(json.decode(user));
+    G.user.init(json.decode(user!));
     G.isLogin = true;
+    print('G.isLogin======>${G.isLogin}');
   } else {
     G.isLogin = false;
   }
 
   String? domain = prefs.getString('domain');
   //  prefs.setString('domain', null);
-  if (domain!.isNotEmpty) {
+  if (domain?.isNotEmpty ?? false) {
     G.isDev = true;
-    G.baseurl = domain;
+    G.baseurl = domain!;
     // G.baseurl = 'http://testapi2.alayluya.com';
     print('G.baseurl======>${G.baseurl}');
     print('G.isDev======>${G.isDev}');
@@ -148,6 +150,9 @@ class _MyAppState extends State<MyApp> {
     //     Provider<FacebookProvider>.value(value: _facebook_provider),
     //   ],
     //   child:
+    print('router: $router');
+    print('G.navigatorKey: ${G.navigatorKey}');
+    print('MyApp.routeObserver: ${MyApp.routeObserver}');
     return RefreshConfiguration(
       headerTriggerDistance: 30.0,
       child: MaterialApp(
@@ -167,7 +172,7 @@ class _MyAppState extends State<MyApp> {
         //###Leo
         navigatorObservers: [MyApp.routeObserver],
         builder: (context, child) {
-          return child!;
+          return child ?? Container(); // Ensure child is not null
           // return FLToastProvider(
           //     defaults: _toastDefaults,
           //     child: child

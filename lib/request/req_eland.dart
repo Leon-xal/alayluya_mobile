@@ -25,6 +25,7 @@ class ReqEland {
     print('elandlist-pageid===>${pageid}');
     print('elandlist-limit===>${limit}');
     print('elandlist-cateid===>${cateid}');
+    print('G.prdapi + /eland-list====>${G.prdapi + '/eland-list'}');
 
     return _dio.post(
       G.prdapi + '/eland-list',

@@ -34,9 +34,9 @@ class _LoginMailState extends State<LoginMail> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
+      print("G.isLogin: ${G.isLogin}");
       if (G.isLogin == true) G.pop();
     });
   }

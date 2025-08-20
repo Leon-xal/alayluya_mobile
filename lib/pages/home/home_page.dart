@@ -45,9 +45,14 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    // print('home======>');
-    UserDataModel userData = G.user.data!;
-    userid = userData.id ?? 0;
+    print('home======>');
+    print("G.user.data====>${G.user.data}");
+    if (G.user.data != null) {
+      UserDataModel userData = G.user.data!;
+      userid = userData.id ?? 0;
+    } else {
+      print("userid is null");
+    }
 
     Future.delayed(Duration.zero, () async {
       prefs = await SharedPreferences.getInstance();
@@ -105,6 +110,7 @@ class _HomePageState extends State<HomePage>
     //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarBrightness: Brightness.light));
     //    return Text('123');
     super.build(context);
+    print("AElandDynamic{$userid, $is_upgrade, $show_version_msg}");
     return AElandDynamic(
       isshowcenterload: true,
       uid: userid,

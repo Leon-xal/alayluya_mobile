@@ -197,22 +197,35 @@ class G {
   /// user信息
   static final User user = User();
 
-  static void isHasNetwork({Function? onCallback}) async {
+  static Future<bool> isHasNetwork({Function? onCallback}) async {
     bool hasNetwork;
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      print('I am connected to a mobile network====>.');
-      hasNetwork = true;
-      onCallback!(hasNetwork);
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      print('I am connected to a wifi network====>.');
-      hasNetwork = true;
-      onCallback!(hasNetwork);
-    } else {
-      print('no network====>');
+    try {
+      final List<ConnectivityResult> connectivityResult = await Connectivity()
+          .checkConnectivity();
+      print('connectivityResult====>${connectivityResult}'); // Log the result
+      print(
+        'connectivityResult type: ${connectivityResult.runtimeType}',
+      ); // Log the type
+
+      // Use identical for more reliable comparison
+      if (connectivityResult.contains(ConnectivityResult.mobile)) {
+        print('I am connected to a mobile network====>.');
+        hasNetwork = true;
+      } else if (connectivityResult.contains(ConnectivityResult.wifi)) {
+        print('I am connected to a wifi network====>.');
+        hasNetwork = true;
+      } else {
+        print('no network====>');
+        hasNetwork = false;
+      }
+    } catch (e) {
+      print(
+        'Error checking network connectivity: $e',
+      ); // Handle potential errors
       hasNetwork = false;
-      onCallback!(hasNetwork);
     }
+    onCallback?.call(hasNetwork); // Call the callback if provided
+    return hasNetwork;
   }
 
   static void setDomain(String doMainStr, {Function? onCallback}) async {

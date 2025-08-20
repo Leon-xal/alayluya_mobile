@@ -35,9 +35,26 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin(); // Initialize FlutterLocalNotificationsPlugin
 
-  AnimationController?
+  late AnimationController
   _controller; //AnimationController是Animation的一个子类，它可以控制Animation，可以控制动画的时间，类型，过渡3曲线
   late Animation<double> _animation;
+  bool _networkAvailable = false;
+
+  Future<void> _checkNetworkAvailability() async {
+    final hasNetwork = await G.isHasNetwork();
+    setState(() {
+      _networkAvailable = hasNetwork;
+    });
+    if (_networkAvailable) {
+      _animation.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _navigateToAppropriateScreen();
+        }
+      });
+    } else {
+      _navigateToNotNetworkScreen();
+    }
+  }
 
   void initState() {
     super.initState();
@@ -47,7 +64,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
       vsync: this,
       duration: Duration(milliseconds: 1500),
     );
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller!);
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
+    _checkNetworkAvailability();
+    _initializeNotifications(); // Initialize notifications
     //上面两行代码表示初始化一个Animation控制器， vsync垂直同步，动画执行时间3000毫秒,然后我们设置一个Animation动画，使用上面设置的控制器
 
     // _animation.addStatusListener((status) async {
@@ -66,7 +85,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
     //   }
     // });
 
-    Future.delayed(Duration.zero, () async {
+    /*Future.delayed(Duration.zero, () async {
       G.isHasNetwork(
         onCallback: (hasNetwork) async {
           // print('onCallback====>${hasNetwork}');
@@ -128,16 +147,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           }
         },
       );
-    });
+    });*/
 
-    _controller?.forward(); // 播放动画
+    _controller.forward(); // 播放动画
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _controller.dispose(); //释放动画
     WidgetsBinding.instance.removeObserver(this);
-    _controller?.dispose(); //释放动画
+    super.dispose();
   }
 
   @override
@@ -171,6 +190,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
     }
   }
 
+  Future<void> _navigateToAppropriateScreen() async {
+    await Syncs.getInstance();
+    // Add any upgrade check here if needed
+    print("G.isLogin: ${G.isLogin}");
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => G.isLogin ? IndexPage() : LoginStart(),
+      ),
+      (route) => false, // Remove all previous routes
+    );
+  }
+
+  void _navigateToNotNetworkScreen() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => NotNetwork()),
+      (route) => false, // Remove all previous routes
+    );
+  }
+
   Future<void> _initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings(
@@ -195,7 +233,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           }
         },
       ),
-      (route) => route == null,
+      (route) => false, // Remove all previous routes
     );
   }
 
