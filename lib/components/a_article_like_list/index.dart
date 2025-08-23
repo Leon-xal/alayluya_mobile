@@ -699,8 +699,8 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware {
       if (mounted) {
         setState(() {
           isloadcomplete = true;
-          articleItems.addAll(tempArticleLikeList.list);
-          if (tempArticleLikeList.list.isEmpty) {
+          articleItems.addAll(tempArticleLikeList.list!);
+          if (tempArticleLikeList.list!.isEmpty) {
             _refreshController.loadNoData();
           }
           isLoading = false; // Set loading flag to false after data is loaded

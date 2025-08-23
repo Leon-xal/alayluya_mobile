@@ -71,6 +71,17 @@ class _MemberCenterState extends State<MemberCenter>
         G.toast('退出成功');
         Navigator.of(context).pushReplacementNamed('/login_start');
       },
+      cancelButtonPress: () {
+        // Add your cancel button action here.  For example:
+        // Do nothing (default behavior):
+        //  return;
+
+        // Or close the dialog:
+        Navigator.of(context).pop(); // This closes the dialog
+
+        // Or perform other actions:
+        // G.toast('取消退出');
+      },
     );
   }
 
@@ -82,6 +93,7 @@ class _MemberCenterState extends State<MemberCenter>
 
   ARow buildUser() {
     UserDataModel userData = G.user.data!;
+    print('userData.avatar====>${userData.avatar}');
     return ARow(
       height: 55,
       color: Colors.transparent,
@@ -321,11 +333,30 @@ class _MemberCenterState extends State<MemberCenter>
                   // new Container(
                   //   child: Text('${Provider.of<FacebookProvider>(context,listen: true).isFacebookLogin}'),
                   // ),
+                  ARow(
+                    height: 50,
+                    //              margin: EdgeInsets.only(top: 10),
+                    //              padding: EdgeInsets.symmetric(horizontal: 15),
+                    leftChild: Container(
+                      width: 30,
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: icon_logout(color: Color(0xff333333), size: 20),
+                      ),
+                    ),
+                    centerChild: Text('退出登錄'),
+                    rightChild: icon_right(color: Color(0xff333333), size: 20),
+                    border: G.borderBottom(show: false),
+                    onPressed: () {
+                      //              G.toast('功能開發中');
+                      loginOut();
+                    },
+                  ),
                 ],
               ),
             ),
 
-            Container(
+            /*Container(
               color: Color(0xffffffff),
               //            padding: EdgeInsets.symmetric(horizontal: 15),
               child: ARow(
@@ -347,8 +378,7 @@ class _MemberCenterState extends State<MemberCenter>
                   loginOut();
                 },
               ),
-            ),
-
+            ),*/
             (G.isDev == true)
                 ? Container(
                     color: Color(0xffffffff),

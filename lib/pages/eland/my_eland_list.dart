@@ -29,8 +29,12 @@ class _MyElandListState extends State<MyElandList>
   void initState() {
     UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
-    args = widget.args;
-    search_key = args?['search_key'];
+    if (args != null) {
+      args = widget.args;
+      search_key = args?['search_key'];
+    } else {
+      search_key = '';
+    }
     print('search_key===>${args}');
     try {
       Future.delayed(Duration.zero, () async {});
@@ -73,8 +77,9 @@ class _MyElandListState extends State<MyElandList>
 
   @override
   Widget build(BuildContext context) {
-    //    print('articleCate===>${articleCate}');
-    //    print('articleCate.list===>${articleCate.list}');
+    //print('articleCate===>${articleCate}');
+    //print('articleCate.list===>${articleCate.list}');
+    print('my_eland_list ${header_title}');
     return Scaffold(
       backgroundColor: Colors.white,
 

@@ -42,7 +42,7 @@ class IndexPage extends StatefulWidget {
     ),
     3: _createPage(
       _membercenter,
-      appbar: _membercenter.getAppBar(),
+      //appbar: _membercenter.getAppBar(),
       routeName: '/membercenter',
       arg: '44',
     ),

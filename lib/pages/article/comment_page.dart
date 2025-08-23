@@ -86,10 +86,10 @@ class _CommentPageState extends State<CommentPage> {
       final result = res.data;
       final commentList = CommentModel.fromJson(result);
       setState(() {
-        comments.addAll(commentList.list);
+        comments.addAll(commentList.list!);
         isLoading = false;
       });
-      if (commentList.list.isEmpty) {
+      if (commentList.list!.isEmpty) {
         _refreshController.loadNoData();
       }
     } catch (e) {

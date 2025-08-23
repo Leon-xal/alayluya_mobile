@@ -100,10 +100,10 @@ class _ReplyCommentState extends State<ReplyComment> {
       final result = res.data;
       final replyList = ReplyModel.fromJson(result);
       setState(() {
-        replies.addAll(replyList.list);
+        replies.addAll(replyList.list!);
         isLoading = false;
       });
-      if (replyList.list.isEmpty) {
+      if (replyList.list!.isEmpty) {
         _refreshController.loadNoData();
       }
     } catch (e) {

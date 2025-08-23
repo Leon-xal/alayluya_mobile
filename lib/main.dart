@@ -125,6 +125,17 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  Future<void> _checkFontAvailability() async {
+    final fontFamilies = await rootBundle.loadString(
+      'packages/flutter/assets/fonts.txt',
+    );
+    if (fontFamilies.contains('yahei')) {
+      print('Font "yahei" is available.');
+    } else {
+      print('Font "yahei" is not available.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //    final ShoppingCartModel _shoppingCartModel = Provider.of<ShoppingCartModel>(context);
@@ -150,6 +161,8 @@ class _MyAppState extends State<MyApp> {
     //     Provider<FacebookProvider>.value(value: _facebook_provider),
     //   ],
     //   child:
+    print('G.navigatorKey======>${G.navigatorKey}');
+    _checkFontAvailability();
     return RefreshConfiguration(
       headerTriggerDistance: 30.0,
       child: MaterialApp(
