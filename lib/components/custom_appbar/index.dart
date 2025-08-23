@@ -20,11 +20,19 @@ AppBar customAppbar({
   bool is_search = false,
   List<Widget>? actions,
   Theme? TabContainer,
-  Function? onGoBackPressed = null,
+  Function? onGoBackPressed,
 }) {
   //  print('aaaaaaa:${context}');
   //  context = null;
   //  print('aaaaaab:${context}');
+  print('customAppbar onGoBackPressed:${onGoBackPressed}');
+  if (onGoBackPressed == null) {
+    onGoBackPressed = () {
+      if (context != null) {
+        Navigator.pop(context);
+      }
+    };
+  }
 
   if (is_search == true) {
     _doSearch(String str) async {
@@ -105,6 +113,8 @@ AppBar customAppbar({
     if (title == null || title.isEmpty) {
       title = 'Alayluya';
     }
+    print('context:${context}');
+    print('onGoBackPressed:${onGoBackPressed}');
     return AppBar(
       //brightness: Brightness.light,
       centerTitle: textcenter,
@@ -127,6 +137,7 @@ AppBar customAppbar({
           : InkWell(
               child: icon_left(color: Color.fromARGB(255, 0, 0, 0), size: 25),
               onTap: () {
+                print('tap onGoBackPressed:${onGoBackPressed}');
                 onGoBackPressed!();
               },
             ),

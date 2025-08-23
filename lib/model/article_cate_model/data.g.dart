@@ -20,7 +20,7 @@ part of 'data.dart';
 
 ArticleCateModel _$ArticleCateModelFromJson(Map<String, dynamic> json) {
   return ArticleCateModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     list: (json['list'] as List?)
         ?.map<ArticleCateDatum>(
           (e) => e == null
@@ -41,9 +41,9 @@ Map<String, dynamic> _$ArticleCateModelToJson(ArticleCateModel instance) =>
 
 ArticleCateDatum _$ArticleCateDatumFromJson(Map<String, dynamic> json) {
   return ArticleCateDatum(
-    key: json['key'] as int,
-    cateid: json['cateid'] as int,
-    catename: json['catename'] as String,
+    key: json['key'] as int?,
+    cateid: json['cateid'] as int?,
+    catename: json['catename'] as String?,
     catepic: (json['catepic'] as List?)
         ?.map<ArticleCatePic>(
           (e) => e == null

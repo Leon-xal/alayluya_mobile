@@ -691,6 +691,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware {
         search_by_title: search_by_title,
         userid: user_id,
       );
+      print('article like list res.data====>${res.data}');
       Map result = res.data;
       ArticleLikeListModel tempArticleLikeList = ArticleLikeListModel.fromJson(
         result as Map<String, dynamic>,
@@ -715,7 +716,7 @@ class _AArticleLikeListState extends State<AArticleLikeList> with RouteAware {
         isLoading = false;
       });
     } catch (e) {
-      print('articleCatch===>${e}');
+      print('articleCatch from a_article_like_list===>${e}');
       setState(() {
         isLoading = false;
       });

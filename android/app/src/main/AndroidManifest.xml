@@ -8,6 +8,11 @@
     <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
     <!--    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIDEO_CAPTURE" />
+    <uses-permission android:name="android.permission.AUDIO_CAPTURE" />
     <!--    <uses-permission android:name="android.permission.VIBRATE" />-->
     <!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
     <!--允许程序设置内置sd卡的写权限-->
@@ -32,6 +37,9 @@
             </intent-filter>
             <meta-data android:name="flutterEmbedding" android:value="2" />
         </activity>
+        <provider android:name="com.pichillilorenzo.flutter_inappwebview_android.InAppWebViewFileProvider" android:authorities="${applicationId}.flutter_inappwebview_android.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths" />
+        </provider>
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyA72A_0QNDwI80r2c_7JYTN0ApWze2atTY"/>
 

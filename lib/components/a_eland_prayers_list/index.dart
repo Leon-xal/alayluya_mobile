@@ -532,6 +532,7 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
         userid: user_id,
         eland_id: eland_id,
       );
+      print('prayer list res.data===>${res.data}');
       Map<String, dynamic> result = {};
       ElandPrayersListModel tempArticleLikeList = ElandPrayersListModel(
         code: 0,
@@ -559,7 +560,7 @@ class _AElandPrayersListState extends State<AElandPrayersList> {
       //      print('sss===>${articleList.list[0].tags[0].name}');
       if (isshowloading == true) G.loading.hide(context);
     } catch (e) {
-      print('articleCatch===>${e}');
+      print('articleCatch from a_eland_prayer_list===>${e}');
       if (isshowloading == true) G.loading.hide(context);
     }
   }

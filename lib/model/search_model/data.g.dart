@@ -8,7 +8,7 @@ part of 'data.dart';
 
 SearchModel _$SearchModelFromJson(Map<String, dynamic> json) {
   return SearchModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     data: json['data'] == null
         ? null
         : SearchData.fromJson(json['data'] as Map<String, dynamic>),
@@ -64,8 +64,8 @@ Map<String, dynamic> _$SearchDataToJson(SearchData instance) =>
 
 SearchSuggested _$SearchSuggestedFromJson(Map<String, dynamic> json) {
   return SearchSuggested(
-    key: json['key'] as int,
-    title: json['title'] as String,
+    key: json['key'] as int?,
+    title: json['title'] as String?,
   );
 }
 

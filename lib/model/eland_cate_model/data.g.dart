@@ -8,7 +8,7 @@ part of 'data.dart';
 
 ElandCateModel _$ElandCateModelFromJson(Map<String, dynamic> json) {
   return ElandCateModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     list: (json['list'] as List?)
         ?.map<ElandCateDatum>(
           (e) => e == null
@@ -33,9 +33,9 @@ Map<String, dynamic> _$ElandCateModelToJson(ElandCateModel instance) =>
 
 ElandCateDatum _$ElandCateDatumFromJson(Map<String, dynamic> json) {
   return ElandCateDatum(
-    key: json['key'] as int,
-    cateid: json['cateid'] as int,
-    catename: json['catename'] as String,
+    key: json['key'] as int?,
+    cateid: json['cateid'] as int?,
+    catename: json['catename'] as String?,
   );
 }
 

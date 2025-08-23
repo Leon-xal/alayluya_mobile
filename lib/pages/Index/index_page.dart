@@ -182,6 +182,14 @@ class _NavigationState extends State<IndexPage> {
         'this._pages[$i]: ${this._pages[i]}',
       ); //Inspect each element.  A null will be printed as "null"
     }
+    print(
+      'index-index_page.dart _pageController: $_pageController',
+    ); // Print the controller
+    var _tmp = NeverScrollableScrollPhysics();
+    print('index-index_page.dart _physics: ${_tmp}'); // Print the list of pages
+    print(
+      'index-index_page.dart _pages : ${_pages}',
+    ); //Print the length of the list
     return Scaffold(
       // appBar: (currentIndex == 1)?null:page['appbar'],
       appBar: page!['appbar'],

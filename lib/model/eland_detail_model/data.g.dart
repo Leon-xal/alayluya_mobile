@@ -8,7 +8,7 @@ part of 'data.dart';
 
 ElandDetailModel _$ElandDetailModelFromJson(Map<String, dynamic> json) {
   return ElandDetailModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     data: json['data'] == null
         ? null
         : ElandDetailData.fromJson(json['data'] as Map<String, dynamic>),
@@ -25,22 +25,22 @@ Map<String, dynamic> _$ElandDetailModelToJson(ElandDetailModel instance) =>
 
 ElandDetailData _$ElandDetailDataFromJson(Map<String, dynamic> json) {
   return ElandDetailData(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    type: json['type'] as String,
-    type_pic: json['type_pic'] as String,
-    desc: json['desc'] as String,
-    cover: json['cover'] as String,
-    avatar: json['avatar'] as String,
-    address: json['address'] as String,
-    phone: json['phone'] as String,
-    fax: json['fax'] as String,
-    email: json['email'] as String,
-    link1: json['link1'] as String,
-    link2: json['link2'] as String,
-    link3: json['link3'] as String,
-    follow: json['follow'] as int,
-    ifollow: json['ifollow'] as bool,
+    id: json['id'] as int?,
+    name: json['name'] as String?,
+    type: json['type'] as String?,
+    type_pic: json['type_pic'] as String?,
+    desc: json['desc'] as String?,
+    cover: json['cover'] as String?,
+    avatar: json['avatar'] as String?,
+    address: json['address'] as String?,
+    phone: json['phone'] as String?,
+    fax: json['fax'] as String?,
+    email: json['email'] as String?,
+    link1: json['link1'] as String?,
+    link2: json['link2'] as String?,
+    link3: json['link3'] as String?,
+    follow: json['follow'] as int?,
+    ifollow: json['ifollow'] as bool?,
     album: (json['album'] as List?)
         ?.map<ElandDetailAlbum>(
           (e) => e == null
@@ -96,8 +96,8 @@ Map<String, dynamic> _$ElandDetailDataToJson(ElandDetailData instance) =>
 
 ElandDetailAlbum _$ElandDetailAlbumFromJson(Map<String, dynamic> json) {
   return ElandDetailAlbum(
-    img: json['img'] as String,
-    desc: json['desc'] as String,
+    img: json['img'] as String?,
+    desc: json['desc'] as String?,
   );
 }
 
@@ -106,10 +106,10 @@ Map<String, dynamic> _$ElandDetailAlbumToJson(ElandDetailAlbum instance) =>
 
 ElandDetailBrochure _$ElandDetailBrochureFromJson(Map<String, dynamic> json) {
   return ElandDetailBrochure(
-    img: json['img'] as String,
-    desc: json['desc'] as String,
-    type: json['type'] as int,
-    source: json['source'] as String,
+    img: json['img'] as String?,
+    desc: json['desc'] as String?,
+    type: json['type'] as int?,
+    source: json['source'] as String?,
   );
 }
 

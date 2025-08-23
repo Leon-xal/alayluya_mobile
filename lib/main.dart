@@ -150,9 +150,6 @@ class _MyAppState extends State<MyApp> {
     //     Provider<FacebookProvider>.value(value: _facebook_provider),
     //   ],
     //   child:
-    print('router: $router');
-    print('G.navigatorKey: ${G.navigatorKey}');
-    print('MyApp.routeObserver: ${MyApp.routeObserver}');
     return RefreshConfiguration(
       headerTriggerDistance: 30.0,
       child: MaterialApp(

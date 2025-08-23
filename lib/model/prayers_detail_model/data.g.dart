@@ -8,11 +8,11 @@ part of 'data.dart';
 
 PrayersDetailModel _$PrayersDetailModelFromJson(Map<String, dynamic> json) {
   return PrayersDetailModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     data: json['data'] == null
         ? null
         : PrayersDetailData.fromJson(json['data'] as Map<String, dynamic>),
-    msg: json['msg'] as String,
+    msg: json['msg'] as String?,
   );
 }
 
@@ -25,15 +25,15 @@ Map<String, dynamic> _$PrayersDetailModelToJson(PrayersDetailModel instance) =>
 
 PrayersDetailData _$PrayersDetailDataFromJson(Map<String, dynamic> json) {
   return PrayersDetailData(
-    id: json['id'] as int,
-    author: json['author'] as String,
-    avatar: json['avatar'] as String,
-    time: json['time'] as String,
-    content: json['content'] as String,
-    cover: json['cover'] as String,
-    prayer: json['prayer'] as int,
-    iprayer: json['iprayer'] as bool,
-    content_app_link: json['content_app_link'] as String,
+    id: json['id'] as int?,
+    author: json['author'] as String?,
+    avatar: json['avatar'] as String?,
+    time: json['time'] as String?,
+    content: json['content'] as String?,
+    cover: json['cover'] as String?,
+    prayer: json['prayer'] as int?,
+    iprayer: json['iprayer'] as bool?,
+    content_app_link: json['content_app_link'] as String?,
   );
 }
 

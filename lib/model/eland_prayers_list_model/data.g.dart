@@ -10,7 +10,7 @@ ElandPrayersListModel _$ElandPrayersListModelFromJson(
   Map<String, dynamic> json,
 ) {
   return ElandPrayersListModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     list:
         (json['list'] as List?)
             ?.map<ElandPrayersListDatum>(
@@ -40,16 +40,16 @@ ElandPrayersListDatum _$ElandPrayersListDatumFromJson(
   Map<String, dynamic> json,
 ) {
   return ElandPrayersListDatum(
-    key: json['key'] as int,
-    id: json['id'] as int,
-    pic: json['pic'] as String,
-    title: json['title'] as String,
-    desc: json['desc'] as String,
-    author: json['author'] as String,
-    like: json['like'] as int,
-    ilike: json['ilike'] as bool,
-    prayer: json['prayer'] as int,
-    iprayer: json['iprayer'] as bool,
+    key: json['key'] as int?,
+    id: json['id'] as int?,
+    pic: json['pic'] as String?,
+    title: json['title'] as String?,
+    desc: json['desc'] as String?,
+    author: json['author'] as String?,
+    like: json['like'] as int?,
+    ilike: json['ilike'] as bool?,
+    prayer: json['prayer'] as int?,
+    iprayer: json['iprayer'] as bool?,
     tags:
         (json['tags'] as List?)
             ?.map<ElandPrayersListTags>(
@@ -86,8 +86,8 @@ Map<String, dynamic> _$ElandPrayersListDatumToJson(
 
 ElandPrayersListTags _$ElandPrayersListTagsFromJson(Map<String, dynamic> json) {
   return ElandPrayersListTags(
-    name: json['name'] as String,
-    value: json['value'] as String,
+    name: json['name'] as String?,
+    value: json['value'] as String?,
   );
 }
 

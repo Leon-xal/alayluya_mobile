@@ -726,10 +726,12 @@ class _AArticleListState extends State<AArticleList> with RouteAware {
         eland_id: eland_id,
         ishot: ishot,
       );
+      print('article list res.data====>${res.data}');
       Map result = res.data;
       ArticleListModel tempArticleList = ArticleListModel.fromJson(
         Map<String, dynamic>.from(result),
       );
+      print('article list result====>${result}');
       if (mounted) {
         setState(() {
           articleItems.addAll(tempArticleList.list!);
@@ -741,7 +743,7 @@ class _AArticleListState extends State<AArticleList> with RouteAware {
         });
       }
     } catch (e) {
-      print('articleCatch===>${e}');
+      print('articleCatch from a_article_list===>${e}');
       setState(() {
         isLoading = false;
       });

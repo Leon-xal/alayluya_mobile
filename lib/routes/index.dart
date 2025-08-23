@@ -130,7 +130,7 @@ class Router {
     String routeName = settings.name!;
     final Function builder = Router._routes[routeName]!;
 
-    //    print("getRoutes====>${routeName}<<<<<<<==========================");
+    print("getRoutes====>${routeName}<<<<<<<==========================");
 
     return MaterialPageRoute(
       settings: settings,

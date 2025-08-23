@@ -97,13 +97,13 @@ dev_dependencies:
   #  json_serializable: 4.0.0
   json_serializable: 6.10.0
 
-dependency_overrides:
-  #path_provider_platform_interface: ^1.0.1
-  #plugin_platform_interface: ^1.0.1
-  #path_provider: 1.6.28
-  #onesignal_flutter:
-  #  git:
-  #    url: https://github.com/milansurelia/OneSignal-Flutter-SDK.git
+#dependency_overrides:
+#path_provider_platform_interface: ^1.0.1
+#plugin_platform_interface: ^1.0.1
+#path_provider: 1.6.28
+#onesignal_flutter:
+#  git:
+#    url: https://github.com/milansurelia/OneSignal-Flutter-SDK.git
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

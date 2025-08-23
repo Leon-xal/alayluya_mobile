@@ -25,36 +25,39 @@ Map<String, dynamic> _$ArticleDetailModelToJson(ArticleDetailModel instance) =>
 
 ArticleDetailData _$ArticleDetailDataFromJson(Map<String, dynamic> json) {
   return ArticleDetailData(
-    id: json['id'] as int,
-    title: json['title'] as String,
-    time: json['time'] as String,
-    article_cate: json['article_cate'] as String,
-    content: json['content'] as String,
-    read: json['read'] as int,
-    like: json['like'] as int,
-    ilike: json['ilike'] as bool,
-    prayer: json['prayer'] as int,
-    iprayer: json['iprayer'] as bool,
-    eland_id: json['eland_id'] as int,
-    eland_pic: json['eland_pic'] as String,
-    eland_name: json['eland_name'] as String,
-    eland_desc: json['eland_desc'] as String,
-    eland_follow: json['eland_follow'] as int,
-    eland_ifollow: json['eland_ifollow'] as bool,
+    id: json['id'] as int?,
+    title: json['title'] as String?,
+    time: json['time'] as String?,
+    article_cate: json['article_cate'] as String?,
+    content: json['content'] as String?,
+    read: json['read'] as int?,
+    like: json['like'] as int?,
+    ilike: json['ilike'] as bool?,
+    prayer: json['prayer'] as int?,
+    iprayer: json['iprayer'] as bool?,
+    eland_id: json['eland_id'] as int?,
+    eland_pic: json['eland_pic'] as String?,
+    eland_name: json['eland_name'] as String?,
+    eland_desc: json['eland_desc'] as String?,
+    eland_follow: json['eland_follow'] as int?,
+    eland_ifollow: json['eland_ifollow'] as bool?,
     tags: (json['tags'] as List?)
-            ?.map<ArticleDetailTags>((e) =>
-            e == null ? ArticleDetailTags() : ArticleDetailTags.fromJson(e as Map<String, dynamic>))
+        ?.map<ArticleDetailTags>(
+          (e) => e == null
+              ? ArticleDetailTags()
+              : ArticleDetailTags.fromJson(e as Map<String, dynamic>),
+        )
         .toList(),
-        /*?.map((e) => e == null
+    /*?.map((e) => e == null
             ? null
             : ArticleDetailTags.fromJson(e as Map<String, dynamic>))
         ?.toList(),*/
-    content_link: json['content_link'] as String,
+    content_link: json['content_link'] as String?,
     content_app_link: json['content_app_link'] as String,
-    MobileViewUrl: json['MobileViewUrl'] as String,
-    MobileAppViewUrl: json['MobileAppViewUrl'] as String,
-    cover: json['cover'] as String,
-    comment_num: json['comment_num'] as int,
+    MobileViewUrl: json['MobileViewUrl'] as String?,
+    MobileAppViewUrl: json['MobileAppViewUrl'] as String?,
+    cover: json['cover'] as String?,
+    comment_num: json['comment_num'] as int?,
   );
 }
 
@@ -93,7 +96,4 @@ ArticleDetailTags _$ArticleDetailTagsFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ArticleDetailTagsToJson(ArticleDetailTags instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'value': instance.value,
-    };
+    <String, dynamic>{'name': instance.name, 'value': instance.value};

@@ -33,18 +33,18 @@ Map<String, dynamic> _$ArticleListModelToJson(ArticleListModel instance) =>
 
 ArticleListDatum _$ArticleListDatumFromJson(Map<String, dynamic> json) {
   return ArticleListDatum(
-    key: json['key'] as int,
-    id: json['id'] as int,
-    eland_id: json['eland_id'] as int,
-    account_id: json['account_id'] as int,
-    pic: json['pic'] as String,
-    title: json['title'] as String,
-    desc: json['desc'] as String,
-    author: json['author'] as String,
-    like: json['like'] as int,
-    ilike: json['ilike'] as bool,
-    prayer: json['prayer'] as int,
-    iprayer: json['iprayer'] as bool,
+    key: json['key'] as int?,
+    id: json['id'] as int?,
+    eland_id: json['eland_id'] as int?,
+    account_id: json['account_id'] as int?,
+    pic: json['pic'] as String?,
+    title: json['title'] as String?,
+    desc: json['desc'] as String?,
+    author: json['author'] as String?,
+    like: json['like'] as int?,
+    ilike: json['ilike'] as bool?,
+    prayer: json['prayer'] as int?,
+    iprayer: json['iprayer'] as bool?,
     tags: (json['tags'] as List?)
         ?.map<ArticleListTags>(
           (e) => e == null
@@ -80,8 +80,8 @@ Map<String, dynamic> _$ArticleListDatumToJson(ArticleListDatum instance) =>
 
 ArticleListTags _$ArticleListTagsFromJson(Map<String, dynamic> json) {
   return ArticleListTags(
-    name: json['name'] as String,
-    value: json['value'] as String,
+    name: json['name'] as String?,
+    value: json['value'] as String?,
   );
 }
 

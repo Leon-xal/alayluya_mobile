@@ -274,6 +274,7 @@ class _AElandListState extends State<AElandList>
         search_by_name: widget.searchByName!,
         cateid: widget.cateId!,
       );
+      print('getElandList res:${res}');
       final result = res.data;
       final elandList = ElandListModel.fromJson(result);
 
@@ -284,7 +285,7 @@ class _AElandListState extends State<AElandList>
         isLoading = false; // Update loading state after data is received
       });
     } catch (e) {
-      print('articleCatch===>${e}');
+      print('articleCatch from a_eland_list===>${e}');
       // Show user-friendly error message
       ScaffoldMessenger.of(
         context,

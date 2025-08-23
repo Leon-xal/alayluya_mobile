@@ -4,9 +4,9 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class CommentModel extends Object {
-  String msg;
-  int code;
-  List<CommentListDatum> list;
+  String? msg;
+  int? code;
+  List<CommentListDatum>? list;
 
   CommentModel(this.msg, this.code, this.list);
   factory CommentModel.fromJson(Map<String, dynamic> srcJson) =>
@@ -16,16 +16,16 @@ class CommentModel extends Object {
 
 @JsonSerializable()
 class CommentListDatum extends Object {
-  int key;
-  String avatar;
-  int comment_id;
-  String user_name;
-  String comment_content;
-  String comment_time;
-  int like_num;
+  int? key;
+  String? avatar;
+  int? comment_id;
+  String? user_name;
+  String? comment_content;
+  String? comment_time;
+  int? like_num;
   bool? ilike;
-  int reply_num;
-  int user_id;
+  int? reply_num;
+  int? user_id;
 
   CommentListDatum(
     this.key,

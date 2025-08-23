@@ -8,8 +8,8 @@ part of 'data.dart';
 
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
   return CommentModel(
-    json['msg'] as String,
-    json['code'] as int,
+    json['msg'] as String?,
+    json['code'] as int?,
     (json['list'] as List<dynamic>?)
             ?.map<CommentListDatum>(
               (e) => e == null
@@ -30,16 +30,16 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
 
 CommentListDatum _$CommentListDatumFromJson(Map<String, dynamic> json) {
   return CommentListDatum(
-    json['key'] as int,
-    json['avatar'] as String,
-    json['comment_id'] as int,
-    json['user_name'] as String,
-    json['comment_content'] as String,
-    json['comment_time'] as String,
-    json['like_num'] as int,
-    json['reply_num'] as int,
-    json['user_id'] as int,
-  )..ilike = json['ilike'] as bool;
+    json['key'] as int?,
+    json['avatar'] as String?,
+    json['comment_id'] as int?,
+    json['user_name'] as String?,
+    json['comment_content'] as String?,
+    json['comment_time'] as String?,
+    json['like_num'] as int?,
+    json['reply_num'] as int?,
+    json['user_id'] as int?,
+  )..ilike = json['ilike'] as bool?;
 }
 
 Map<String, dynamic> _$CommentListDatumToJson(CommentListDatum instance) =>

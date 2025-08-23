@@ -8,7 +8,7 @@ part of 'data.dart';
 
 ElandDynamicModel _$ElandDynamicModelFromJson(Map<String, dynamic> json) {
   return ElandDynamicModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     list: (json['list'] as List?)
         ?.map<ElandDynamicDatum>(
           (e) => e == null
@@ -88,8 +88,8 @@ Map<String, dynamic> _$ElandDynamicDatumToJson(ElandDynamicDatum instance) =>
 
 ElandDynamicTags _$ElandDynamicTagsFromJson(Map<String, dynamic> json) {
   return ElandDynamicTags(
-    name: json['name'] as String,
-    value: json['value'] as String,
+    name: json['name'] as String?,
+    value: json['value'] as String?,
   );
 }
 

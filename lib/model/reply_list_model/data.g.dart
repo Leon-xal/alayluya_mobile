@@ -8,8 +8,8 @@ part of 'data.dart';
 
 ReplyModel _$ReplyModelFromJson(Map<String, dynamic> json) {
   return ReplyModel(
-    json['msg'] as String,
-    json['code'] as int,
+    json['msg'] as String?,
+    json['code'] as int?,
     (json['list'] as List?)
             ?.map<ReplyListDatum>(
               (e) => e == null
@@ -34,14 +34,14 @@ Map<String, dynamic> _$ReplyModelToJson(ReplyModel instance) =>
 
 ReplyListDatum _$ReplyListDatumFromJson(Map<String, dynamic> json) {
   return ReplyListDatum(
-    json['key'] as int,
-    json['user_name'] as String,
-    json['avatar'] as String,
-    json['reply_id'] as int,
-    json['comment_id'] as int,
-    json['reply_content'] as String,
-    json['reply_time'] as String,
-    json['user_id'] as int,
+    json['key'] as int?,
+    json['user_name'] as String?,
+    json['avatar'] as String?,
+    json['reply_id'] as int?,
+    json['comment_id'] as int?,
+    json['reply_content'] as String?,
+    json['reply_time'] as String?,
+    json['user_id'] as int?,
   );
 }
 

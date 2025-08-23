@@ -4,15 +4,11 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class ArticleLikeListModel {
-  int code;
-  List<ArticleLikeListDatum> list;
-  String msg;
+  int? code;
+  List<ArticleLikeListDatum>? list;
+  String? msg;
 
-  ArticleLikeListModel({
-    required this.code,
-    required this.list,
-    required this.msg,
-  });
+  ArticleLikeListModel({this.code, this.list, this.msg});
 
   //反序列化
   factory ArticleLikeListModel.fromJson(Map<String, dynamic> json) =>
@@ -23,34 +19,34 @@ class ArticleLikeListModel {
 
 @JsonSerializable()
 class ArticleLikeListDatum {
-  int key;
-  int id;
-  int eland_id;
-  int account_id;
-  String pic;
-  String title;
-  String desc;
-  String author;
-  int like;
-  bool ilike;
-  int prayer;
-  bool iprayer;
-  List<ArticleLikeListTags> tags;
+  int? key;
+  int? id;
+  int? eland_id;
+  int? account_id;
+  String? pic;
+  String? title;
+  String? desc;
+  String? author;
+  int? like;
+  bool? ilike;
+  int? prayer;
+  bool? iprayer;
+  List<ArticleLikeListTags>? tags;
 
   ArticleLikeListDatum({
-    required this.key,
-    required this.id,
-    required this.eland_id,
-    required this.account_id,
-    required this.pic,
-    required this.title,
-    required this.desc,
-    required this.author,
-    required this.like,
-    required this.ilike,
-    required this.prayer,
-    required this.iprayer,
-    required this.tags,
+    this.key,
+    this.id,
+    this.eland_id,
+    this.account_id,
+    this.pic,
+    this.title,
+    this.desc,
+    this.author,
+    this.like,
+    this.ilike,
+    this.prayer,
+    this.iprayer,
+    this.tags,
   });
 
   //反序列化
@@ -62,8 +58,8 @@ class ArticleLikeListDatum {
 
 @JsonSerializable()
 class ArticleLikeListTags {
-  String name;
-  String value;
+  String? name;
+  String? value;
   ArticleLikeListTags({required this.name, required this.value});
 
   //反序列化

@@ -8,7 +8,7 @@ part of 'data.dart';
 
 PrayerByUserModel _$PrayerByUserModelFromJson(Map<String, dynamic> json) {
   return PrayerByUserModel(
-    code: json['code'] as int,
+    code: json['code'] as int?,
     list:
         (json['list'] as List?)
             ?.map<PrayerByUserDatum>(
@@ -35,11 +35,11 @@ Map<String, dynamic> _$PrayerByUserModelToJson(PrayerByUserModel instance) =>
 
 PrayerByUserDatum _$PrayerByUserDatumFromJson(Map<String, dynamic> json) {
   return PrayerByUserDatum(
-    key: json['key'] as int,
-    f_uid: json['f_uid'] as int,
-    f_avatar: json['f_avatar'] as String,
-    f_uname: json['f_uname'] as String,
-    my_is_follow: json['my_is_follow'] as bool,
+    key: json['key'] as int?,
+    f_uid: json['f_uid'] as int?,
+    f_avatar: json['f_avatar'] as String?,
+    f_uname: json['f_uname'] as String?,
+    my_is_follow: json['my_is_follow'] as bool?,
   );
 }
 
