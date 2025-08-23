@@ -718,7 +718,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           );
                           G.pushNamed(
                             '/article_list',
-                            arguments: {'ishot': true},
+                            arguments: {
+                              'eland_id': article?.eland_id,
+                              'ishot': true,
+                            },
                           );
                         },
                       );
