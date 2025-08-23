@@ -506,7 +506,7 @@ class _ElandInfoState extends State<ElandInfo> {
                                       height: 50,
                                     ),
                                     onTap: () async {
-                                      String? response;
+                                      //String? response;
                                       final url = eland?.MobileAppViewUrl;
                                       if (Platform.isAndroid) {
                                         /*response = await FlutterShareMe()

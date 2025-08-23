@@ -410,7 +410,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
               ),
               //这是点击弹出菜单的操作，点击对应菜单后，改变屏幕中间文本状态，将点击的菜单值赋予屏幕中间文本
               onSelected: (String value) {
-                print('onSelected value===>${share_url}');
+                print('onSelected share_url===>${share_url}');
                 if (value == 'copylink') {
                   if (share_url != null && share_url.isNotEmpty) {
                     Clipboard.setData(ClipboardData(text: share_url));
