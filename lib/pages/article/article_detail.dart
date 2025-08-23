@@ -91,6 +91,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
             header_title = article?.title ?? '';
           }
 
+          print('setState share_url====>${article?.content_app_link}');
           share_url = article?.content_app_link ?? '';
           share_text = article?.title;
 
@@ -409,8 +410,9 @@ class _ArticleDetailState extends State<ArticleDetail> {
               ),
               //这是点击弹出菜单的操作，点击对应菜单后，改变屏幕中间文本状态，将点击的菜单值赋予屏幕中间文本
               onSelected: (String value) {
+                print('onSelected value===>${share_url}');
                 if (value == 'copylink') {
-                  if (share_url.isEmpty) {
+                  if (share_url != null && share_url.isNotEmpty) {
                     Clipboard.setData(ClipboardData(text: share_url));
                     G.toast('已復制連結');
                   } else {
@@ -515,7 +517,10 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   width: G.screenWidth(),
                   height: G.screenHeight(),
                   child: InAppWebView(
-                    //initialUrlRequest: URLRequest(url: Uri.parse("about:blank")), // Placeholder URL
+                    //initialUrlRequest: URLRequest(url: Uri.parse("about:blank")),
+                    initialUrlRequest: URLRequest(
+                      url: WebUri(article?.MobileAppViewUrl ?? 'about:blank'),
+                    ), // Placeholder URL
                     initialSettings: InAppWebViewSettings(
                       useShouldOverrideUrlLoading: true,
                       useOnLoadResource: true,
@@ -802,6 +807,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       print('onLoadStop=====>');
                       setState(() {
                         isloading = false;
+                      });
+                    },
+                    onReceivedError: (controller, request, error) {
+                      setState(() {
+                        isloading = false; // Hide the progress indicator
+                        print(
+                          "WebView Error: code=${error}, description=${error.description}, request=${request.url}",
+                        );
                       });
                     },
                     onProgressChanged:

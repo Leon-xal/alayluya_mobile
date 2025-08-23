@@ -1109,7 +1109,10 @@ class _ElandInfoState extends State<ElandInfo> {
                               onPressed: () {
                                 G.pushNamed(
                                   '/article_list',
-                                  arguments: {'eland_id': eland_id},
+                                  arguments: {
+                                    'eland_id': eland_id,
+                                    'ishot': true,
+                                  },
                                 );
                               },
                             ),

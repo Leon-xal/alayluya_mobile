@@ -59,7 +59,9 @@ class _AElandListState extends State<AElandList>
   @override
   void initState() {
     super.initState();
-    _loadListData(context, showLoading: widget.isShowCenterload!);
+    Future.delayed(Duration.zero, () {
+      _loadListData(context, showLoading: widget.isShowCenterload!);
+    });
   }
 
   @override
@@ -116,6 +118,7 @@ class _AElandListState extends State<AElandList>
 
   Widget _buildContent(item, int index) {
     //Added index parameter
+    print('item:${item}');
     return Container(
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
@@ -142,7 +145,7 @@ class _AElandListState extends State<AElandList>
               margin: const EdgeInsets.only(right: 15.0),
               child: CircleAvatar(
                 backgroundColor: Color.fromARGB(255, 28, 141, 160),
-                backgroundImage: NetworkImage(item.elandPic),
+                backgroundImage: NetworkImage(item.eland_pic),
                 radius: 11.0,
               ),
             ),
@@ -154,7 +157,7 @@ class _AElandListState extends State<AElandList>
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0, right: 4.0),
                     child: Text(
-                      item.elandName,
+                      item.eland_name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,

@@ -13,12 +13,13 @@ class ArticleListPage extends StatefulWidget {
 
 class _ArticleListPageState extends State<ArticleListPage> {
   static Map? args;
-  int userid = 0;
-  int _eland_id = 0;
-  bool _ishot = false;
+  int? userid = 0;
+  int? _eland_id = 0;
+  bool? _ishot = false;
   @override
   void initState() {
     super.initState();
+    print('ArticleListPage args===>${widget.args}');
     UserDataModel userData = G.user.data!;
     userid = userData.id ?? 0;
     args = widget.args;
@@ -37,19 +38,21 @@ class _ArticleListPageState extends State<ArticleListPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('userid===>${userid}');
+    print('_eland_id===>${_eland_id}');
+    print('_ishot===>${_ishot}');
     return new Scaffold(
       backgroundColor: Colors.white,
       appBar: customAppbar(context: context, title: 'AA文章'),
-
-      body: (userid > 0)
+      body: (userid! > 0)
           ? AArticleList(
-              uid: userid,
-              eland_id: _eland_id,
+              uid: userid!,
+              eland_id: _eland_id!,
               isreload: true,
               isShowDesc: true,
               isShowCenterload: true,
               isShowPrayerBtn: false,
-              ishot: _ishot,
+              ishot: _ishot!,
             )
           : Container(),
 
