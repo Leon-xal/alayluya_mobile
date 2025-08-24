@@ -233,7 +233,7 @@ class _ElandCardState extends State<AElandCard>
                                       Container(
                                         margin: const EdgeInsets.only(
                                           top: 5.0,
-                                          bottom: 10.0,
+                                          bottom: 6.0,
                                           left: 4.0,
                                           right: 4.0,
                                         ),

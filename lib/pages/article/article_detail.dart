@@ -412,7 +412,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
               onSelected: (String value) {
                 print('onSelected share_url===>${share_url}');
                 if (value == 'copylink') {
-                  if (share_url != null && share_url.isNotEmpty) {
+                  if (share_url.isNotEmpty) {
                     Clipboard.setData(ClipboardData(text: share_url));
                     G.toast('已復制連結');
                   } else {
@@ -870,7 +870,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                     height: 75,
                     child: Container(
                       alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(top: 10, bottom: 10.0),
+                      padding: const EdgeInsets.only(top: 5, bottom: 5.0),
                       child: new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
