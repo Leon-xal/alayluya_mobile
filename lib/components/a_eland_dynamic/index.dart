@@ -283,6 +283,9 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
 
   Widget buildContent(item) {
     int imageSize = item.pics.length;
+    print("imageSize in buildContent is ${imageSize}");
+    print("item.pics is ${item.pics}");
+    print("item Content ${item.content}");
     double imageWidth =
         G.screenWidth() /
         ((imageSize == 3 || imageSize > 4)
@@ -300,7 +303,8 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
             new Container(
               alignment: Alignment.topLeft,
               margin: const EdgeInsets.only(top: 0.0, bottom: 0.0),
-              padding: const EdgeInsets.only(bottom: 20.0),
+              // Ian 20251107 - chnage from 20 to 10 to look better
+              padding: const EdgeInsets.only(bottom: 10.0),
               decoration: new BoxDecoration(
                 color: Colors.white,
                 border: new BorderDirectional(
@@ -308,6 +312,16 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                 ),
               ),
               child: new ElevatedButton(
+                // Ian 20251107 - add to style the button
+                style: ElevatedButton.styleFrom(
+                  //primary: Colors.white, // Button background color
+                  //onPrimary: Colors.blue, // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      8.0,
+                    ), // Match the border radius
+                  ),
+                ),
                 onPressed: () {
                   if (item.type == 2) {
                     //###Leo

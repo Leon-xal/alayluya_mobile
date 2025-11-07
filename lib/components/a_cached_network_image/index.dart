@@ -9,10 +9,12 @@ class AcachedNetworkImage extends StatelessWidget {
   final String path;
 
   /// 宽
-  final double width;
+  // Ian 20251108 - not initialized to zero but allow null of width & height
+  final double? width;
 
   /// 高
-  final double height;
+  // Ian 20251108 - not initialized to zero but allow null of width & height
+  final double? height;
 
   /// 填充效果
   final BoxFit fit;
@@ -23,14 +25,16 @@ class AcachedNetworkImage extends StatelessWidget {
   AcachedNetworkImage(
     this.path, {
     Key? key,
-    this.width = 0,
-    this.height = 0,
+    // Ian 20251108 - not initialized to zero but allow null of width & height
+    this.width,
+    this.height,
     this.fit = BoxFit.fill,
     this.borderRadius = const BorderRadius.all(Radius.circular(0.0)),
   });
 
   @override
   Widget build(BuildContext context) {
+    print("AcachedNetworkImage path ${path}, ${height} ${width}");
     return ClipRRect(
       borderRadius: borderRadius,
       child: CachedNetworkImage(
@@ -39,6 +43,9 @@ class AcachedNetworkImage extends StatelessWidget {
         height: height,
         width: width,
         fit: fit,
+        placeholder: (context, url) =>
+            Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
       ),
     );
   }
