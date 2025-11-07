@@ -372,7 +372,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
     print('buildArticleDetail isloading====>${isloading}');
     print('buildArticleDetail context====>${context}');
     return Scaffold(
-      backgroundColor: Color(0xffccccc),
+      // Ian 20251107 - originally is ffccccc, missing 1 'c'
+      backgroundColor: Color(0xffcccccc),
       appBar: customAppbar(
         context: context,
         title: header_title,
@@ -855,13 +856,14 @@ class _ArticleDetailState extends State<ArticleDetail> {
                   bottom: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xfffffff),
+                      // Ian 20251107 : bug is originally 0xfffffff, missing 1 'f'
+                      color: Color(0xffffffff),
                       border: new Border(
                         top: BorderSide(width: 2.0, color: Color(0xffcacbd1)),
                       ),
                     ),
                     padding: EdgeInsets.only(
-                      left: 20.0,
+                      left: 30.0,
                       right: 20.0,
                       top: 10.0,
                       bottom: 10.0,
