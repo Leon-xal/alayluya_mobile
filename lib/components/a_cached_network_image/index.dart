@@ -34,7 +34,6 @@ class AcachedNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("AcachedNetworkImage path ${path}, ${height} ${width}");
     return ClipRRect(
       borderRadius: borderRadius,
       child: CachedNetworkImage(
