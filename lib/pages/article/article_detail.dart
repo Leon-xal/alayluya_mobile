@@ -917,14 +917,18 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                       textChild: Text(
                                         article!.like.toString(),
                                         style: TextStyle(
-                                          color: Color(0xfffffff),
+                                          //color: Color(0xfffffff),
+                                          // Ian 20251111: wrong color
+                                          color: Colors.white,
                                           fontSize: 13,
                                         ),
                                       ),
                                       borderRadius: BorderRadius.circular(40),
                                       icon: icon_favorite(
                                         size: 13,
-                                        color: Color(0xfffffff),
+                                        //color: Color(0xfffffff),
+                                        // Ian 20251111: wrong color
+                                        color: Colors.white,
                                       ),
                                       onPressed: () {
                                         _clickDoLike(article);
