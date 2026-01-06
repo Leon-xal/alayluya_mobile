@@ -98,7 +98,7 @@ class _ElandCardState extends State<AElandCard>
     return (elandItem.length == 0)
         ? new Container()
         : new Container(
-            //      color: Colors.white,
+                 color: Colors.white,
             alignment: Alignment.topLeft,
             //        margin: const EdgeInsets.only(left: 12.0),
             child: new Column(
@@ -167,7 +167,8 @@ class _ElandCardState extends State<AElandCard>
                               //                           ),
                             ),
                           );
-                        } else {
+                        }
+                        else {
                           return InkWell(
                             onTap: () {
                               //                        print('eland_info===>${item.eland_id}');
@@ -180,8 +181,7 @@ class _ElandCardState extends State<AElandCard>
                               //                    alignment:Alignment.center , //指定未定位或部分定位widget的对齐方式
                               children: <Widget>[
                                 Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 4.0,
+                                  width: MediaQuery.of(context).size.width / 4.0,
                                   height: 135,
                                   margin: const EdgeInsets.only(
                                     top: 6.0,

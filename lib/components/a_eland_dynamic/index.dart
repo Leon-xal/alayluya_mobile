@@ -314,11 +314,11 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
               child: new ElevatedButton(
                 // Ian 20251107 - add to style the button
                 style: ElevatedButton.styleFrom(
-                  //primary: Colors.white, // Button background color
+                  backgroundColor: Colors.white, // Button background color
                   //onPrimary: Colors.blue, // Text color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
-                      8.0,
+                      0.0,
                     ), // Match the border radius
                   ),
                 ),

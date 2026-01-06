@@ -1,4 +1,6 @@
 //import '../../components/a_upgrade_app/index.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 //import 'package:connectivity_plus/connectivity.dart';
 //import 'package:connectivity_plus/connectivity_plus.dart';
@@ -191,15 +193,20 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
   }
 
   Future<void> _navigateToAppropriateScreen() async {
-    await Syncs.getInstance();
-    // Add any upgrade check here if needed
-    print("G.isLogin: ${G.isLogin}");
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => G.isLogin ? IndexPage() : LoginStart(),
-      ),
-      (route) => false, // Remove all previous routes
-    );
+    try{
+      await Syncs.getInstance();
+      // Add any upgrade check here if needed
+      print("G.isLogin: ${G.isLogin}");
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => G.isLogin ? IndexPage() : LoginStart(),
+        ),
+            (route) => false, // Remove all previous routes
+      );
+    } catch(err){
+      log('init error :::::::::: $err');
+    }
+
   }
 
   void _navigateToNotNetworkScreen() {

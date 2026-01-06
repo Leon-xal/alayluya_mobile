@@ -1,6 +1,8 @@
 /*
 * 用於異步轉同步
 * */
+import 'dart:developer';
+
 import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/global.dart';
 
@@ -11,6 +13,7 @@ class Syncs {
   static Future<bool> getInstance() async {
     packageInfo = await PackageInfo.fromPlatform();
     getCateList = await G.req.article_cate.list(cateid: 0);
+    log("${getCateList}");
     String user_version = '${packageInfo!.version}+${packageInfo!.buildNumber}';
     var res = await G.req.setting.getSetting(user_version: '${user_version}');
     var data = res.data;

@@ -13,15 +13,15 @@ class TermsOfUse extends StatefulWidget {
 }
 
 class _TermsOfUseState extends State<TermsOfUse> {
-  int userid = 0;
+  int? userid = 0;
   ScrollController scrollController = ScrollController();
   String content_html = '';
 
   @override
   void initState() {
     super.initState();
-    UserDataModel userData = G.user.data!;
-    userid = userData.id!;
+    UserDataModel? userData = G.user.data;
+    userid = userData?.id!;
     //    print('aaaaa===>${userData}');
 
     content_html = """
@@ -128,7 +128,7 @@ class _TermsOfUseState extends State<TermsOfUse> {
           ),
         ),
       ),
-      bottomNavigationBar: (userid > 0)
+      bottomNavigationBar: (userid!=null && userid! > 0)
           ? CustomNavbar(
               onTap: (index) {
                 G.pushNamed(G.toobarRouteNameList[index]);
