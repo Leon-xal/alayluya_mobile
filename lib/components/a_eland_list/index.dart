@@ -127,119 +127,122 @@ class _AElandListState extends State<AElandList>
           bottom: BorderSide(color: Colors.black12, width: 1.0),
         ),
       ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-        ),
-        onPressed: () {
-          final map = {"isLike": item.ifollow, "id": item.elandId};
-          Provider.of<DoLikeMethod>(context, listen: false).getPushIsLike(map);
-          G.pushNamed('/eland_info', arguments: {'id': item.elandId});
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              margin: const EdgeInsets.only(right: 15.0),
-              child: CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 28, 141, 160),
-                backgroundImage: NetworkImage(item.eland_pic),
-                radius: 11.0,
+      child: Container(
+        padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+        child: InkWell(
+          // style: ElevatedButton.styleFrom(
+          //
+          // ),
+          onTap: () {
+            final map = {"isLike": item.ifollow, "id": item.elandId};
+            Provider.of<DoLikeMethod>(context, listen: false).getPushIsLike(map);
+            G.pushNamed('/eland_info', arguments: {'id': item.elandId});
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                margin: const EdgeInsets.only(right: 15.0),
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 28, 141, 160),
+                  backgroundImage: NetworkImage(item.eland_pic),
+                  radius: 11.0,
+                ),
               ),
-            ),
-            Expanded(
-              flex: 6,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0, right: 4.0),
-                    child: Text(
-                      item.eland_name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        height: 1.1,
-                        color: Colors.black,
+              Expanded(
+                flex: 6,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0, right: 4.0),
+                      child: Text(
+                        item.eland_name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                          height: 1.1,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Text(
-                              '${item.follow}用戶',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                '${item.follow}用戶',
+                                style: TextStyle(
+                                  color: Color(0xff333333),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '關注',
                               style: TextStyle(
                                 color: Color(0xff333333),
                                 fontSize: 13,
                               ),
                             ),
-                          ),
-                          Text(
-                            '關注',
-                            style: TextStyle(
-                              color: Color(0xff333333),
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        child: item.ifollow
-                            ? AButton.icon(
-                                width: 70,
-                                height: 25,
-                                borderColor: Color.fromARGB(255, 28, 141, 160),
-                                bgColor: Color.fromARGB(255, 28, 141, 160),
-                                plain: true,
-                                textChild: Text(
-                                  '已關注',
-                                  style: TextStyle(
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10.0),
+                          child: item.ifollow
+                              ? AButton.icon(
+                                  width: 70,
+                                  height: 25,
+                                  borderColor: Color.fromARGB(255, 28, 141, 160),
+                                  bgColor: Color.fromARGB(255, 28, 141, 160),
+                                  plain: true,
+                                  textChild: Text(
+                                    '已關注',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  icon: icon_star(
+                                    size: 13,
                                     color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 13,
                                   ),
-                                ),
-                                borderRadius: BorderRadius.circular(40),
-                                icon: icon_star(
-                                  size: 13,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                ),
-                                onPressed: () => _clickFollow(item),
-                              )
-                            : AButton.icon(
-                                width: 70,
-                                height: 25,
-                                borderColor: Color.fromARGB(255, 28, 141, 160),
-                                bgColor: Color.fromARGB(255, 255, 255, 255),
-                                plain: true,
-                                textChild: Text(
-                                  '關注',
-                                  style: TextStyle(
+                                  onPressed: () => _clickFollow(item),
+                                )
+                              : AButton.icon(
+                                  width: 70,
+                                  height: 25,
+                                  borderColor: Color.fromARGB(255, 28, 141, 160),
+                                  bgColor: Color.fromARGB(255, 255, 255, 255),
+                                  plain: true,
+                                  textChild: Text(
+                                    '關注',
+                                    style: TextStyle(
+                                      color: Color(0xff333333),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  icon: icon_star_border(
+                                    size: 13,
                                     color: Color(0xff333333),
-                                    fontSize: 13,
                                   ),
+                                  onPressed: () => _clickFollow(item),
                                 ),
-                                borderRadius: BorderRadius.circular(40),
-                                icon: icon_star_border(
-                                  size: 13,
-                                  color: Color(0xff333333),
-                                ),
-                                onPressed: () => _clickFollow(item),
-                              ),
-                      ),
-                    ],
-                  ),
-                ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

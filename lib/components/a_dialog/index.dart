@@ -9,11 +9,11 @@ class ADialog {
   String content = "";
 
   static Widget _title =
-      const SizedBox.shrink(); // Provide a default empty widget;
+      const SizedBox(); // Provide a default empty widget;
   static Widget _content =
-      const SizedBox.shrink(); // Provide a default empty widget;
+      const SizedBox(); // Provide a default empty widget;
   static Widget _bottom =
-      const SizedBox.shrink(); // Provide a default empty widget;
+      const SizedBox(); // Provide a default empty widget;
 
   /// 提示弹窗
   ///
@@ -128,6 +128,7 @@ class ADialog {
 
   // 标题部分
   Widget _initTitle() {
+    if(title == '') return SizedBox();
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.only(top: 12),
@@ -232,6 +233,7 @@ class ADialog {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
+                  color: Colors.white
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

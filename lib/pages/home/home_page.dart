@@ -180,10 +180,10 @@ class _HomePageState extends State<HomePage>
                         //     // https://testapi2.alayluya.com/apk/alayluya-1.0.0+100.apk
                         //     launch('${G.baseurl}/apk/alayluya-${show_version}.apk');
                         //   }else{
-                        //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+                        //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluyav3', iOSAppId: 'id1506175100');
                         //   }
                         // }else{
-                        //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+                        //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluyav3', iOSAppId: 'id1506175100');
                         // }
                       },
                     ),
@@ -233,10 +233,10 @@ class _HomePageState extends State<HomePage>
             //           //     // https://testapi2.alayluya.com/apk/alayluya-1.0.0+100.apk
             //           //     launch('${G.baseurl}/apk/alayluya-${show_version}.apk');
             //           //   }else{
-            //           //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+            //           //     LaunchReview.launch(androidAppId: 'com.loopin.nepalayluyav3', iOSAppId: 'id1506175100');
             //           //   }
             //           // }else{
-            //           //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluya', iOSAppId: 'id1506175100');
+            //           //   LaunchReview.launch(androidAppId: 'com.loopin.nepalayluyav3', iOSAppId: 'id1506175100');
             //           // }
             //         }
             //     );

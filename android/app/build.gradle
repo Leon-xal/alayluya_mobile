@@ -21,7 +21,7 @@ plugins {
 android {
     compileSdkVersion 36
     ndkVersion = "27.0.12077973"
-    namespace = "com.loopin.nepalayluya"
+    namespace = "com.loopin.nepalayluyav3"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -42,9 +42,9 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.loopin.nepalayluya"
+        applicationId "com.loopin.nepalayluyav3"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
+        targetSdkVersion 35
         versionCode 1 // Default value
         versionName "1.0" // Default value
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -49,11 +49,12 @@ class _SearchResultState extends State<SearchResult> {
   Widget barSearch() {
     return new Container(
       color: Color.fromARGB(77, 51, 51, 51),
-      padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+      padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+      height: 48,
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       //        child: Text('123')
-      child: new ElevatedButton(
-        onPressed: () {
+      child: new InkWell(
+        onTap: () {
           Navigator.of(context).pushReplacementNamed('/search');
         },
         child: new Row(
@@ -72,9 +73,11 @@ class _SearchResultState extends State<SearchResult> {
               ),
             ),
             new Container(
-              child: new ElevatedButton(
+              child: new InkWell(
                 child: new Icon(Icons.cancel, size: 18.0, color: Colors.black),
-                onPressed: () {},
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/search');
+                },
               ),
               width: 40.0,
             ),
@@ -156,7 +159,7 @@ class _SearchResultState extends State<SearchResult> {
                           width: MediaQuery.of(context).size.width,
                           child: Text('更多'),
                           bgColor: Color.fromARGB(255, 229, 229, 229),
-                          color: Color(0x00000000),
+                          // color: Color(0x00000000),
                           borderColor: Color.fromARGB(255, 229, 229, 229),
                           plain: true,
                           borderRadius: BorderRadius.circular(5),
@@ -216,7 +219,7 @@ class _SearchResultState extends State<SearchResult> {
                           width: MediaQuery.of(context).size.width,
                           child: Text('更多'),
                           bgColor: Color.fromARGB(255, 229, 229, 229),
-                          color: Color(0x00000000),
+                          // color: Color(0x00000000),
                           borderColor: Color.fromARGB(255, 229, 229, 229),
                           plain: true,
                           borderRadius: BorderRadius.circular(5),

@@ -228,6 +228,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
+                    color: Colors.white,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

@@ -150,55 +150,64 @@ class _TodayPageState extends State<TodayPage>
             child: Column(
               children: [
                 // Text('asd'),
-                TabBar(
-                  controller: _tabController,
-                  /*tabs: (articleCate.list!.length > 0)
-                      ? articleCate.list.asMap().keys.map((f) {
-                          return Text(articleCate.list[f].catename);
-                        }).toList()
-                      : Text('全部'),*/
-                  tabs:
-                      articleCate?.list != null && articleCate!.list!.isNotEmpty
-                      ? articleCate!.list!.map((item) {
-                          return Tab(
-                            text: item.catename,
-                          ); // Assuming 'catename' is a property of your list items
-                        }).toList()
-                      : [
-                          Tab(text: '全部'),
-                        ], // Handle the case where the list is empty or null
-                  indicatorColor: Color.fromARGB(255, 28, 141, 160),
-                  //            indicatorSize: TabBarIndicatorSize.tab,
-                  //          labelPadding: EdgeInsets.only(top: 20,bottom:20,left:20,right:20),
-                  labelPadding: (articleCate!.list!.length > 4)
-                      ? EdgeInsets.only(
-                          top: 20,
-                          bottom: 20,
-                          left: 20,
-                          right: 20,
-                        )
-                      : EdgeInsets.only(top: 20, bottom: 20),
-                  indicatorPadding: EdgeInsets.only(
-                    top: 10,
-                    bottom: 10,
-                    left: 20,
-                    right: 20,
+                // Column(
+                //   children: articleCate!.list!.map((item) => Text('${item.catename}')).toList(),
+                // ),
+                Container(
+                  // color: Colors.red,
+                  child: TabBar(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    tabAlignment: TabAlignment.start,
+                    controller: _tabController,
+                    /*tabs: (articleCate.list!.length > 0)
+                        ? articleCate.list.asMap().keys.map((f) {
+                            return Text(articleCate.list[f].catename);
+                          }).toList()
+                        : Text('全部'),*/
+                    tabs: articleCate?.list != null && articleCate!.list!.isNotEmpty
+                        ? articleCate!.list!.map((item) {
+                            return Tab(
+                              iconMargin: EdgeInsets.symmetric(horizontal: 0),
+                              text: item.catename,
+                            ); // Assuming 'catename' is a property of your list items
+                          }).toList()
+                        : [
+                            Tab(text: '全部'),
+                          ], // Handle the case where the list is empty or null
+                    indicatorColor: Color.fromARGB(255, 28, 141, 160),
+                    //            indicatorSize: TabBarIndicatorSize.tab,
+                    //          labelPadding: EdgeInsets.only(top: 20,bottom:20,left:20,right:20),
+                    labelPadding: (articleCate!.list!.length > 4)
+                        ? EdgeInsets.only(
+                            // top: 20,
+                            bottom: 10,
+                            left: 0,
+                            right: 40,
+                          )
+                        : EdgeInsets.only(top: 20, bottom: 20),
+                    indicatorPadding: EdgeInsets.only(
+                      top: 10,
+                      bottom: 10,
+                      // left: 20,
+                      // right: 20,
+                    ),
+                    //          indicator: new ShapeDecoration(shape: new Border.all(color: Colors.redAccent, width: 1.0)),
+                    labelColor: Color.fromARGB(255, 28, 141, 160),
+                    //          indicatorWeight: 15.0,
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 28, 141, 160),
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: 15,
+                      color: Color(0xff333333),
+                    ),
+                    unselectedLabelColor: Color(0xff333333),
+                    isScrollable: (articleCate!.list!.length > 4) ? true : false,
+                    // isScrollable: true,
                   ),
-                  //          indicator: new ShapeDecoration(shape: new Border.all(color: Colors.redAccent, width: 1.0)),
-                  labelColor: Color.fromARGB(255, 28, 141, 160),
-                  //          indicatorWeight: 15.0,
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 28, 141, 160),
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff333333),
-                  ),
-                  unselectedLabelColor: Color(0xff333333),
-                  isScrollable: (articleCate!.list!.length > 4) ? true : false,
                 ),
-                Container(height: 10),
+                SizedBox(height: 10),
                 ASwiper(
                   // items,
                   articleCateList.catepic!,

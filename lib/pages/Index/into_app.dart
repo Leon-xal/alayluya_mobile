@@ -194,6 +194,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   Future<void> _navigateToAppropriateScreen() async {
     try{
+      print("G.isLogin111: ${G.isLogin}");
       await Syncs.getInstance();
       // Add any upgrade check here if needed
       print("G.isLogin: ${G.isLogin}");

@@ -20,7 +20,7 @@
 		"product_id":"736430079244906215",
 		"project_id":"736430079244906215",
 		"app_id":"104496751",
-		"package_name":"com.loopin.nepalayluya"
+		"package_name":"com.loopin.nepalayluyav3"
 	},
 	"oauth_client":{
 		"client_id":"104496751",
@@ -28,7 +28,7 @@
 	},
 	"app_info":{
 		"app_id":"104496751",
-		"package_name":"com.loopin.nepalayluya"
+		"package_name":"com.loopin.nepalayluyav3"
 	},
 	"service":{
 		"analytics":{
@@ -50,12 +50,12 @@
 	"configuration_version":"3.0",
 	"appInfos":[
 		{
-			"package_name":"com.loopin.nepalayluya",
+			"package_name":"com.loopin.nepalayluyav3",
 			"client":{
 				"app_id":"104496751"
 			},
 			"app_info":{
-				"package_name":"com.loopin.nepalayluya",
+				"package_name":"com.loopin.nepalayluyav3",
 				"app_id":"104496751"
 			},
 			"oauth_client":{

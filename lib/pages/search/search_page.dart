@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
         });
       }
     } catch (e) {
-      print('searchCatch===>${e}');
+      print('searchCatch1===>${e}');
     }
   }
 

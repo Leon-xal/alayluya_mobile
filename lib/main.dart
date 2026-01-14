@@ -126,14 +126,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _checkFontAvailability() async {
-    final fontFamilies = await rootBundle.loadString(
-      'packages/flutter/assets/fonts.txt',
-    );
-    if (fontFamilies.contains('yahei')) {
-      print('Font "yahei" is available.');
-    } else {
-      print('Font "yahei" is not available.');
-    }
+    // final fontFamilies = await rootBundle.loadString(
+    //   'packages/flutter/assets/fonts.txt',
+    // );
+    // if (fontFamilies.contains('yahei')) {
+    //   print('Font "yahei" is available.');
+    // } else {
+    //   print('Font "yahei" is not available.');
+    // }
   }
 
   @override

@@ -308,7 +308,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
               decoration: new BoxDecoration(
                 color: Colors.white,
                 border: new BorderDirectional(
-                  bottom: new BorderSide(color: Colors.black12, width: 1.0),
+                  // bottom: new BorderSide(color: Colors.black12, width: 1.0),
                 ),
               ),
               child: new ElevatedButton(
@@ -550,7 +550,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                       offstage: imageSize == 0,
                       child: imageSize > 1
                           ? GridView.builder(
-                              padding: EdgeInsets.only(top: 8.0),
+                              padding: EdgeInsets.only(top: 8.0,bottom: 12),
                               itemCount: imageSize,
                               shrinkWrap: true,
                               primary: false,
@@ -640,7 +640,7 @@ class _ElandDynamicState extends State<AElandDynamic> with RouteAware {
                             )
                           : imageSize == 1
                           ? Padding(
-                              padding: EdgeInsets.only(top: 8.0),
+                              padding: EdgeInsets.only(top: 8.0,bottom: 12),
                               child: GestureDetector(
                                 onTap: () {
                                   //                            APhotoview.show(context,url: item.pics[0]);

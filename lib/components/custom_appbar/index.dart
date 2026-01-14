@@ -50,11 +50,12 @@ AppBar customAppbar({
     return new AppBar(
       //brightness: Brightness.light,
       title: Container(
+        height: 48,
         child: new Row(
           children: <Widget>[
             new Container(
-              child: new ElevatedButton.icon(
-                onPressed: () {
+              child: new InkWell(
+                onTap: () {
                   //                  Navigator.of(context).pop();
                   if (context == null) {
                     G.toast('參數有誤');
@@ -62,8 +63,8 @@ AppBar customAppbar({
                     Navigator.pop(context);
                   }
                 },
-                icon: new Icon(Icons.arrow_back, color: Colors.black54),
-                label: new Text(""),
+                child: new Icon(Icons.arrow_back, color: Colors.black54),
+                // label: new Text(""),
               ),
               width: 60.0,
             ),
