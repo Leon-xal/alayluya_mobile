@@ -1,0 +1,16 @@
+{
+  "code": 200,
+  "list": [
+    {
+      "eland_id": 2000,
+      "eland_name": "xxx教會",
+      "eland_desc": "這是xxx教會",
+      "eland_pic": "https://pic2.zhimg.com/50/v2-710b7a6fea12a7203945b666790b7181_hd.jpg",
+      "eland_has_news": true,
+      "follow": 10,
+      "ifollow": true
+
+    }
+  ],
+  "msg": ""
+}

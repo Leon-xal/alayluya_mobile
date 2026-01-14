@@ -28,6 +28,18 @@
 				<string>fb371924147328793</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLIconFile</key>
+			<string>alayluya</string>
+			<key>CFBundleURLName</key>
+			<string>alayluya</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>alayluya</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -41,13 +53,13 @@
 	<string>Alayluya</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-        <string>instagram-stories</string>
-        <string>facebook-stories</string>
-        <string>facebook</string>
-        <string>instagram</string>
-        <string>twitter</string>
-        <string>whatsapp</string>
-        <string>tg</string>
+		<string>instagram-stories</string>
+		<string>facebook-stories</string>
+		<string>facebook</string>
+		<string>instagram</string>
+		<string>twitter</string>
+		<string>whatsapp</string>
+		<string>tg</string>
 		<string>fbapi</string>
 		<string>fbapi20130214</string>
 		<string>fbapi20130410</string>
@@ -59,9 +71,9 @@
 		<string>fbapi20150313</string>
 		<string>fbapi20150629</string>
 		<string>fbapi20160328</string>
-        <string>fbauth</string>
-        <string>fb-messenger-share-api</string>
-        <string>fbshareextension</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbshareextension</string>
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
@@ -119,7 +131,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
 </dict>
 </plist>

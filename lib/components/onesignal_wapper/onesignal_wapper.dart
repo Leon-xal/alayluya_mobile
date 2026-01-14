@@ -23,7 +23,7 @@ class OneSignalWapper {
   String linkUrl = '';
   bool is_open_onesignal_push = false;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin(); // Initialize FlutterLocalNotificationsPlugin
+  FlutterLocalNotificationsPlugin(); // Initialize FlutterLocalNotificationsPlugin
 
   init() async {
     var systemInfo = Syncs.getSystemInfo;
@@ -170,50 +170,50 @@ class OneSignalWapper {
 
   Future<void> _initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings(
-          '@mipmap/ic_launcher',
-        ); // Replace with your app icon
+    AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    ); // Replace with your app icon
 
     const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    InitializationSettings(android: initializationSettingsAndroid);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   Future<void> _setupOneSignal() async {
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
-    OneSignal.consentRequired(_requireConsent);
+    // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    // OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    // OneSignal.consentRequired(_requireConsent);
     //OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
-    OneSignal.Notifications.addClickListener((OSNotificationClickEvent result) {
-      // ... (Notification handling remains unchanged) ...
-      print(
-        "Opened notification=======>: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}",
-      );
+    // OneSignal.Notifications.addClickListener((OSNotificationClickEvent result) {
+    //   // ... (Notification handling remains unchanged) ...
+    //   print(
+    //     "Opened notification=======>: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}",
+    //   );
 
-      // print('Opened notification2=======>${result.notification.payload.rawPayload}');
-      // print('Opened notification3=======>${result.notification.payload.rawPayload['custom']}');
+    // print('Opened notification2=======>${result.notification.payload.rawPayload}');
+    // print('Opened notification3=======>${result.notification.payload.rawPayload['custom']}');
 
-      var custom = null;
-      if (Platform.isAndroid) {
-        custom = jsonDecode(result.notification.rawPayload!['custom']);
-      } else {
-        custom = result.notification.rawPayload!['custom'];
-      }
-
-      print('Opened notification4=======>${custom}');
-
-      if (custom.containsKey('a')) {
-        if (custom['a'].containsKey('article')) {
-          String title = custom['a']['article'];
-          String hrefVal =
-              'https://alayluya.com/article/' + Uri.encodeComponent(title);
-          // print('hrefVal======>${hrefVal}');
-          AWebview.open(G.getCurrentContext(), url: hrefVal, title: title);
-        }
-      }
-    });
+    //   var custom = null;
+    //   if (Platform.isAndroid) {
+    //     custom = jsonDecode(result.notification.rawPayload!['custom']);
+    //   } else {
+    //     custom = result.notification.rawPayload!['custom'];
+    //   }
+    //
+    //   print('Opened notification4=======>${custom}');
+    //
+    //   if (custom.containsKey('a')) {
+    //     if (custom['a'].containsKey('article')) {
+    //       String title = custom['a']['article'];
+    //       String hrefVal =
+    //           'https://alayluya.com/article/' + Uri.encodeComponent(title);
+    //       // print('hrefVal======>${hrefVal}');
+    //       AWebview.open(G.getCurrentContext(), url: hrefVal, title: title);
+    //     }
+    //   }
+    // });
 
     // ... (Other OneSignal handlers remain unchanged) ...
     /*OneSignal.setInAppMessageClickedHandler((
@@ -247,22 +247,22 @@ class OneSignalWapper {
     });*/
 
     //await OneSignal.shared.setAppId(kOneSignalKey['appID']!);
-    OneSignal.initialize(kOneSignalKey['appID']!);
+    // OneSignal.initialize(kOneSignalKey['appID']!);
 
     /*bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
     print('requiresConsent=====>${requiresConsent}');
     if (requiresConsent == true) {*/
-    if (_requireConsent == true) {
-      //await OneSignal.shared.consentGranted(true);
-      await OneSignal.consentGiven(true);
-    }
+    // if (_requireConsent == true) {
+    //   //await OneSignal.shared.consentGranted(true);
+    //   await OneSignal.consentGiven(true);
+    // }
 
     /*bool accepted = await OneSignal.shared
         .promptUserForPushNotificationPermission();
     print("Accepted permission=======>: ${accepted}");
   }*/
-    bool accepted = await OneSignal.Notifications.requestPermission(true);
-    print("Accepted permission=======>: ${accepted}");
+    // bool accepted = await OneSignal.Notifications.requestPermission(true);
+    // print("Accepted permission=======>: ${accepted}");
   }
   /*loginInit() async {
     NotificationPermissions.getNotificationPermissionStatus().then((
@@ -363,10 +363,10 @@ class OneSignalWapper {
         /*OneSignal.shared.setExternalUserId(userData.id.toString()).then((
           results,
         )*/
-        OneSignal.login(userData.id.toString()).then((results) {
-          // print("Successfully set external user id
-          //print("External user id set2=======>: ${results}");
-        });
+        // OneSignal.login(userData.id.toString()).then((results) {
+        //   // print("Successfully set external user id
+        //   //print("External user id set2=======>: ${results}");
+        // });
 
         // ... (Email and tag setting remains unchanged) ...
       });

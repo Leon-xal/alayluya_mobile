@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/global.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
@@ -37,64 +37,68 @@ class FacebookProvider extends ChangeNotifier {
   }
 
   Future<bool> loginByFacebook() async {
-    final result = await FacebookAuth.instance.login(permissions: ['email']);
-    print('result======>${result}');
-    print('result.status======>${result.status}');
-    if (result.status == LoginStatus.success) {
-      Map<String, dynamic> profile = await FacebookAuth.instance.getUserData(
-        fields: "name,first_name,last_name,email",
-      );
-      final AccessToken accessToken = result.accessToken!;
-      Map<String, dynamic> accessTokenJson = accessToken.toJson();
-      // print('AccessToken=========>${accessTokenJson['token']}');
-      // print('name=========>${profile['name']}');
-      // print('email=========>${profile['email']}');
-      // print('first_name=========>${profile['first_name']}');
-      // print('last_name=========>${profile['last_name']}');
-      // print('id=========>${profile['id']}');
-      // print('_userData=========>${profile}');
-
-      var res = await G.req.user.loginByFacebook(
-        name: profile['name'],
-        first_name: profile['first_name'],
-        last_name: profile['last_name'],
-        facebookid: profile['id'],
-        facebook_token: accessTokenJson['token'],
-        email: profile['email'],
-      );
-
-      print('loginByFacebook1=====>${res}');
-
-      var data = res.data;
-      // print('loginByFacebook2=====>${data['data']['id']}');
-      if (data == null) {
-        _isFacebookLogin = false;
-        _message = '登錄失敗';
-        notifyListeners();
-        return false;
-      } else {
-        if (data['data']['id'] == -1) {
-          _isFacebookLogin = false;
-          _message = data['msg'];
-          print('loginByFacebook3=====>${data['msg']}');
-          notifyListeners();
-          return false;
-        } else {
-          await getUserDetail(data['data']['id']);
-          _isFacebookLogin = true;
-          _message = '登錄成功';
-          _prefs?.setBool('isFacebookLogin', true);
-          notifyListeners();
-          return true;
-        }
-      }
-    } else {
-      _isFacebookLogin = false;
-      _message = '登錄失敗';
-      print('FacebookLoginStatus.cancelledByUser=====>${_message}');
-      notifyListeners();
-      return false;
-    }
+    // final result = await FacebookAuth.instance.login(permissions: ['email']);
+    // print('result======>${result}');
+    // print('result.status======>${result.status}');
+    // if (result.status == LoginStatus.success) {
+    //   Map<String, dynamic> profile = await FacebookAuth.instance.getUserData(
+    //     fields: "name,first_name,last_name,email",
+    //   );
+    //   final AccessToken accessToken = result.accessToken!;
+    //   Map<String, dynamic> accessTokenJson = accessToken.toJson();
+    //   // print('AccessToken=========>${accessTokenJson['token']}');
+    //   // print('name=========>${profile['name']}');
+    //   // print('email=========>${profile['email']}');
+    //   // print('first_name=========>${profile['first_name']}');
+    //   // print('last_name=========>${profile['last_name']}');
+    //   // print('id=========>${profile['id']}');
+    //   // print('_userData=========>${profile}');
+    //
+    //   var res = await G.req.user.loginByFacebook(
+    //     name: profile['name'],
+    //     first_name: profile['first_name'],
+    //     last_name: profile['last_name'],
+    //     facebookid: profile['id'],
+    //     facebook_token: accessTokenJson['token'],
+    //     email: profile['email'],
+    //   );
+    //
+    //   print('loginByFacebook1=====>${res}');
+    //
+    //   var data = res.data;
+    //   // print('loginByFacebook2=====>${data['data']['id']}');
+    //   if (data == null) {
+    //     _isFacebookLogin = false;
+    //     _message = '登錄失敗';
+    //     notifyListeners();
+    //     return false;
+    //   } else {
+    //     if (data['data']['id'] == -1) {
+    //       _isFacebookLogin = false;
+    //       _message = data['msg'];
+    //       print('loginByFacebook3=====>${data['msg']}');
+    //       notifyListeners();
+    //       return false;
+    //     } else {
+    //       await getUserDetail(data['data']['id']);
+    //       _isFacebookLogin = true;
+    //       _message = '登錄成功';
+    //       _prefs?.setBool('isFacebookLogin', true);
+    //       notifyListeners();
+    //       return true;
+    //     }
+    //   }
+    // }
+    // else {
+    //   _isFacebookLogin = false;
+    //   _message = '登錄失敗';
+    //   print('FacebookLoginStatus.cancelledByUser=====>${_message}');
+    //   notifyListeners();
+    //   return false;
+    // }
+    _isFacebookLogin = false;
+    _message = '登錄失敗';
+    return false;
     // _isFacebookLogin = false;
     // _message = '登錄成功???';
     // notifyListeners();
@@ -211,7 +215,7 @@ class FacebookProvider extends ChangeNotifier {
     _isFacebookLogin = false;
     _message = 'Logout';
     // await facebookSignIn.logOut();
-    await FacebookAuth.instance.logOut();
+    // await FacebookAuth.instance.logOut();
     notifyListeners();
     return true;
   }

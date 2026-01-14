@@ -55,10 +55,10 @@ class _LoginStartState extends State<LoginStart> {
               ? false
               : systemInfo['is_open_apple_login'];
         }
-        is_open_facebook_login = (systemInfo == null)
-            ? false
-            : systemInfo['is_open_facebook_login'];
-
+        // is_open_facebook_login = (systemInfo == null)
+        //     ? false
+        //     : systemInfo['is_open_facebook_login'];
+        is_open_facebook_login = false;
         // is_open_facebook_login = true;
       });
     });
