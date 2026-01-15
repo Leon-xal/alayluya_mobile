@@ -55,8 +55,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
     id = args?['id'];
     Future.delayed(Duration.zero, () async {
       _prefs = await SharedPreferences.getInstance();
-      String? _custom_font_size_str = _prefs?.getString('_custom_font_size');
-      if (_custom_font_size_str!.isNotEmpty) {
+      String? _custom_font_size_str = _prefs?.getString('_custom_font_size') ?? '16';
+      if (_custom_font_size_str.isNotEmpty) {
         custom_font_size = double.parse(_custom_font_size_str);
       } else {
         _prefs?.setString('_custom_font_size', custom_font_size.toString());

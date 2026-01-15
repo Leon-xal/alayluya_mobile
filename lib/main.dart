@@ -11,10 +11,12 @@
 * */
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 //import 'package:color_dart/color_dart.dart';
 import 'package:app_links/app_links.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flui/flui.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +28,8 @@ import './provider/do_like_method.dart';
 import './provider/facebookProvider.dart';
 import './routes/index.dart' as myRouter;
 import './utils/global.dart';
+import 'lib/lib/request/req_article.dart';
+import 'lib/lib/request/request.dart';
 //import './utils/syncs.dart';
 
 final myRouter.Router router = myRouter.Router();
@@ -90,15 +94,6 @@ void main() async {
 
   print('G.prdapi=======>${G.prdapi}');
 
-  AppLinks().uriLinkStream.listen((uri) {
-    print('uriLinkStream======>${uri}');
-    print('uriLinkStream112======>${uri.fragment}');
-    print('uriLinkStream223======>${uri.host}');
-    print('uriLinkStream334======>${uri.scheme}');
-    print('uriLinkStream445======>${uri.queryParametersAll}');
-    print('uriLinkStream556======>${uri.pathSegments}');
-  });
-
   // runApp(
   //     MyApp()
   // );
@@ -128,6 +123,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    if (G.isLogin == true) {
+      Future.microtask(() async {
+        G.listenDeeplink();
+      });
+    }
   }
 
   @override

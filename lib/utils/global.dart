@@ -6,7 +6,9 @@
  */
 //import 'package:color_dart/color_dart.dart';
 //import 'package:connectivity/connectivity.dart';
+import 'package:app_links/app_links.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +47,7 @@ class G {
   //  static String prdapi = 'http://192.168.4.45/api';
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+  static bool _deeplinkInitialized = false;
 
   /// toolbar routeName
   static final List toobarRouteNameList = [
@@ -245,6 +248,32 @@ class G {
         onCallback!(true);
       } else {
         onCallback!(false);
+      }
+    });
+  }
+
+  static listenDeeplink() async {
+    if (_deeplinkInitialized) {
+      return;
+    }
+    _deeplinkInitialized = true;
+    AppLinks().uriLinkStream.listen((uri) async {
+      print('uriLinkStream======>${uri}');
+      print('uriLinkStream112======>${uri.fragment}');
+      print('uriLinkStream223======>${uri.host}');
+      print('uriLinkStream334======>${uri.scheme}');
+      print('uriLinkStream445======>${uri.queryParametersAll}');
+      print('uriLinkStream556======>${uri.pathSegments}');
+      List<String> segments = uri.pathSegments;
+      // List<String> segments = ['article','基督教靈糧世界佈道會香港靈糧堂-0103-牧者的話1935652056'];
+      if(segments.isNotEmpty && segments.length >= 2) {
+        if(segments[0] == 'article') {
+          Response data = await G.req.article_cate.request_article_id_by_title(title: '${segments[1]}');
+          if(data.statusCode == 200 && data.data != null) {
+            String id = '${data.data['result']['id']}';
+            G.pushNamed('/article_detail', arguments: {'id': int.parse(id)});
+          }
+        }
       }
     });
   }

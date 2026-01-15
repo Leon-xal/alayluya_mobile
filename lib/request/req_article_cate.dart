@@ -16,4 +16,14 @@ class ReqArticleCate {
       queryParameters: {'p_cateid': cateid},
     );
   }
+
+  /// 根據標題獲取文章id
+  Future<Response> request_article_id_by_title({required String title}) {
+    return _dio.post(
+      G.prdapi + '/get-article-id',
+      queryParameters: {
+        'slug': title,
+      },
+    );
+  }
 }

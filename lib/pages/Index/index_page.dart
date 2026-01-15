@@ -159,6 +159,9 @@ class _NavigationState extends State<IndexPage> {
 
         // print('argumentsCurrentIndex2====>${tempCurrentIndex}');
       });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        G.listenDeeplink();
+      });
     });
   }
 
