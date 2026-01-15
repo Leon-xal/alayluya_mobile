@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     print("AElandDynamic{$userid, $is_upgrade, $show_version_msg}");
     return AElandDynamic(
-      isshowcenterload: true,
+      isshowcenterload: false,
       uid: userid,
       topchild: Container(
         // height: 180,

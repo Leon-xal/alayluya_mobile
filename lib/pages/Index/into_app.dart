@@ -66,6 +66,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
       vsync: this,
       duration: Duration(milliseconds: 1500),
     );
+    G.isInitApp = true;
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _checkNetworkAvailability();
     _initializeNotifications(); // Initialize notifications

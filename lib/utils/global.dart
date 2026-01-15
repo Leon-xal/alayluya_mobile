@@ -252,6 +252,7 @@ class G {
     });
   }
 
+  static bool isInitApp = false;
   static listenDeeplink() async {
     if (_deeplinkInitialized) {
       return;
@@ -271,6 +272,7 @@ class G {
           Response data = await G.req.article_cate.request_article_id_by_title(title: '${segments[1]}');
           if(data.statusCode == 200 && data.data != null) {
             String id = '${data.data['result']['id']}';
+            if(!isInitApp) await Future.delayed(Duration(seconds: 3));
             G.pushNamed('/article_detail', arguments: {'id': int.parse(id)});
           }
         }
