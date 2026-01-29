@@ -374,7 +374,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   web_view.JavascriptChannel iosJavascript1(BuildContext context) {
     return web_view.JavascriptChannel(
-      name: 'InAppWebViewFacebookCallback',
+      name: 'InAppWebViewGetReadyCallback',
       onMessageReceived: (web_view.JavascriptMessage message) {
         iosController?.evaluateJavascript("""
                         var _dom = document.getElementById('article-content');
@@ -1148,6 +1148,56 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       setState(() {
                         isloading = false;
                       });
+                      iosController?.evaluateJavascript("""
+                        (function(){
+                          if(!window.flutter_inappwebview){window.flutter_inappwebview={};}
+                          window.flutter_inappwebview.callHandler=function(name){
+                            var args=Array.prototype.slice.call(arguments,1);
+                            try{
+                              switch(name){
+                                case 'InAppWebViewGetReadyCallback':
+                                  InAppWebViewGetReadyCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewFacebookCallback':
+                                  InAppWebViewFacebookCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewTwitterFuncCallback':
+                                  InAppWebViewTwitterFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewWhatsAppFuncCallback':
+                                  InAppWebViewWhatsAppFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewEmailFuncCallback':
+                                  InAppWebViewEmailFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewCopyFuncCallback':
+                                  InAppWebViewCopyFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewHotArticleClickFuncFuncCallback':
+                                  InAppWebViewHotArticleClickFuncFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewMoreArticleFuncCallback':
+                                  InAppWebViewMoreArticleFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewFollowElandFuncCallback':
+                                  InAppWebViewFollowElandFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewGoElandPageFuncCallback':
+                                  InAppWebViewGoElandPageFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewOpenImageByContentFuncCallback':
+                                  InAppWebViewOpenImageByContentFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                case 'InAppWebViewOpenHrefByContentFuncCallback':
+                                  InAppWebViewOpenHrefByContentFuncCallback.postMessage(JSON.stringify(args));
+                                  break;
+                                default:
+                                  break;
+                              }
+                            }catch(e){}
+                          };
+                        })();
+                      """);
                     },
                   ),
                 ),
