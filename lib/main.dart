@@ -28,8 +28,8 @@ import './provider/do_like_method.dart';
 import './provider/facebookProvider.dart';
 import './routes/index.dart' as myRouter;
 import './utils/global.dart';
-import 'lib/lib/request/req_article.dart';
-import 'lib/lib/request/request.dart';
+// import 'lib/lib/request/req_article.dart';
+// import 'lib/lib/request/request.dart';
 //import './utils/syncs.dart';
 
 final myRouter.Router router = myRouter.Router();
@@ -123,6 +123,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // print('G.navigatorKey======>1${G.navigatorKey}');
     if (G.isLogin == true) {
       Future.microtask(() async {
         G.listenDeeplink();
@@ -171,7 +172,6 @@ class _MyAppState extends State<MyApp> {
     //     Provider<FacebookProvider>.value(value: _facebook_provider),
     //   ],
     //   child:
-    print('G.navigatorKey======>${G.navigatorKey}');
     _checkFontAvailability();
     return RefreshConfiguration(
       headerTriggerDistance: 30.0,

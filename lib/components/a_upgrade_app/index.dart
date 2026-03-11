@@ -113,13 +113,13 @@ class AUpgradeApp {
         launchUrlString('${G.baseurl}/apk/alayluya-${show_version}.apk');
       } else {
         // LaunchReviewLatest.launch(
-        //   androidAppId: 'com.loopin.nepalayluyav3',
+        //   androidAppId: 'com.loopin.nepalayluya',
         //   iOSAppId: 'id1506175100',
         // );
       }
     } else {
       // LaunchReviewLatest.launch(
-      //   androidAppId: 'com.loopin.nepalayluyav3',
+      //   androidAppId: 'com.loopin.nepalayluya',
       //   iOSAppId: 'id1506175100',
       // );
     }

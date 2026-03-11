@@ -48,7 +48,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   bool _submit_i = false;
 
-  final Completer<web_view.WebViewController> _controller = Completer<web_view.WebViewController>();
+  // final Completer<web_view.WebViewController> _controller = Completer<web_view.WebViewController>();
   web_view.WebViewController? iosController;
 
   @override
@@ -372,267 +372,267 @@ class _ArticleDetailState extends State<ArticleDetail> {
     );
   }
 
-  web_view.JavascriptChannel iosJavascript1(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewGetReadyCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) {
-        iosController?.evaluateJavascript("""
-                        var _dom = document.getElementById('article-content');
-                        reFontSize(_dom,""" +
-            custom_font_size.toString() +
-            """);
-                      """);
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript2(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewFacebookCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print('shareToFacebook======>${share_url}');
-        List<String> share_url_arr = share_url.split('/');
-        String share_url2 = '';
-        if (share_url_arr.length > 0) {
-          for (int i = 0; i < share_url_arr.length; i++) {
-            if (i == share_url_arr.length - 1) {
-              share_url2 += Uri.encodeComponent(
-                share_url_arr[share_url_arr.length - 1],
-              );
-            } else {
-              share_url2 += share_url_arr[i] + '/';
-            }
-          }
-        }
-        print('share_url2====>${share_url2}');
-        var response = await SharePlus.instance.share(
-          ShareParams(
-            uri: Uri.parse(share_url2),
-            text: share_text,
-          ),
-        );
-        print('shareToFacebook2======>${response}');
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript3(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewTwitterFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print('shareToTwitter======>${share_url}');
-        /* var response = FlutterShareMe().shareToTwitter(
-                            url: share_url,
-                            msg: share_text!,
-                          ); */
-        var response = await SharePlus.instance.share(
-          ShareParams(
-            uri: Uri.parse(share_url),
-            text: share_text,
-          ),
-        );
-        print('shareToTwitter======>${response}');
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript4(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewWhatsAppFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        String share_url2 = Uri.encodeComponent(share_url);
-        try {
-          //                          "whatsapp://send?text=${share_url2}"
-          Future<bool> canToWhatsApp = canLaunchUrl(
-            Uri.parse("whatsapp://send?text=${share_url2}"),
-          );
-          canToWhatsApp.then((isCanToWhatsApp) async {
-            if (isCanToWhatsApp == true) {
-              launchUrl(
-                Uri.parse(
-                  "whatsapp://send?text=${share_url2}",
-                ),
-              );
-            } else {
-              await G.toast('請安裝WhatsApp');
-            }
-          });
-        } catch (e) {
-          print('eeeeeeeeee2======================>${e}');
-        }
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript5(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewEmailFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewEmailFuncCallback=========>${message}',
-        );
-        String share_text2 = Uri.encodeComponent(share_text!);
-        String share_url2 = Uri.encodeComponent(share_url);
-        try {
-          Future<bool> canToEmail = canLaunchUrl(
-            Uri.parse(
-              "mailto:?subject=${share_text2}&body=${share_url2}",
-            ),
-          );
-          canToEmail.then((isCanToEmail) async {
-            if (isCanToEmail == true) {
-              launchUrl(
-                Uri.parse(
-                  "mailto:?subject=${share_text2}&body=${share_url2}",
-                ),
-              );
-            } else {
-              await G.toast('請安裝第三方郵箱工具');
-            }
-          });
-        } catch (e) {
-          print('eeeeeeeeee2======================>${e}');
-        }
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript6(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewCopyFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewCopyFuncCallback=========>${message}',
-        );
-        Clipboard.setData(ClipboardData(text: share_url));
-        await G.toast('已復制連結');
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript7(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewHotArticleClickFuncFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewHotArticleClickFuncFuncCallback=========>${message}',
-        );
-        // print(arguments[0] is String);
-        List res = json.decode(message.message);
-        G.pushNamed(
-          '/article_detail',
-          arguments: {'id': int.parse(res[0])},
-        );
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript8(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewMoreArticleFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewMoreArticleFuncCallback=========>${message}',
-        );
-        G.pushNamed(
-          '/article_list',
-          arguments: {
-            'eland_id': article?.eland_id,
-            'ishot': true,
-          },
-        );
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript9(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewFollowElandFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewFollowElandFuncCallback=========>${message}',
-        );
-        _clickElandFollow(article);
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript10(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewGoElandPageFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewGoElandPageFuncCallback=========>${message}',
-        );
-        G.pushNamed(
-          '/eland_info',
-          arguments: {'id': article?.eland_id},
-        );
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript11(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewOpenImageByContentFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewOpenImageByContentFuncCallback=========>${message}',
-
-        );
-        dynamic res = json.decode(message.message);
-        // print('arguments====>${arguments}');
-        if (res.length > 0 && res[0] != null) {
-          APhotoview.show(context, url: res[0]);
-        }
-      },
-    );
-  }
-
-  web_view.JavascriptChannel iosJavascript12(BuildContext context) {
-    return web_view.JavascriptChannel(
-      name: 'InAppWebViewOpenHrefByContentFuncCallback',
-      onMessageReceived: (web_view.JavascriptMessage message) async {
-        print(
-          'InAppWebViewOpenHrefByContentFuncCallback=========>${message}',
-        );
-        dynamic arguments = json.decode(message.message);
-        // print('arguments====>${arguments}');
-        if (arguments.length > 0 && arguments[0] != null) {
-          String hrefVal = arguments[0];
-          String extVal = hrefVal.substring(
-            hrefVal.lastIndexOf(".") + 1,
-            hrefVal.length,
-          );
-          if (extVal == 'pdf') {
-            APdfview.show(context, url: hrefVal);
-          } else {
-            List hrefValArr = hrefVal.split("/");
-            String pos = hrefValArr[hrefValArr.length - 2];
-            String val = hrefValArr[hrefValArr.length - 1];
-            print('pos====>${pos}');
-            print('val====>${val}');
-            if (pos == 'article') {
-              G.pushNamed(
-                '/article_detail',
-                arguments: {'id': int.parse(val)},
-              );
-            } else {
-              if (await canLaunchUrl(Uri.parse(hrefVal))) {
-                await launchUrl(Uri.parse(hrefVal));
-              } else {
-                AWebview.open(
-                  context,
-                  url: hrefVal,
-                  title: hrefVal,
-                );
-              }
-            }
-          }
-        }
-      },
-    );
-  }
+  // web_view.JavascriptChannel iosJavascript1(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewGetReadyCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) {
+  //       iosController?.evaluateJavascript("""
+  //                       var _dom = document.getElementById('article-content');
+  //                       reFontSize(_dom,""" +
+  //           custom_font_size.toString() +
+  //           """);
+  //                     """);
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript2(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewFacebookCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print('shareToFacebook======>${share_url}');
+  //       List<String> share_url_arr = share_url.split('/');
+  //       String share_url2 = '';
+  //       if (share_url_arr.length > 0) {
+  //         for (int i = 0; i < share_url_arr.length; i++) {
+  //           if (i == share_url_arr.length - 1) {
+  //             share_url2 += Uri.encodeComponent(
+  //               share_url_arr[share_url_arr.length - 1],
+  //             );
+  //           } else {
+  //             share_url2 += share_url_arr[i] + '/';
+  //           }
+  //         }
+  //       }
+  //       print('share_url2====>${share_url2}');
+  //       var response = await SharePlus.instance.share(
+  //         ShareParams(
+  //           uri: Uri.parse(share_url2),
+  //           text: share_text,
+  //         ),
+  //       );
+  //       print('shareToFacebook2======>${response}');
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript3(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewTwitterFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print('shareToTwitter======>${share_url}');
+  //       /* var response = FlutterShareMe().shareToTwitter(
+  //                           url: share_url,
+  //                           msg: share_text!,
+  //                         ); */
+  //       var response = await SharePlus.instance.share(
+  //         ShareParams(
+  //           uri: Uri.parse(share_url),
+  //           text: share_text,
+  //         ),
+  //       );
+  //       print('shareToTwitter======>${response}');
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript4(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewWhatsAppFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       String share_url2 = Uri.encodeComponent(share_url);
+  //       try {
+  //         //                          "whatsapp://send?text=${share_url2}"
+  //         Future<bool> canToWhatsApp = canLaunchUrl(
+  //           Uri.parse("whatsapp://send?text=${share_url2}"),
+  //         );
+  //         canToWhatsApp.then((isCanToWhatsApp) async {
+  //           if (isCanToWhatsApp == true) {
+  //             launchUrl(
+  //               Uri.parse(
+  //                 "whatsapp://send?text=${share_url2}",
+  //               ),
+  //             );
+  //           } else {
+  //             await G.toast('請安裝WhatsApp');
+  //           }
+  //         });
+  //       } catch (e) {
+  //         print('eeeeeeeeee2======================>${e}');
+  //       }
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript5(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewEmailFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewEmailFuncCallback=========>${message}',
+  //       );
+  //       String share_text2 = Uri.encodeComponent(share_text!);
+  //       String share_url2 = Uri.encodeComponent(share_url);
+  //       try {
+  //         Future<bool> canToEmail = canLaunchUrl(
+  //           Uri.parse(
+  //             "mailto:?subject=${share_text2}&body=${share_url2}",
+  //           ),
+  //         );
+  //         canToEmail.then((isCanToEmail) async {
+  //           if (isCanToEmail == true) {
+  //             launchUrl(
+  //               Uri.parse(
+  //                 "mailto:?subject=${share_text2}&body=${share_url2}",
+  //               ),
+  //             );
+  //           } else {
+  //             await G.toast('請安裝第三方郵箱工具');
+  //           }
+  //         });
+  //       } catch (e) {
+  //         print('eeeeeeeeee2======================>${e}');
+  //       }
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript6(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewCopyFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewCopyFuncCallback=========>${message}',
+  //       );
+  //       Clipboard.setData(ClipboardData(text: share_url));
+  //       await G.toast('已復制連結');
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript7(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewHotArticleClickFuncFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewHotArticleClickFuncFuncCallback=========>${message}',
+  //       );
+  //       // print(arguments[0] is String);
+  //       List res = json.decode(message.message);
+  //       G.pushNamed(
+  //         '/article_detail',
+  //         arguments: {'id': int.parse(res[0])},
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript8(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewMoreArticleFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewMoreArticleFuncCallback=========>${message}',
+  //       );
+  //       G.pushNamed(
+  //         '/article_list',
+  //         arguments: {
+  //           'eland_id': article?.eland_id,
+  //           'ishot': true,
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript9(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewFollowElandFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewFollowElandFuncCallback=========>${message}',
+  //       );
+  //       _clickElandFollow(article);
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript10(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewGoElandPageFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewGoElandPageFuncCallback=========>${message}',
+  //       );
+  //       G.pushNamed(
+  //         '/eland_info',
+  //         arguments: {'id': article?.eland_id},
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript11(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewOpenImageByContentFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewOpenImageByContentFuncCallback=========>${message}',
+  //
+  //       );
+  //       dynamic res = json.decode(message.message);
+  //       // print('arguments====>${arguments}');
+  //       if (res.length > 0 && res[0] != null) {
+  //         APhotoview.show(context, url: res[0]);
+  //       }
+  //     },
+  //   );
+  // }
+  //
+  // web_view.JavascriptChannel iosJavascript12(BuildContext context) {
+  //   return web_view.JavascriptChannel(
+  //     name: 'InAppWebViewOpenHrefByContentFuncCallback',
+  //     onMessageReceived: (web_view.JavascriptMessage message) async {
+  //       print(
+  //         'InAppWebViewOpenHrefByContentFuncCallback=========>${message}',
+  //       );
+  //       dynamic arguments = json.decode(message.message);
+  //       // print('arguments====>${arguments}');
+  //       if (arguments.length > 0 && arguments[0] != null) {
+  //         String hrefVal = arguments[0];
+  //         String extVal = hrefVal.substring(
+  //           hrefVal.lastIndexOf(".") + 1,
+  //           hrefVal.length,
+  //         );
+  //         if (extVal == 'pdf') {
+  //           APdfview.show(context, url: hrefVal);
+  //         } else {
+  //           List hrefValArr = hrefVal.split("/");
+  //           String pos = hrefValArr[hrefValArr.length - 2];
+  //           String val = hrefValArr[hrefValArr.length - 1];
+  //           print('pos====>${pos}');
+  //           print('val====>${val}');
+  //           if (pos == 'article') {
+  //             G.pushNamed(
+  //               '/article_detail',
+  //               arguments: {'id': int.parse(val)},
+  //             );
+  //           } else {
+  //             if (await canLaunchUrl(Uri.parse(hrefVal))) {
+  //               await launchUrl(Uri.parse(hrefVal));
+  //             } else {
+  //               AWebview.open(
+  //                 context,
+  //                 url: hrefVal,
+  //                 title: hrefVal,
+  //               );
+  //             }
+  //           }
+  //         }
+  //       }
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -770,7 +770,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
           : Stack(
               children: <Widget>[
                 // Text(article.content_app_link.toString()),
-                if(Platform.isAndroid) Container(
+                 Container(
                   margin: const EdgeInsets.only(
                     left: 10.0,
                     right: 10.0,
@@ -1099,106 +1099,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             });
                           }
                         },
-                  ),
-                ),
-                if(Platform.isIOS) Container(
-                  margin: const EdgeInsets.only(
-                    left: 10.0,
-                    right: 10.0,
-                    top: 10.0,
-                    bottom: 85.0,
-                  ),
-                  padding: const EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0,
-                    top: 20.0,
-                  ),
-                  color: Color(0xffffffff),
-                  width: G.screenWidth(),
-                  height: G.screenHeight(),
-                  child: web_view.WebView(
-                    initialUrl: article?.MobileAppViewUrl ?? 'about:blank',
-                    javascriptMode: web_view.JavascriptMode.unrestricted,
-                    onWebViewCreated: (web_view.WebViewController webViewController) {
-                      _controller.complete(webViewController);
-                      iosController = webViewController;
-                      // webViewController.
-                    },
-                    javascriptChannels: <web_view.JavascriptChannel>{
-                      iosJavascript1(context),
-                      iosJavascript2(context),
-                      iosJavascript3(context),
-                      iosJavascript4(context),
-                      iosJavascript5(context),
-                      iosJavascript6(context),
-                      iosJavascript7(context),
-                      iosJavascript8(context),
-                      iosJavascript9(context),
-                      iosJavascript10(context),
-                      iosJavascript11(context),
-                      iosJavascript12(context),
-                    },
-                    navigationDelegate: (web_view.NavigationRequest request) {
-                      return web_view.NavigationDecision.navigate;
-                    },
-                    onPageStarted: (String url) {
-
-                    },
-                    onPageFinished: (String url1) {
-                      setState(() {
-                        isloading = false;
-                      });
-                      iosController?.evaluateJavascript("""
-                        (function(){
-                          if(!window.flutter_inappwebview){window.flutter_inappwebview={};}
-                          window.flutter_inappwebview.callHandler=function(name){
-                            var args=Array.prototype.slice.call(arguments,1);
-                            try{
-                              switch(name){
-                                case 'InAppWebViewGetReadyCallback':
-                                  InAppWebViewGetReadyCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewFacebookCallback':
-                                  InAppWebViewFacebookCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewTwitterFuncCallback':
-                                  InAppWebViewTwitterFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewWhatsAppFuncCallback':
-                                  InAppWebViewWhatsAppFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewEmailFuncCallback':
-                                  InAppWebViewEmailFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewCopyFuncCallback':
-                                  InAppWebViewCopyFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewHotArticleClickFuncFuncCallback':
-                                  InAppWebViewHotArticleClickFuncFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewMoreArticleFuncCallback':
-                                  InAppWebViewMoreArticleFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewFollowElandFuncCallback':
-                                  InAppWebViewFollowElandFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewGoElandPageFuncCallback':
-                                  InAppWebViewGoElandPageFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewOpenImageByContentFuncCallback':
-                                  InAppWebViewOpenImageByContentFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                case 'InAppWebViewOpenHrefByContentFuncCallback':
-                                  InAppWebViewOpenHrefByContentFuncCallback.postMessage(JSON.stringify(args));
-                                  break;
-                                default:
-                                  break;
-                              }
-                            }catch(e){}
-                          };
-                        })();
-                      """);
-                    },
                   ),
                 ),
                 (isloading == false)

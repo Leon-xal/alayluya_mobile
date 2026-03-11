@@ -5,23 +5,57 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.11.1' //Consider updating to latest stable version
-        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.14.0' 
+        classpath 'com.android.tools.build:gradle:8.11.1'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.14.0'
     }
 }
 
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin" // This MUST be before other plugins
+    id "dev.flutter.flutter-gradle-plugin"
     id "com.onesignal.androidsdk.onesignal-gradle-plugin" version "0.14.0"
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    println("key.properties file found and loaded")
+
+    // 打印调试信息
+    ['keyAlias','keyPassword','storeFile','storePassword'].each { k ->
+        def v = keystoreProperties.getProperty(k)
+        def maskedValue = v ? (k.toLowerCase().contains('password') ? ('*' * Math.min(8, v.length())) : v) : '(null or empty)'
+        println("  ${k}: ${maskedValue}")
+    }
+} else {
+    println("WARNING: key.properties file not found at ${keystorePropertiesFile.absolutePath}")
+    println("Release builds will use debug signing config")
+}
 
 android {
     compileSdkVersion 36
     ndkVersion = "27.0.12077973"
-    namespace = "com.loopin.nepalayluyav3"
+    namespace = "com.loopin.nepalayluya"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -42,11 +76,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.loopin.nepalayluyav3"
+        applicationId "com.loopin.nepalayluya"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 35
-        versionCode 1 // Default value
-        versionName "1.0" // Default value
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -58,22 +92,49 @@ android {
             //storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             //storePassword keystoreProperties['storePassword']
             //These will be populated later
-            storeFile file("upload-keystore.jks") // Replace with your keystore path
-            storePassword "123456" // Replace with your keystore password
-            keyAlias "upload" // Replace with your key alias
-            keyPassword "123456" // Replace with your key password
+            storeFile file("./key/alayluya_key.jks") // Replace with your keystore path
+            storePassword "loopin123" // Replace with your keystore password
+            keyAlias "loopin_key" // Replace with your key alias
+            keyPassword "loopin123" // Replace with your key password
+            enableV1Signing true    // V1 簽名
+            enableV2Signing true    // V2 簽名
+//            v3SigningEnabled true
         }
     }
 
     buildTypes {
         debug {
-            minifyEnabled false
-            shrinkResources false
+            signingConfig signingConfigs.release
+//            ndk {
+//                abiFilters "armeabi-v7a"
+//            }
+        }
+        profile {
+            signingConfig signingConfigs.release
         }
         release {
+            ndk {
+                abiFilters "arm64-v8a"
+            }
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
-            minifyEnabled false
-            shrinkResources false
+            shrinkResources true
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
         }
     }
 }
@@ -83,43 +144,8 @@ flutter {
 }
 
 dependencies {
-    //Remove these lines; Flutter plugin handles them
-    //implementation("io.flutter:flutter_embedding_android:{$flutterEmbeddingVersion}") 
-    //implementation("io.flutter:flutter_plugin_android_lifecycle:{$flutterPluginAndroidLifecycleVersion}") 
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-}
-
-
-// Load properties AFTER android block to ensure plugins are applied
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withInputStream { input ->
-        localProperties.load(input)
-    }
-    //Now safe to access properties
-    def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
-    def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
-    android.defaultConfig.versionCode = flutterVersionCode.toInteger()
-    android.defaultConfig.versionName = flutterVersionName
-} else {
-    //Handle the exception more gracefully, perhaps by logging a warning instead of crashing the build
-    logger.warn("Could not find local.properties file. Using default version.")
-}
-
-
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    android.signingConfigs.release.keyAlias = keystoreProperties['keyAlias']
-    android.signingConfigs.release.keyPassword = keystoreProperties['keyPassword']
-    android.signingConfigs.release.storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-    android.signingConfigs.release.storePassword = keystoreProperties['storePassword']
-} else {
-    logger.warn("Could not find key.properties file. Skipping signing config.")
 }

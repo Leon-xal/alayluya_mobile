@@ -80,9 +80,9 @@ class _LoginStartState extends State<LoginStart> {
           ],
           webAuthenticationOptions: WebAuthenticationOptions(
             // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-            clientId: 'com.loopin.nepalayluyav3',
+            clientId: 'com.loopin.nepalayluya',
             redirectUri: Uri.parse(
-              'intent://callback?${PARAMETERS_FROM_CALLBACK_BODY}#Intent;package=com.loopin.nepalayluyav3;scheme=signinwithapple;end',
+              'intent://callback?${PARAMETERS_FROM_CALLBACK_BODY}#Intent;package=com.loopin.nepalayluya;scheme=signinwithapple;end',
             ),
           ),
           // TODO: Remove these if you have no need for them

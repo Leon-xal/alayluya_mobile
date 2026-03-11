@@ -1,4 +1,4 @@
-package com.loopin.nepalayluyav3
+package com.loopin.nepalayluya
 
 import io.flutter.embedding.android.FlutterActivity
 

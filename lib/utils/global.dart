@@ -46,7 +46,7 @@ class G {
   //  static String prdapi = 'http://192.168.31.249/api';
   //  static String prdapi = 'http://192.168.4.45/api';
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static bool _deeplinkInitialized = false;
 
   /// toolbar routeName
